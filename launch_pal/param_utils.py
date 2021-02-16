@@ -53,12 +53,14 @@ def insert_ros_param_prefix(data, prefix):
 
 def merge_param_files(yaml_files):
     """
-      Substitution in ROS2 launch can only return a string. The way to combine multiple parameter
-      files is to create a single temporary file and return the path to it, this path is passed as
-      the "parameters" argument of a Node
+    Merge multiple param yaml files.
 
-      yaml_files is a list of either paths to yaml files or pairs of two strings (path, prefix),
-      so the file is loaded inside the provided prefix, inside the ros__parameters field
+    Substitution in ROS2 launch can only return a string. The way to combine multiple parameter
+    files is to create a single temporary file and return the path to it, this path is passed as
+    the "parameters" argument of a Node
+
+    yaml_files is a list of either paths to yaml files or pairs of two strings (path, prefix),
+    so the file is loaded inside the provided prefix, inside the ros__parameters field
     """
     concatenated_dict = {}
     for e in yaml_files:

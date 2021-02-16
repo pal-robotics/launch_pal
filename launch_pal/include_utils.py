@@ -15,7 +15,6 @@
 from ament_index_python.packages import get_package_share_directory
 
 from launch.actions import IncludeLaunchDescription
-from launch.substitutions import PathJoinSubstitution
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 import os
@@ -23,12 +22,14 @@ import os
 from typing import List
 from typing import Text
 
+
 def include_launch_py_description(
         pkg_name: Text,
         paths: List[Text],
         **kwargs) -> Text:
-    """ 
-    Return IncludeLaunchDescription for the file inside pkg at paths
+    """
+    Return IncludeLaunchDescription for the file inside pkg at paths.
+
     example:
      include_launch_py_description('my_pkg', ['launch', 'my_file.launch.py'])
      returns file IncludeLaunchDescription from PATH_TO_MY_PKG_SHARE/launch/my_file.launch.py
