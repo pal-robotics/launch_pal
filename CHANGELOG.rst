@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.0.2 (2021-03-15)
+------------------
 * Added missing dependencies
 * Contributors: Jordan Palacios
 
