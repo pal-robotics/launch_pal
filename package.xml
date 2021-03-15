@@ -7,6 +7,10 @@
   <maintainer email="victor.lopez@pal-robotics.com">user</maintainer>
   <license>Apache</license>
 
+  <depend>ament_index_python</depend>
+  <depend>launch</depend>
+  <depend>python3-yaml</depend>
+
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
   <test_depend>ament_pep257</test_depend>
