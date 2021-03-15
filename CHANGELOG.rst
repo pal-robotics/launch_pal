@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.0.1 (2021-03-15)
+------------------
 * Add CONTRIBUTING and LICENSE
 * Apply linter fixes
 * Add param_utils
