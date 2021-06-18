@@ -12,12 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from . import arg_utils
-from . import include_utils
-from . import param_utils
+from launch.utilities import perform_substitutions
+from launch.substitutions import LaunchConfiguration
 
-__all__ = [
-    'arg_utils',
-    'include_utils',
-    'param_utils',
-]
+
+def read_launch_argument(arg_name, context):
+    return perform_substitutions(context,
+                                 [LaunchConfiguration(arg_name)])
