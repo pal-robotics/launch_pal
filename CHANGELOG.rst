@@ -2,6 +2,11 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add arg_utils.py
+* Contributors: Victor Lopez
+
 0.0.2 (2021-03-15)
 ------------------
 * Added missing dependencies
