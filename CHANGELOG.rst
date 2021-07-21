@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.0.4 (2021-07-21)
+------------------
 * Linter fixes
 * Add load file substitution
 * Contributors: Victor Lopez
