@@ -2,6 +2,12 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Linter fixes
+* Add load file substitution
+* Contributors: Victor Lopez
+
 0.0.3 (2021-06-30)
 ------------------
 * Add arg_utils.py
