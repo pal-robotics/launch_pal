@@ -2,6 +2,14 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge branch 'change_include_utils_to_substitutions' into 'master'
+  Change Text type to substitutions for include utils
+  See merge request common/launch_pal!1
+* change Text type to substitutions
+* Contributors: cescfolch, victor
+
 0.0.4 (2021-07-21)
 ------------------
 * Linter fixes
