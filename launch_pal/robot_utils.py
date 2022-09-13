@@ -12,9 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from launch.actions import DeclareLaunchArgument
-from launch.substitutions import PythonExpression
 
+from launch.actions import DeclareLaunchArgument
 
 def get_robot_name():
     declare_robot_name = DeclareLaunchArgument(
