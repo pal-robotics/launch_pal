@@ -20,13 +20,13 @@ def get_robot_name():
         'robot_name',
         default_value='pmb2',
         description='Name of the robot. ',
-        choices=['pmb2'])
+        choices=['pmb2', 'tiago'])
 
     return declare_robot_name
 
 
 def get_wheel_model(robot):
-    if (robot == 'pmb2'):
+    if (robot == 'pmb2') or (robot == 'tiago'):
         declare_wheel_model = DeclareLaunchArgument(
             'wheel_model',
             default_value='moog',
@@ -40,7 +40,7 @@ def get_wheel_model(robot):
 
 
 def get_laser_model(robot):
-    if (robot == 'pmb2'):
+    if (robot == 'pmb2') or (robot == 'tiago'):
         declare_laser_model = DeclareLaunchArgument(
             'laser_model',
             default_value='sick-571',
@@ -65,3 +65,74 @@ def get_courier_rgbd_sensors(robot):
         raise ValueError('The robot ' + robot + ' has not the argument courier_rgbd_sensors')
 
     return declare_courier_rgbd_sensors
+
+
+def get_arm(robot):
+    if (robot == 'tiago'):
+        declare_arm = DeclareLaunchArgument(
+            'arm',
+            default_value='right-arm',
+            description='Which type of arm TIAGo has. ',
+            choices=['no-arm', 'left-arm', 'right-arm'])
+
+    else:
+        raise ValueError('The robot ' + robot + ' has not the argument arm')
+
+    return declare_arm
+
+
+def get_wrist_model(robot):
+    if (robot == 'tiago'):
+        declare_wrist_model = DeclareLaunchArgument(
+            'wrist_model',
+            default_value='wrist-2010',
+            description='Wrist model. ',
+            choices=['wrist-2010', 'wrist-2017'])
+
+    else:
+        raise ValueError('The robot ' + robot + ' has not the argument wrist_model')
+
+    return declare_wrist_model
+
+
+def get_end_effector(robot):
+    if (robot == 'tiago'):
+        declare_end_effector = DeclareLaunchArgument(
+            'end_effector',
+            default_value='pal-hey5',
+            description='End effector model.',
+            choices=['pal-gripper', 'pal-hey5', 'schunk-wsg',
+                     'custom', 'no-end-effector'])
+
+    else:
+        raise ValueError('The robot ' + robot + ' has not the argument end_effector')
+
+    return declare_end_effector
+
+
+def get_ft_sensor(robot):
+    if (robot == 'tiago'):
+        declare_ft_sensor = DeclareLaunchArgument(
+            'ft_sensor',
+            default_value='schunk-ft',
+            description='FT sensor model. ',
+            choices=['schunk-ft', 'no-ft-sensor'])
+
+    else:
+        raise ValueError('The robot ' + robot + ' has not the argument ft_sensor')
+
+    return declare_ft_sensor
+
+
+def get_camera_model(robot):
+    if (robot == 'tiago'):
+        declare_camera_model = DeclareLaunchArgument(
+            'camera_model',
+            default_value='orbbec-astra',
+            description='Head camera model. ',
+            choices=['no-camera', 'orbbec-astra', 'orbbec-astra-pro', 'asus-xtion'])
+
+    else:
+        raise ValueError('The robot ' + robot + ' has not the argument camera_model')
+
+    return declare_camera_model
