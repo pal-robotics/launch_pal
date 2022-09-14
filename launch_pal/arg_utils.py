@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from launch.utilities import perform_substitutions
 from launch.substitutions import LaunchConfiguration
+from launch.utilities import perform_substitutions
 
 
 def read_launch_argument(arg_name, context):

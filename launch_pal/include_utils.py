@@ -12,18 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from ament_index_python.packages import get_package_share_directory
+from typing import List
+from typing import Text
 
+from launch import SomeSubstitutionsType
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import PathJoinSubstitution
-from launch import SomeSubstitutionsType
 from launch_ros.substitutions import FindPackageShare
-
-import os
-
-from typing import List
-from typing import Text
 
 
 def include_launch_py_description(
@@ -33,9 +29,11 @@ def include_launch_py_description(
     """
     Return IncludeLaunchDescription for the file inside pkg at paths.
 
-    example:
-     include_launch_py_description('my_pkg', ['launch', 'my_file.launch.py'])
-     returns file IncludeLaunchDescription from PATH_TO_MY_PKG_SHARE/launch/my_file.launch.py
+    Example:
+    -------
+        include_launch_py_description('my_pkg', ['launch', 'my_file.launch.py'])
+        returns file IncludeLaunchDescription from PATH_TO_MY_PKG_SHARE/launch/my_file.launch.py
+
     """
     pkg_dir = FindPackageShare(pkg_name)
     full_path = PathJoinSubstitution([pkg_dir] + paths)

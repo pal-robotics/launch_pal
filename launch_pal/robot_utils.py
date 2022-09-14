@@ -12,53 +12,56 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 from launch.actions import DeclareLaunchArgument
+
 
 def get_robot_name():
     declare_robot_name = DeclareLaunchArgument(
         'robot_name',
-        default_value="pmb2",
+        default_value='pmb2',
         description='Name of the robot. ',
-        choices=["pmb2"])
+        choices=['pmb2'])
 
     return declare_robot_name
 
+
 def get_wheel_model(robot):
-    if (robot == "pmb2"):
+    if (robot == 'pmb2'):
         declare_wheel_model = DeclareLaunchArgument(
             'wheel_model',
-            default_value="moog",
+            default_value='moog',
             description='Wheel model, ',
-            choices=["nadia", "moog"])
+            choices=['nadia', 'moog'])
 
     else:
-        raise ValueError("The robot " + robot + " has not the argument wheel_model")
+        raise ValueError('The robot ' + robot + ' has not the argument wheel_model')
 
     return declare_wheel_model
 
+
 def get_laser_model(robot):
-    if (robot == "pmb2"):
+    if (robot == 'pmb2'):
         declare_laser_model = DeclareLaunchArgument(
             'laser_model',
-            default_value="sick-571",
+            default_value='sick-571',
             description='Base laser model. ',
-            choices=["no-laser", "sick-571", "sick-561", "sick-551", "hokuyo"])
+            choices=['no-laser', 'sick-571', 'sick-561', 'sick-551', 'hokuyo'])
 
     else:
-        raise ValueError("The robot " + robot + " has not the argument laser_model")
+        raise ValueError('The robot ' + robot + ' has not the argument laser_model')
 
     return declare_laser_model
 
+
 def get_courier_rgbd_sensors(robot):
-    if (robot == "pmb2"):
+    if (robot == 'pmb2'):
         declare_courier_rgbd_sensors = DeclareLaunchArgument(
             'courier_rgbd_sensors',
-            default_value="False",
+            default_value='False',
             description='Whether the base has RGBD sensors or not. ',
-            choices=["True", "False"])
+            choices=['True', 'False'])
 
     else:
-        raise ValueError("The robot " + robot + " has not the argument courier_rgbd_sensors")
+        raise ValueError('The robot ' + robot + ' has not the argument courier_rgbd_sensors')
 
     return declare_courier_rgbd_sensors
