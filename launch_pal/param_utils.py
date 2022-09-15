@@ -13,9 +13,9 @@
 # limitations under the License.
 
 import copy
+import tempfile
 
 import yaml
-import tempfile
 
 
 def _merge_dictionaries(dict1, dict2):
