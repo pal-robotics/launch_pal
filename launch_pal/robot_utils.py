@@ -99,7 +99,7 @@ def get_end_effector(robot):
     if (robot == 'tiago'):
         declare_end_effector = DeclareLaunchArgument(
             'end_effector',
-            default_value='pal-hey5',
+            default_value='pal-gripper',
             description='End effector model.',
             choices=['pal-gripper', 'pal-hey5', 'schunk-wsg',
                      'custom', 'no-end-effector'])
