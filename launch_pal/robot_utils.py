@@ -15,10 +15,10 @@
 from launch.actions import DeclareLaunchArgument
 
 
-def get_robot_name():
+def get_robot_name(default_robot_name='pmb2'):
     declare_robot_name = DeclareLaunchArgument(
         'robot_name',
-        default_value='pmb2',
+        default_value=default_robot_name,
         description='Name of the robot. ',
         choices=['pmb2', 'tiago'])
 
