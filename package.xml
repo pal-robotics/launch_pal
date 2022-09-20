@@ -4,7 +4,8 @@
   <name>launch_pal</name>
   <version>0.0.5</version>
   <description>Utilities for launch files</description>
-  <maintainer email="victor.lopez@pal-robotics.com">user</maintainer>
+  <maintainer email="jordan.palacios@pal-robotics.com">Jordan Palacios</maintainer>
+  <maintainer email="noel.jimenez@pal-robotics.com">Noel Jimenez</maintainer>
   <license>Apache</license>
 
   <depend>ament_index_python</depend>
