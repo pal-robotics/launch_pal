@@ -6,7 +6,7 @@
   <description>Utilities for launch files</description>
   <maintainer email="jordan.palacios@pal-robotics.com">Jordan Palacios</maintainer>
   <maintainer email="noel.jimenez@pal-robotics.com">Noel Jimenez</maintainer>
-  <license>Apache</license>
+  <license>Apache License 2.0</license>
 
   <depend>ament_index_python</depend>
   <depend>launch</depend>
