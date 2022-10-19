@@ -2,6 +2,34 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge branch 'update_copyright' into 'master'
+  Update copyright
+  See merge request common/launch_pal!6
+* update copyright
+* Merge branch 'update_maintainers' into 'master'
+  Update maintainers
+  See merge request common/launch_pal!5
+* update maintainers
+* Merge branch 'arg_robot_name' into 'master'
+  Add get_robot_name argument to choose default value
+  See merge request common/launch_pal!4
+* add get_robot_name arg to choose default value
+* Merge branch 'robot_utils' into 'master'
+  Robot utils
+  See merge request common/launch_pal!3
+* pal-gripper as default end_effector
+* launch methods for tiago
+* linters
+* rm unused import
+* robot utils for pmb2
+* Merge branch 'fix_slash_warns' into 'master'
+  Fix slash warns
+  See merge request common/launch_pal!2
+* fix slash warns
+* Contributors: Jordan Palacios, Noel Jimenez
+
 0.0.5 (2021-08-13)
 ------------------
 * Merge branch 'change_include_utils_to_substitutions' into 'master'
