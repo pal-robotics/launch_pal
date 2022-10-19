@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.0.6 (2022-10-19)
+------------------
 * Merge branch 'update_copyright' into 'master'
   Update copyright
   See merge request common/launch_pal!6
