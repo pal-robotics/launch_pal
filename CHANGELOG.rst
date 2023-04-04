@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.0.7 (2023-04-04)
+------------------
 * added parse_parametric_yaml utils
 * Contributors: antoniobrandi
 
