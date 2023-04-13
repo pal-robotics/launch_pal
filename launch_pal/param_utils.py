@@ -146,10 +146,13 @@ def _parse_config(path, param_rewrites):
             if (
                 full_value == "True"
                 or full_value == "true"
-                or full_value == "False"
+            ):
+                return True
+            if (
+                full_value == "False"
                 or full_value == "false"
             ):
-                return bool(full_value)
+                return False
 
             try:
                 return int(full_value)

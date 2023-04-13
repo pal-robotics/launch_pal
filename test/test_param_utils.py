@@ -49,7 +49,7 @@ class TestParseParametricYaml(unittest.TestCase):
             "name": "John",
             "surname": "Black",
             "age": 42,
-            "married": True,
+            "married": False,
             "weight": 70.3,
         }
         rewritten_yaml = parse_parametric_yaml(
