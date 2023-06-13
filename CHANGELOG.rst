@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.0.8 (2023-06-13)
+------------------
 * fix cast when bool equals False
 * Contributors: antoniobrandi
 
