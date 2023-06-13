@@ -2,6 +2,11 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* fix cast when bool equals False
+* Contributors: antoniobrandi
+
 0.0.7 (2023-04-04)
 ------------------
 * added parse_parametric_yaml utils
