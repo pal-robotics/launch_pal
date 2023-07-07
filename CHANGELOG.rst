@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.0.9 (2023-07-07)
+------------------
 * Remove not supported choices
 * Contributors: Noel Jimenez
 
