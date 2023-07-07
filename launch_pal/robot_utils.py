@@ -73,7 +73,7 @@ def get_arm(robot):
             'arm',
             default_value='right-arm',
             description='Which type of arm TIAGo has. ',
-            choices=['no-arm', 'left-arm', 'right-arm'])
+            choices=['no-arm', 'right-arm'])
 
     else:
         raise ValueError('The robot ' + robot + ' has not the argument arm')
@@ -101,8 +101,7 @@ def get_end_effector(robot):
             'end_effector',
             default_value='pal-gripper',
             description='End effector model.',
-            choices=['pal-gripper', 'pal-hey5', 'schunk-wsg',
-                     'custom', 'no-end-effector'])
+            choices=['pal-gripper', 'pal-hey5', 'custom', 'no-end-effector'])
 
     else:
         raise ValueError('The robot ' + robot + ' has not the argument end_effector')
