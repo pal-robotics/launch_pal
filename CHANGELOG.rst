@@ -2,6 +2,11 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Remove not supported choices
+* Contributors: Noel Jimenez
+
 0.0.8 (2023-06-13)
 ------------------
 * fix cast when bool equals False
