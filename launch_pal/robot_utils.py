@@ -20,7 +20,7 @@ def get_robot_name(default_robot_name='pmb2'):
         'robot_name',
         default_value=default_robot_name,
         description='Name of the robot. ',
-        choices=['pmb2', 'tiago'])
+        choices=['pmb2', 'tiago', 'pmb3'])
 
     return declare_robot_name
 
@@ -40,7 +40,7 @@ def get_wheel_model(robot):
 
 
 def get_laser_model(robot):
-    if (robot == 'pmb2') or (robot == 'tiago'):
+    if (robot == 'pmb2') or (robot == 'tiago') or (robot == 'pmb3'):
         declare_laser_model = DeclareLaunchArgument(
             'laser_model',
             default_value='sick-571',
@@ -130,7 +130,12 @@ def get_camera_model(robot):
             default_value='orbbec-astra',
             description='Head camera model. ',
             choices=['no-camera', 'orbbec-astra', 'orbbec-astra-pro', 'asus-xtion'])
-
+    elif (robot == 'pmb3'):
+        declare_camera_model = DeclareLaunchArgument(
+            'camera_model',
+            default_value='realsense-d435',
+            description='Base cameras model',
+            choices=['realsense-d435'])
     else:
         raise ValueError('The robot ' + robot + ' has not the argument camera_model')
 
