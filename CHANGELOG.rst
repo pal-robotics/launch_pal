@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.0.10 (2023-10-10)
+-------------------
 * Merge branch 'yen/feat/pmb3_robot' into 'master'
   Add pmb3 utils
   See merge request common/launch_pal!18
