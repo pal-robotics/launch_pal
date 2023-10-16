@@ -20,7 +20,7 @@ def get_robot_name(default_robot_name='pmb2'):
         'robot_name',
         default_value=default_robot_name,
         description='Name of the robot. ',
-        choices=['pmb2', 'tiago', 'pmb3'])
+        choices=['pmb2', 'tiago', 'pmb3', 'ari'])
 
     return declare_robot_name
 
@@ -47,6 +47,13 @@ def get_laser_model(robot):
             default_value='sick-571',
             description='Base laser model. ',
             choices=['no-laser', 'sick-571', 'sick-561', 'sick-551', 'hokuyo'])
+    elif robot == 'ari':
+        declare_laser_model = DeclareLaunchArgument(
+            'laser_model',
+            default_value='ydlidar-tg15',
+            description='Base laser model.',
+            choices=['no-laser', 'sick-571', 'ydlidar-tg15', 'ydlidar-tg30'],
+        )
 
     else:
         raise ValueError('The robot ' + robot +
@@ -107,6 +114,13 @@ def get_end_effector(robot):
             description='End effector model.',
             choices=['pal-gripper', 'pal-hey5', 'custom', 'no-end-effector'])
 
+    elif robot == 'ari':
+        declare_end_effector = DeclareLaunchArgument(
+            'end_effector',
+            default_value='no-hand',
+            description='End effector model. ',
+            choices=['ari-hand', 'no-hand'],  # ARIv2 does not have a hand DoF
+        )
     else:
         raise ValueError('The robot ' + robot +
                          ' has not the argument end_effector')
@@ -142,8 +156,30 @@ def get_camera_model(robot):
             default_value='realsense-d435',
             description='Base cameras model',
             choices=['realsense-d435'])
+    elif robot == 'ari':
+        declare_camera_model = DeclareLaunchArgument(
+            'camera_model',
+            default_value='realsense-d435',
+            description='Head camera model. ',
+            choices=['raspi', 'realsense-d435'],
+        )
     else:
         raise ValueError('The robot ' + robot +
                          ' has not the argument camera_model')
 
     return declare_camera_model
+
+
+def get_robot_model(robot):
+    if robot == 'ari':
+        declare_robot_model = DeclareLaunchArgument(
+            'robot_model',
+            default_value='v2',
+            description='ARI\'s version. ',
+            choices=['v1', 'v2'],
+        )
+    else:
+        raise ValueError('The robot ' + robot +
+                         ' has not the argument robot_model')
+
+    return declare_robot_model
