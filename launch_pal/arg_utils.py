@@ -14,8 +14,21 @@
 
 from launch.substitutions import LaunchConfiguration
 from launch.utilities import perform_substitutions
+from launch.actions import DeclareLaunchArgument
+from launch_pal.robot_config import RobotSetting
 
 
 def read_launch_argument(arg_name, context):
     return perform_substitutions(context,
                                  [LaunchConfiguration(arg_name)])
+
+
+def setting_to_launch_argument(robot_setting: RobotSetting):
+    declare_launch_arg = DeclareLaunchArgument(
+        robot_setting.name,
+        default_value=robot_setting.default,
+        description=robot_setting.description,
+        choices=robot_setting.values)
+
+    return declare_launch_arg
+
