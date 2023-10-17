@@ -34,7 +34,8 @@ def get_wheel_model(robot):
             choices=['nadia', 'moog'])
 
     else:
-        raise ValueError('The robot ' + robot + ' has not the argument wheel_model')
+        raise ValueError('The robot ' + robot +
+                         ' has not the argument wheel_model')
 
     return declare_wheel_model
 
@@ -48,7 +49,8 @@ def get_laser_model(robot):
             choices=['no-laser', 'sick-571', 'sick-561', 'sick-551', 'hokuyo'])
 
     else:
-        raise ValueError('The robot ' + robot + ' has not the argument laser_model')
+        raise ValueError('The robot ' + robot +
+                         ' has not the argument laser_model')
 
     return declare_laser_model
 
@@ -62,7 +64,8 @@ def get_courier_rgbd_sensors(robot):
             choices=['True', 'False'])
 
     else:
-        raise ValueError('The robot ' + robot + ' has not the argument courier_rgbd_sensors')
+        raise ValueError('The robot ' + robot +
+                         ' has not the argument courier_rgbd_sensors')
 
     return declare_courier_rgbd_sensors
 
@@ -90,7 +93,8 @@ def get_wrist_model(robot):
             choices=['wrist-2010', 'wrist-2017'])
 
     else:
-        raise ValueError('The robot ' + robot + ' has not the argument wrist_model')
+        raise ValueError('The robot ' + robot +
+                         ' has not the argument wrist_model')
 
     return declare_wrist_model
 
@@ -104,7 +108,8 @@ def get_end_effector(robot):
             choices=['pal-gripper', 'pal-hey5', 'custom', 'no-end-effector'])
 
     else:
-        raise ValueError('The robot ' + robot + ' has not the argument end_effector')
+        raise ValueError('The robot ' + robot +
+                         ' has not the argument end_effector')
 
     return declare_end_effector
 
@@ -118,7 +123,8 @@ def get_ft_sensor(robot):
             choices=['schunk-ft', 'no-ft-sensor'])
 
     else:
-        raise ValueError('The robot ' + robot + ' has not the argument ft_sensor')
+        raise ValueError('The robot ' + robot +
+                         ' has not the argument ft_sensor')
 
     return declare_ft_sensor
 
@@ -137,6 +143,7 @@ def get_camera_model(robot):
             description='Base cameras model',
             choices=['realsense-d435'])
     else:
-        raise ValueError('The robot ' + robot + ' has not the argument camera_model')
+        raise ValueError('The robot ' + robot +
+                         ' has not the argument camera_model')
 
     return declare_camera_model
