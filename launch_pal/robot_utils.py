@@ -20,7 +20,7 @@ def get_robot_name(default_robot_name='pmb2'):
         'robot_name',
         default_value=default_robot_name,
         description='Name of the robot. ',
-        choices=['pmb2', 'tiago', 'pmb3', 'ari'])
+        choices=['pmb2', 'tiago', 'pmb3', 'ari', 'omni_base'])
 
     return declare_robot_name
 
@@ -41,7 +41,7 @@ def get_wheel_model(robot):
 
 
 def get_laser_model(robot):
-    if (robot == 'pmb2') or (robot == 'tiago') or (robot == 'pmb3'):
+    if (robot == 'pmb2') or (robot == 'tiago') or (robot == 'pmb3') or (robot == 'omni_base'):
         declare_laser_model = DeclareLaunchArgument(
             'laser_model',
             default_value='sick-571',
