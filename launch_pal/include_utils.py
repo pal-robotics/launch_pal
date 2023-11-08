@@ -64,6 +64,8 @@ def include_scoped_launch_py_description(
           this launch file,
         returns a scoped python launch file
     """
+
+    # In case the given launch configuration contain substitutions, get the launch configs for these substitutions as well.
     updated_launch_configs = get_nested_launch_configurations(launch_configurations)
 
     launch_file = include_launch_py_description(
