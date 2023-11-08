@@ -94,10 +94,10 @@ def get_nested_launch_configurations(configuration_list: Dict):
     nested_launch_configs = {}
     nested_launch_configs = nested_launch_configs | configuration_list
 
-    for config_name, config_value in configuration_list.items():
+    for config_value in configuration_list.values():
         if not hasattr(config_value, 'substitutions'):
             continue
-        
+
         substitutions = copy.deepcopy(config_value.substitutions)
         while substitutions:
             sub = substitutions.pop()
