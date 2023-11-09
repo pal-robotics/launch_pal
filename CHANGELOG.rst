@@ -2,6 +2,12 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Initial ARI support
+* autopep8 line wrapping
+* Contributors: Séverin Lemaignan
+
 0.0.10 (2023-10-10)
 -------------------
 * Merge branch 'yen/feat/pmb3_robot' into 'master'
