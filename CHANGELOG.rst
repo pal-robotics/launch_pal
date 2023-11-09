@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.0.11 (2023-11-09)
+-------------------
 * Initial ARI support
 * autopep8 line wrapping
 * Contributors: Séverin Lemaignan
