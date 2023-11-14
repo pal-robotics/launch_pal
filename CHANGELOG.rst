@@ -2,6 +2,12 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add website tag
+* added support for omni_base
+* Contributors: Noel Jimenez, andreacapodacqua
+
 0.0.11 (2023-11-09)
 -------------------
 * Initial ARI support
