@@ -8,6 +8,8 @@
   <maintainer email="noel.jimenez@pal-robotics.com">Noel Jimenez</maintainer>
   <license>Apache License 2.0</license>
 
+  <url type="website">https://github.com/pal-robotics/launch_pal</url>
+
   <depend>ament_index_python</depend>
   <depend>launch</depend>
   <depend>launch_ros</depend>
