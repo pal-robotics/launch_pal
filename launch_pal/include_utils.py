@@ -16,6 +16,7 @@ from typing import List, Dict, Optional, Text
 import copy
 from launch import SomeSubstitutionsType
 from launch.actions import IncludeLaunchDescription, GroupAction, DeclareLaunchArgument
+from launch import Action
 from launch import Condition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import PathJoinSubstitution, LaunchConfiguration
@@ -25,7 +26,7 @@ from launch_ros.substitutions import FindPackageShare
 def include_launch_py_description(
         pkg_name: SomeSubstitutionsType,
         paths: List[SomeSubstitutionsType],
-        **kwargs) -> Text:
+        **kwargs) -> Action:
     """
     Return IncludeLaunchDescription for the file inside pkg at paths.
 
@@ -47,10 +48,10 @@ def include_launch_py_description(
 def include_scoped_launch_py_description(
         pkg_name: SomeSubstitutionsType,
         paths: List[SomeSubstitutionsType],
-        launch_args: Optional[List[DeclareLaunchArgument]] = None,
-        launch_configurations: Optional[Dict] = None,
+        launch_args: List[DeclareLaunchArgument] = [],
+        launch_configurations: Dict = {},
         condition: Optional[Condition] = None,
-        **kwargs) -> Text:
+        **kwargs) -> Action:
     """
     Return a GroupAction for the launch file inside pkg at paths.
 
@@ -76,10 +77,9 @@ def include_scoped_launch_py_description(
     actions = []
 
     # First add launch argument if provided
-    if launch_args is not None:
-        actions.extend(launch_args)
-
-    actions.extend([launch_file])
+    actions.extend(launch_args)
+    # Add the launch file
+    actions.append(launch_file)
 
     scoped_launch_file = GroupAction(actions,
                 forwarding=False,
