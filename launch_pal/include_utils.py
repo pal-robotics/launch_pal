@@ -66,8 +66,8 @@ def include_scoped_launch_py_description(
         condition=IfCondition(LaunchConfiguration('arg_a')): set a specific condition for loading
           this launch file,
         returns a scoped python launch file
-    """
 
+    """
     # In case the given launch configuration contain substitutions,
     # get the launch configs for these substitutions as well.
     updated_launch_configs = get_nested_launch_configurations(
@@ -86,9 +86,9 @@ def include_scoped_launch_py_description(
     actions.append(launch_file)
 
     scoped_launch_file = GroupAction(actions,
-                forwarding=False,
-                condition=condition,
-                launch_configurations=updated_launch_configs)
+                                     forwarding=False,
+                                     condition=condition,
+                                     launch_configurations=updated_launch_configs)
 
     return scoped_launch_file
 
@@ -106,7 +106,8 @@ def get_nested_launch_configurations(configuration_list: Dict):
         while substitutions:
             sub = substitutions.pop()
             if isinstance(sub, LaunchConfiguration):
-                nested_launch_configs = {sub.variable_name[0].text: sub} | nested_launch_configs
+                nested_launch_configs = {
+                    sub.variable_name[0].text: sub} | nested_launch_configs
 
             if hasattr(sub, 'expression'):
                 substitutions.extend(sub.expression)

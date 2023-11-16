@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from typing import Optional
 from launch import LaunchDescription
 from launch.substitutions import LaunchConfiguration
 from launch.utilities import perform_substitutions
@@ -27,7 +28,8 @@ class LaunchArgumentsBase:
         for attr, type_ in annotations.items():
             if not issubclass(type_, DeclareLaunchArgument):
                 raise TypeError(
-                    f"All attributes in dataclass {cls.__name__} must have type DeclareLaunchArgument")
+                    f"All attributes in dataclass {cls.__name__} must have type \
+                          DeclareLaunchArgument")
 
     def add_to_launch_description(self, launch_description: LaunchDescription):
         annotations = getattr(self, '__annotations__', {})
@@ -53,7 +55,8 @@ def launch_arg_factory(custom_args: LaunchArgumentsBase, has_robot_config: bool 
 
         if common_keys:
             raise ValueError(
-                f"Overlapping keys found between declared launch arguments and robot launch arguments: {common_keys}")
+                f"Overlapping keys found between declared launch arguments and \
+                    robot launch arguments: {common_keys}")
 
     merged_dict = {**custom_arg_dict, **robot_arg_dict}
 
