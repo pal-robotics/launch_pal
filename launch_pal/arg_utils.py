@@ -16,8 +16,8 @@ from launch import LaunchDescription
 from launch.substitutions import LaunchConfiguration
 from launch.utilities import perform_substitutions
 from launch.actions import DeclareLaunchArgument
-from launch_pal.robot_config import RobotSetting
-from dataclasses import dataclass
+from launch_pal.robot_config import RobotSetting, RobotConfiguration
+from dataclasses import dataclass, asdict, make_dataclass
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -27,13 +27,41 @@ class LaunchArgumentsBase:
         for attr, type_ in annotations.items():
             if not issubclass(type_, DeclareLaunchArgument):
                 raise TypeError(
-                    f"All attributes in {cls.__name__} must have type DeclareLaunchArgument")
+                    f"All attributes in dataclass {cls.__name__} must have type DeclareLaunchArgument")
 
     def add_to_launch_description(self, launch_description: LaunchDescription):
         annotations = getattr(self, '__annotations__', {})
         for attr, type_ in annotations.items():
             launch_description.add_action(getattr(self, attr))
         return
+
+
+def launch_arg_factory(custom_args: LaunchArgumentsBase, has_robot_config: bool = False,
+                       robot_name: Optional[str] = None):
+
+    custom_arg_dict = asdict(custom_args)
+
+    robot_arg_dict = {}
+    if has_robot_config:
+        robot_config = RobotConfiguration(robot_name)
+        configuration = robot_config.get_configuration()
+        robot_arg_dict = {k: setting_to_launch_argument(
+            v) for k, v in configuration.items()}
+
+        common_keys = set(custom_arg_dict.keys()) & set(
+            robot_arg_dict.keys())
+
+        if common_keys:
+            raise ValueError(
+                f"Overlapping keys found between declared launch arguments and robot launch arguments: {common_keys}")
+
+    merged_dict = {**custom_arg_dict, **robot_arg_dict}
+
+    field_list = [(k, DeclareLaunchArgument) for k, v in merged_dict.items()]
+    launch_args = make_dataclass('LaunchArgs', field_list, bases=(
+        LaunchArgumentsBase,), frozen=True)(**merged_dict)
+
+    return launch_args
 
 
 def read_launch_argument(arg_name, context):
