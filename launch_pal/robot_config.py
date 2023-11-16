@@ -53,6 +53,9 @@ class RobotConfiguration:
 
         return configuration
 
+    def get_configuration(self) -> Dict[str, RobotSetting]:
+        return self.configuration
+
     def has_setting(self, setting_name: str) -> bool:
 
         setting_exists = setting_name in self.configuration.keys()
