@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import List, Dict, Optional, Text
+from typing import List, Dict, Optional
 import copy
 from launch import SomeSubstitutionsType
 from launch.actions import IncludeLaunchDescription, GroupAction, DeclareLaunchArgument
@@ -53,6 +53,7 @@ def include_scoped_launch_py_description(
         condition: Optional[Condition] = None,
         **kwargs) -> Action:
     """
+
     Return a GroupAction for the launch file inside pkg at paths.
 
     Example:
@@ -64,10 +65,12 @@ def include_scoped_launch_py_description(
         condition=IfCondition(LaunchConfiguration('arg_a')): set a specific condition for loading
           this launch file,
         returns a scoped python launch file
-    """
 
-    # In case the given launch configuration contain substitutions, get the launch configs for these substitutions as well.
-    updated_launch_configs = get_nested_launch_configurations(launch_configurations)
+    """
+    # In case the given launch configuration contain substitutions,
+    # get the launch configs for these substitutions as well.
+    updated_launch_configs = get_nested_launch_configurations(
+        launch_configurations)
 
     launch_file = include_launch_py_description(
         pkg_name, paths,
@@ -82,9 +85,9 @@ def include_scoped_launch_py_description(
     actions.append(launch_file)
 
     scoped_launch_file = GroupAction(actions,
-                forwarding=False,
-                condition=condition,
-                launch_configurations=updated_launch_configs)
+                                     forwarding=False,
+                                     condition=condition,
+                                     launch_configurations=updated_launch_configs)
 
     return scoped_launch_file
 
@@ -102,7 +105,8 @@ def get_nested_launch_configurations(configuration_list: Dict):
         while substitutions:
             sub = substitutions.pop()
             if isinstance(sub, LaunchConfiguration):
-                nested_launch_configs = {sub.variable_name[0].text: sub} | nested_launch_configs
+                nested_launch_configs = {
+                    sub.variable_name[0].text: sub} | nested_launch_configs
 
             if hasattr(sub, 'expression'):
                 substitutions.extend(sub.expression)

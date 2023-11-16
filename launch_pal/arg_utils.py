@@ -31,4 +31,3 @@ def setting_to_launch_argument(robot_setting: RobotSetting):
         choices=robot_setting.values)
 
     return declare_launch_arg
-
