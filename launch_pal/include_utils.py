@@ -59,7 +59,8 @@ def include_scoped_launch_py_description(
     Example:
     -------
         include_scoped_launch_py_description('my_pkg', ['launch', 'my_file.launch.py'],
-        launch_args= [List of DeclareLaunchArgument(arg_a)] that are required for the launch file,
+        launch_args= [List of DeclareLaunchArgument(arg_a)] that are required for the launch file.
+          Environment variables should be passeed here as well,
         launch_configuration={'arg_b':  LaunchConfiguration('arg_a')}: If the given launch argument
           needs to be renamed for the included launch file,
         condition=IfCondition(LaunchConfiguration('arg_a')): set a specific condition for loading
