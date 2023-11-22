@@ -5,20 +5,20 @@ robot_configuration:
     default: "moog"
   arm_type_right:
     description: "Arm type right"
-    values: ['tiago-arm', 'no-arm']
-    default: 'tiago-arm'
+    values: ["tiago-arm", "no-arm"]
+    default: "tiago-arm"
   arm_type_left:
     description: "Arm type left"
-    values: ['tiago-arm', 'no-arm']
-    default: 'tiago-arm'
+    values: ["tiago-arm", "no-arm"]
+    default: "tiago-arm"
   laser_model:
     description: "Base laser model"
     values: ["no-laser", "sick-571", "sick-561", "sick-551", "hokuyo"]
     default: "sick-571"
   courier_rgbd_sensors:
     description: "Whether the base has RGBD sensors or not"
-    values: ['true', 'false']
-    default: 'false'
+    values: ["true", "false"]
+    default: "false"
   wrist_model_right:
     description: "Wrist model right arm"
     values: ["wrist-2010", "wrist-2017"]
@@ -53,5 +53,5 @@ robot_configuration:
     default: "pmb2"
   camera_model:
     description: "Head camera model"
-    values: ["orbbec-astra", "orbbec-astra-pro", "asus-xtion", 'no-camera']
+    values: ["orbbec-astra", "orbbec-astra-pro", "asus-xtion", "no-camera"]
     default: "orbbec-astra"
