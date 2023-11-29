@@ -1,0 +1,41 @@
+robot_configuration:
+  wheel_model:
+    description: 'Wheel model'
+    values: ['nadia', 'moog']
+    default: 'moog'
+  arm_type:
+    description: 'Arm type'
+    values: ['tiago-arm', 'no-arm']
+    default: 'tiago-arm'
+  laser_model:
+    description: 'Base laser model'
+    values: ['no-laser', 'sick-571', 'sick-561', 'sick-551', 'hokuyo']
+    default: 'sick-571'
+  courier_rgbd_sensors:
+    description: 'Whether the base has RGBD sensors or not'
+    values: ['true', 'false']
+    default: 'false'
+  wrist_model:
+    description: 'Wrist model'
+    values: ['wrist-2010', 'wrist-2017']
+    default: 'wrist-2010'
+  end_effector:
+    description: 'End effector model'
+    values: ['pal-gripper', 'pal-hey5', 'custom', 'no-end-effector']
+    default: 'pal-gripper'
+  ft_sensor:
+    description: 'FT sensor model'
+    values: ['schunk-ft', 'no-ft-sensor']
+    default: 'schunk-ft'
+  has_screen:
+    description: 'Has screen at torso'
+    values: ['false', 'true']
+    default: 'false'
+  base_type:
+    description: 'Base type'
+    values: ['pmb2', 'omni_base']
+    default: 'pmb2'
+  camera_model:
+    description: 'Head camera model'
+    values: ['orbbec-astra', 'orbbec-astra-pro', 'asus-xtion', 'no-camera']
+    default: 'orbbec-astra'
