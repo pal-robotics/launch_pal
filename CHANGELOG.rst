@@ -2,6 +2,28 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Remove triple quotes
+* Add docstrings and update README
+* Change yaml file to single quotes
+* change to double quotes to be consistent in robot config yaml
+* Update linting
+* Update tiaog config and add tiago_dual config
+* Add launch arg factory
+* Update linting
+* Add get_configuration function to robotConfig
+* Update tiago configuration
+* Add base dataclass with for launch args
+* update linting
+* Update types
+* loop over value instead of items
+* A bit of documentation
+* Add scoped launch file inclusion
+* Create function to translate setting to launch arg
+* Create initial version of robot configuration
+* Contributors: David ter Kuile
+
 0.0.12 (2023-11-14)
 -------------------
 * Add website tag
