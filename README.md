@@ -21,14 +21,14 @@ An example of the use can be found in the launch_tutorial package that compares 
 ## param_utils
 Contains utilities for merging yaml parameter files or replace parametric variables in a param file.
 
-```parse_parametric_yaml```: Checks yaml files for variables of layout `${VAR_NAME} `and parses them. Parsing is done by giving a dictionary as input:
+`parse_parametric_yaml`: Checks yaml files for variables of layout `${VAR_NAME} `and parses them. Parsing is done by giving a dictionary as input:
 
 ```
 parse_dict = { VAR_NAME_1: value_1,
                VAR_NAME_2: value_2}
 ```
 
-```merge_param_files```: Merges multiple yaml files into one single file to be loaded by a node.
+`merge_param_files`: Merges multiple yaml files into one single file to be loaded by a node.
 
 
 
