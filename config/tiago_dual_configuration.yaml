@@ -1,57 +1,57 @@
 robot_configuration:
   wheel_model:
-    description: "Wheel model"
-    values: ["nadia", "moog"]
-    default: "moog"
+    description: 'Wheel model'
+    values: ['nadia', 'moog']
+    default: 'moog'
   arm_type_right:
-    description: "Arm type right"
-    values: ["tiago-arm", "no-arm"]
-    default: "tiago-arm"
+    description: 'Arm type right'
+    values: ['tiago-arm', 'no-arm']
+    default: 'tiago-arm'
   arm_type_left:
-    description: "Arm type left"
-    values: ["tiago-arm", "no-arm"]
-    default: "tiago-arm"
+    description: 'Arm type left'
+    values: ['tiago-arm', 'no-arm']
+    default: 'tiago-arm'
   laser_model:
-    description: "Base laser model"
-    values: ["no-laser", "sick-571", "sick-561", "sick-551", "hokuyo"]
-    default: "sick-571"
+    description: 'Base laser model'
+    values: ['no-laser', 'sick-571', 'sick-561', 'sick-551', 'hokuyo']
+    default: 'sick-571'
   courier_rgbd_sensors:
-    description: "Whether the base has RGBD sensors or not"
-    values: ["true", "false"]
-    default: "false"
+    description: 'Whether the base has RGBD sensors or not'
+    values: ['true', 'false']
+    default: 'false'
   wrist_model_right:
-    description: "Wrist model right arm"
-    values: ["wrist-2010", "wrist-2017"]
-    default: "wrist-2010"
+    description: 'Wrist model right arm'
+    values: ['wrist-2010', 'wrist-2017']
+    default: 'wrist-2010'
   wrist_model_left:
-    description: "Wrist model left arm"
-    values: ["wrist-2010", "wrist-2017"]
-    default: "wrist-2010"
+    description: 'Wrist model left arm'
+    values: ['wrist-2010', 'wrist-2017']
+    default: 'wrist-2010'
   end_effector_right:
-    description: "End effector model right arm"
-    values: ["pal-gripper", "pal-hey5", "custom", "no-end-effector"]
-    default: "pal-gripper"
+    description: 'End effector model right arm'
+    values: ['pal-gripper', 'pal-hey5', 'custom', 'no-end-effector']
+    default: 'pal-gripper'
   end_effector_left:
-    description: "End effector model left arm"
-    values: ["pal-gripper", "pal-hey5", "custom", "no-end-effector"]
-    default: "pal-gripper"
+    description: 'End effector model left arm'
+    values: ['pal-gripper', 'pal-hey5', 'custom', 'no-end-effector']
+    default: 'pal-gripper'
   ft_sensor_right:
-    description: "FT sensor model right arm"
-    values: ["schunk-ft", "no-ft-sensor"]
-    default: "schunk-ft"
+    description: 'FT sensor model right arm'
+    values: ['schunk-ft', 'no-ft-sensor']
+    default: 'schunk-ft'
   ft_sensor_left:
-    description: "FT sensor model left arm"
-    values: ["schunk-ft", "no-ft-sensor"]
-    default: "schunk-ft"
+    description: 'FT sensor model left arm'
+    values: ['schunk-ft', 'no-ft-sensor']
+    default: 'schunk-ft'
   has_screen:
-    description: "Has screen at torso"
-    values: ["false", "true"]
-    default: "false"
+    description: 'Has screen at torso'
+    values: ['false', 'true']
+    default: 'false'
   base_type:
-    description: "Base type"
-    values: ["pmb2", "omni_base"]
-    default: "pmb2"
+    description: 'Base type'
+    values: ['pmb2', 'omni_base']
+    default: 'pmb2'
   camera_model:
-    description: "Head camera model"
-    values: ["orbbec-astra", "orbbec-astra-pro", "asus-xtion", "no-camera"]
-    default: "orbbec-astra"
+    description: 'Head camera model'
+    values: ['orbbec-astra', 'orbbec-astra-pro', 'asus-xtion', 'no-camera']
+    default: 'orbbec-astra'
