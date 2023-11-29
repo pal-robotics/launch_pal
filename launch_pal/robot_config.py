@@ -21,6 +21,8 @@ from launch_ros.substitutions import FindPackageShare
 
 @dataclass
 class RobotSetting:
+    """This class is a dataclass containing the objects required for a LaunchArgument."""
+
     name: str
     description: str
     values: List[Union[str, bool]]
@@ -28,13 +30,28 @@ class RobotSetting:
 
 
 class RobotConfiguration:
+    """This class loads a argument configuration for the given robot name from a yaml file."""
+
     def __init__(self, robot_name: str):
         self.robot_name: str = robot_name
         self.configuration: Dict[str, RobotSetting] = self.load_configuration(
             robot_name)
 
     def load_configuration(self, robot_name: str) -> Dict[str, RobotSetting]:
+        """
+        Load a yaml configuration file given by the robot name.
 
+        Parameters
+        ----------
+        robot_name : Text
+            The robot name
+
+        Returns
+        -------
+        value : Dict
+            A dictionary containing the argument name and the corresponding RobotSetting.
+
+        """
         pkg_dir = FindPackageShare("launch_pal").find("launch_pal")
 
         config_file = f"{pkg_dir}/config/{robot_name}_configuration.yaml"
@@ -54,6 +71,15 @@ class RobotConfiguration:
         return configuration
 
     def get_configuration(self) -> Dict[str, RobotSetting]:
+        """
+        Return the robot configuration as a Dict.
+
+        Returns
+        -------
+        value : Dict
+            A dictionary containing the argument name and the corresponding RobotSetting.
+
+        """
         return self.configuration
 
     def has_setting(self, setting_name: str) -> bool:

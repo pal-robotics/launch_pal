@@ -23,6 +23,8 @@ from dataclasses import dataclass, asdict, make_dataclass
 
 @dataclass(frozen=True, kw_only=True)
 class LaunchArgumentsBase:
+    """This class is a dataclass containing only DeclareLaunchArgument objects."""
+
     def __init_subclass__(cls, **kwargs):
         annotations = getattr(cls, '__annotations__', {})
         for attr, type_ in annotations.items():
@@ -32,6 +34,16 @@ class LaunchArgumentsBase:
                           DeclareLaunchArgument")
 
     def add_to_launch_description(self, launch_description: LaunchDescription):
+        """
+        Load a yaml configuration file given by the robot name.
+
+        Parameters
+        ----------
+        launch_description : LaunchDescription
+            The launch description that the Launch Arguments will be added to
+
+
+        """
         annotations = getattr(self, '__annotations__', {})
         for attr, type_ in annotations.items():
             launch_description.add_action(getattr(self, attr))
@@ -40,7 +52,26 @@ class LaunchArgumentsBase:
 
 def launch_arg_factory(custom_args: LaunchArgumentsBase, has_robot_config: bool = False,
                        robot_name: Optional[str] = None):
+    """
+    Create a dataclass consisting of DeclareLaunchArgument objects only.
 
+    Combines a dataclass with LaunchArguments with LaunchArguments of a robot.
+
+    Parameters
+    ----------
+    custom_args : LaunchArgumentsBase
+        A dataclass containing LaunchArguments
+    has_robot_config : Bool
+        Flag to enable loading of robot specific launch arguments.
+    robot_name : String
+        The name of the robot.
+
+    Returns
+    -------
+    value : LaunchArgumentsBase
+        A dataclass containing LaunchArguments combined with robot specific launch arguments.
+
+    """
     custom_arg_dict = asdict(custom_args)
 
     robot_arg_dict = {}
@@ -68,6 +99,22 @@ def launch_arg_factory(custom_args: LaunchArgumentsBase, has_robot_config: bool 
 
 
 def read_launch_argument(arg_name, context):
+    """
+    Use in Opaque functions to read the value of a launch argument.
+
+    Parameters
+    ----------
+    arg_name : String
+        Name of the launch argument
+    context : LaunchContext
+        The launch context
+
+    Returns
+    -------
+    value : String
+        The value of the launch argument
+
+    """
     return perform_substitutions(context,
                                  [LaunchConfiguration(arg_name)])
 
