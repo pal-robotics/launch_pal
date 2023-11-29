@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.0.13 (2023-11-29)
+-------------------
 * Remove triple quotes
 * Add docstrings and update README
 * Change yaml file to single quotes
