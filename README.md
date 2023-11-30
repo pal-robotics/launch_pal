@@ -39,6 +39,18 @@ Contains utilities to reduce the boilerplate necessary for including files.
 
 `include_scoped_launch_py_description`: Include a python launch file but avoid  all launch arguments to be passed on by default. Any required launch arguments have to explicitly passed on to the launch file. 
 
+```
+    scoped_launch_file = include_scoped_launch_py_description(pkg_name='my_pkg', 
+    paths=['launch','my_file.launch.py'],
+    launch_arguments={ 'arg_a': DeclareLaunchArgument('arg_a'),
+                       'arg_2': DeclareLaunchArgument('arg_b'),
+                       'arg_c': LaunchConfiguration('arg_c'),
+                       'arg_d': "some_value' }
+    env_vars=[SetEnvironmentVariable("VAR_NAME", 'value)]
+    condition=IfCondition(LaunchConfiguration('arg_a')))
+```
+
+
 **NOTE:**
 This mimics the behavior of including launch files in ROS 1. Helpful in large launch files structures to avoid launch arguments to be overwritten by accident.
 

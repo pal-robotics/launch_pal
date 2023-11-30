@@ -92,7 +92,7 @@ def include_scoped_launch_py_description(
                     'arg_c': LaunchConfiguration('arg_c'),
                     'arg_d': "some_value' }
     env_vars= [SetEnvironmentVariable("VAR_NAME", 'value)]
-    condition=IfCondition(LaunchConfiguration('arg_a'))
+    condition=IfCondition(LaunchConfiguration('arg_a')))
 
     """
     # Note: In case the argument name is remapped and the argument value type is
