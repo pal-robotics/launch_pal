@@ -1,0 +1,17 @@
+ari_configuration:
+  robot_model:
+    description: 'Robot version model'
+    values: ['v1', 'v2']
+    default: 'v2'
+  laser_model:
+    description: 'Base laser model'
+    values: ['no-laser', 'sick-571', 'ydlidar-tg15', 'ydlidar-tg30']
+    default: 'ydlidar-tg15'
+  end_effector:
+    description: 'End effector model'
+    values: ['ari-hand', 'no-hand']
+    default: 'no-hand'
+  camera_model:
+    description: 'Head camera model'
+    values: ['raspi', 'realsense-d435']
+    default: realsense-d435'
