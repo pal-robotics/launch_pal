@@ -131,7 +131,7 @@ class TestIncludeLaunch(unittest.TestCase):
         nested_launch_args = dict(nested_launch_file.launch_arguments)
         grouped_launch_args = scoped_launch_file._GroupAction__launch_configurations
 
-        self.assertEqual(nested_launch_args, grouped_launch_args)
+        self.assertDictEqual(nested_launch_args, grouped_launch_args)
 
         # Check types of arguments
         self.assertTrue(isinstance(
