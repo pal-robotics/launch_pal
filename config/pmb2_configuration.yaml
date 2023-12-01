@@ -1,13 +1,13 @@
 pmb2_configuration:
   wheel_model:
     description: 'Wheel model'
-    values: ['nadia', 'moog']
-    default: 'moog'
+    choices: ['nadia', 'moog']
+    default_value: 'moog'
   laser_model:
     description: 'Base laser model'
-    values: ['no-laser', 'sick-571', 'sick-561', 'sick-551', 'hokuyo']
-    default: 'sick-571'
+    choices: ['no-laser', 'sick-571', 'sick-561', 'sick-551', 'hokuyo']
+    default_value: 'sick-571'
   courier_rgbd_sensors:
     description: 'Whether the base has RGBD sensors or not'
-    values: ['true', 'false']
-    default: 'false'
+    choices: ['true', 'false']
+    default_value: 'false'
