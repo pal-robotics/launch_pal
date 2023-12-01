@@ -18,7 +18,7 @@ from launch.actions import DeclareLaunchArgument as DLA
 from .robot import create_robot_arg
 
 
-ROBOT_NAME = "pmni_base"
+ROBOT_NAME = "omni_base"
 
 
 @dataclass(frozen=True)
