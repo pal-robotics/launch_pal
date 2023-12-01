@@ -20,7 +20,7 @@ from ament_index_python.packages import get_package_share_directory
 import yaml
 
 
-def create_robot_arg(arg_name: str, robot_name: Optional[str]) -> DLA:
+def create_robot_arg(arg_name: str, robot_name: Optional[str] = None) -> DLA:
 
     pkg_dir = get_package_share_directory("launch_pal")
 
@@ -40,7 +40,7 @@ def create_robot_arg(arg_name: str, robot_name: Optional[str]) -> DLA:
     default_value = None
     choices = None
 
-    if arg_name != 'robot':
+    if robot_name != 'robot':
         default_value = configurations_raw[arg_name]['default_value']
         choices = configurations_raw[arg_name]['choices']
 
