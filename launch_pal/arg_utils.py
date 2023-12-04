@@ -51,7 +51,7 @@ class LaunchArgumentsBase:
 
 
 def launch_arg_factory(custom_args: LaunchArgumentsBase, has_robot_config: bool = False,
-                       robot_name: Optional[str] = None):
+                       robot_name: Optional[str] = None) -> LaunchArgumentsBase:
     """
     Create a dataclass consisting of DeclareLaunchArgument objects only.
 

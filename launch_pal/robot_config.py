@@ -16,7 +16,7 @@
 import yaml
 from dataclasses import dataclass
 from typing import List, Union, Dict
-from launch_ros.substitutions import FindPackageShare
+from ament_index_python.packages import get_package_share_directory
 
 
 @dataclass
@@ -52,7 +52,7 @@ class RobotConfiguration:
             A dictionary containing the argument name and the corresponding RobotSetting.
 
         """
-        pkg_dir = FindPackageShare("launch_pal").find("launch_pal")
+        pkg_dir = get_package_share_directory("launch_pal")
 
         config_file = f"{pkg_dir}/config/{robot_name}_configuration.yaml"
 
