@@ -24,4 +24,5 @@ ROBOT_NAME = "tiago_sea_dual"
 @dataclass(frozen=True)
 class TiagoSEADualArgs:
     """This dataclass contains launch arguments for TIAGo SEA Dual."""
+
     pass
