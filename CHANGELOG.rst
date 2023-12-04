@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.0.14 (2023-12-04)
+-------------------
 * Update style errors
 * fix typo and add type hint
 * update typo
