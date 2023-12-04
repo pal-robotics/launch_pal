@@ -1,41 +1,37 @@
-robot_configuration:
+tiago_configuration:
   wheel_model:
     description: 'Wheel model'
-    values: ['nadia', 'moog']
-    default: 'moog'
+    choices: ['nadia', 'moog']
+    default_value: 'moog'
   arm_type:
     description: 'Arm type'
-    values: ['tiago-arm', 'no-arm']
-    default: 'tiago-arm'
+    choices: ['tiago-arm', 'no-arm']
+    default_value: 'tiago-arm'
   laser_model:
     description: 'Base laser model'
-    values: ['no-laser', 'sick-571', 'sick-561', 'sick-551', 'hokuyo']
-    default: 'sick-571'
-  courier_rgbd_sensors:
-    description: 'Whether the base has RGBD sensors or not'
-    values: ['true', 'false']
-    default: 'false'
+    choices: ['no-laser', 'sick-571', 'sick-561', 'sick-551', 'hokuyo']
+    default_value: 'sick-571'
   wrist_model:
     description: 'Wrist model'
-    values: ['wrist-2010', 'wrist-2017']
-    default: 'wrist-2010'
+    choices: ['wrist-2010', 'wrist-2017']
+    default_value: 'wrist-2010'
   end_effector:
     description: 'End effector model'
-    values: ['pal-gripper', 'pal-hey5', 'custom', 'no-end-effector']
-    default: 'pal-gripper'
+    choices: ['pal-gripper', 'pal-hey5', 'custom', 'no-end-effector']
+    default_value: 'pal-gripper'
   ft_sensor:
     description: 'FT sensor model'
-    values: ['schunk-ft', 'no-ft-sensor']
-    default: 'schunk-ft'
+    choices: ['schunk-ft', 'no-ft-sensor']
+    default_value: 'schunk-ft'
   has_screen:
     description: 'Has screen at torso'
-    values: ['false', 'true']
-    default: 'false'
+    choices: ['false', 'true']
+    default_value: 'false'
   base_type:
     description: 'Base type'
-    values: ['pmb2', 'omni_base']
-    default: 'pmb2'
+    choices: ['pmb2', 'omni_base']
+    default_value: 'pmb2'
   camera_model:
     description: 'Head camera model'
-    values: ['orbbec-astra', 'orbbec-astra-pro', 'asus-xtion', 'no-camera']
-    default: 'orbbec-astra'
+    choices: ['orbbec-astra', 'orbbec-astra-pro', 'asus-xtion', 'no-camera']
+    default_value: 'orbbec-astra'
