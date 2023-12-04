@@ -2,6 +2,20 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update style errors
+* fix typo and add type hint
+* update typo
+* Update configuration file keywords
+* Enable autocomplete for robot arguments
+* Use assertDictEqual in test
+* Type hint and use get_share_directory function
+* update readme
+* Add tests
+* Update include scoped launch for more intuitive use
+* Contributors: David ter Kuile
+
 0.0.13 (2023-11-29)
 -------------------
 * Remove triple quotes
