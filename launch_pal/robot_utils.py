@@ -112,7 +112,8 @@ def get_end_effector(robot):
             'end_effector',
             default_value='pal-gripper',
             description='End effector model.',
-            choices=['pal-gripper', 'pal-hey5', 'custom', 'no-end-effector'])
+            choices=['pal-gripper', 'pal-hey5', 'custom', 'no-end-effector', 'robotiq-2f-85',
+                     'robotiq-2f-140', 'robotiq-epick'])
 
     elif robot == 'ari':
         declare_end_effector = DeclareLaunchArgument(
