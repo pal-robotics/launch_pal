@@ -23,10 +23,7 @@ class LaunchArguments(LaunchArgumentsBase):
     wheel_model: DeclareLaunchArgument = TiagoArgs.wheel_model
     # Robot agnostic argument
     base_type: DeclareLaunchArgument = RobotArgs.base_type
-
-
 ```
-
 
 
 ## arg_utils
@@ -52,7 +49,6 @@ parse_dict = { VAR_NAME_1: value_1,
 `merge_param_files`: Merges multiple yaml files into one single file to be loaded by a node.
 
 
-
 ## include_utils
 Contains utilities to reduce the boilerplate necessary for including files.
 
@@ -70,7 +66,6 @@ Contains utilities to reduce the boilerplate necessary for including files.
     env_vars=[SetEnvironmentVariable("VAR_NAME", 'value)]
     condition=IfCondition(LaunchConfiguration('arg_a')))
 ```
-
 
 **NOTE:**
 This mimics the behavior of including launch files in ROS 1. Helpful in large launch files structures to avoid launch arguments to be overwritten by accident.
