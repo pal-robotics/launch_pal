@@ -3,17 +3,38 @@
 Utilities for simplifying some common ROS2 launch operations.
 
 
-## robot_config
-Contains utilities to read launch argument settings directly from a YAML file, grouped per robot type. Used to to automate argument declaration for the robots by ```launch_arg_factory```.
+## robot_arguments
+Contains classes to read launch argument settings directly from a YAML file, grouped per robot type. For each argument the name, the description, default value and possible choices are provided. The classes can be imported to remove boilerplate of robot launch arguments. 
+
+One special class, ```RobotArgs```, contains all available
+launch arguments for PAL Robots. These arguments consist of only a name and description.
+
+Example:
+```python
+from launch_pal.arg_utils import LaunchArgumentsBase
+from launch_pal.robot_arguments import TiagoArgs, RobotArgs
+from launch.actions import DeclareLaunchArgument
+from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class LaunchArguments(LaunchArgumentsBase):
+
+    # Tiago specific settings
+    wheel_model: DeclareLaunchArgument = TiagoArgs.wheel_model
+    # Robot agnostic argument
+    base_type: DeclareLaunchArgument = RobotArgs.base_type
+
+
+```
+
+
 
 ## arg_utils
 Contains utilities for declaring launch arguments and removing boiler plate. 
 
-`launch_arg_factory`: Combines an existing `LaunchArgumentsBase` dataclass with robot specific launch arguments. These robot specific arguments are directly loaded from a yaml file. 
-
 An example of the use can be found in the launch_tutorial package that compares the standard [boilerplate](https://gitlab/davidterkuile/launch_tutorial/-/blob/main/launch/robot_args_example_boilerplate.launch.py) with the an [updated version](https://gitlab/davidterkuile/launch_tutorial/-/blob/main/launch/robot_args_example.launch.py) of the launch file. This updated version also provides a structured architecture that seperates launch arguments from other launch actions. 
 
-`LaunchArgumentsBase`: A dataclass that contains only `DeclareLaunchArgument` objects. The class is used to ease the process of adding launch arguments to the launch description.
+`LaunchArgumentsBase`: A dataclass that contains only `DeclareLaunchArgument` objects. The class is used to ease the process of adding launch arguments to the launch description. Has member function `add_to_launch_description` to automatically add all launch arguments to the launch description.
 
 `read_launch_argument`: Used in Opaque functions to read the value of a launch argument and substitute it to text.
 
