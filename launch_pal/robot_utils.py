@@ -81,9 +81,9 @@ def get_arm(robot):
     if (robot == 'tiago'):
         declare_arm = DeclareLaunchArgument(
             'arm',
-            default_value='right-arm',
+            default_value='tiago-arm',
             description='Which type of arm TIAGo has. ',
-            choices=['no-arm', 'right-arm'])
+            choices=['no-arm', 'tiago-arm', 'right-arm'])
 
     else:
         raise ValueError('The robot ' + robot + ' has not the argument arm')
