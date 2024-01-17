@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.0.15 (2024-01-17)
+-------------------
 * Add right-arm as arm type for backwards compability
 * Change arm type from right-arm to tiago-arm
 * Remove unecessary whitelines
