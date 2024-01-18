@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.0.16 (2024-01-18)
+-------------------
 * removing epick
 * adding robotiq as end effector for tiago dual
 * Adding pal_robotiq grippers as part of choises for the end_effector in ros2
