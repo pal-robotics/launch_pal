@@ -17,7 +17,7 @@ tiago_configuration:
     default_value: 'wrist-2010'
   end_effector:
     description: 'End effector model'
-    choices: ['pal-gripper', 'pal-hey5', 'custom', 'no-end-effector', 'robotiq-2f-85','robotiq-2f-140', 'robotiq-epick']
+    choices: ['pal-gripper', 'pal-hey5', 'custom', 'no-end-effector', 'robotiq-2f-85','robotiq-2f-140']
     default_value: 'pal-gripper'
   ft_sensor:
     description: 'FT sensor model'
