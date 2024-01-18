@@ -2,6 +2,13 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* removing epick
+* adding robotiq as end effector for tiago dual
+* Adding pal_robotiq grippers as part of choises for the end_effector in ros2
+* Contributors: Aina Irisarri
+
 0.0.15 (2024-01-17)
 -------------------
 * Add right-arm as arm type for backwards compability
