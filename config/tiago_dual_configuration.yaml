@@ -25,11 +25,11 @@ tiago_dual_configuration:
     default_value: 'wrist-2010'
   end_effector_right:
     description: 'End effector model right arm'
-    choices: ['pal-gripper', 'pal-hey5', 'custom', 'no-end-effector']
+    choices: ['pal-gripper', 'pal-hey5', 'custom', 'no-end-effector', 'robotiq-2f-85','robotiq-2f-140']
     default_value: 'pal-gripper'
   end_effector_left:
     description: 'End effector model left arm'
-    choices: ['pal-gripper', 'pal-hey5', 'custom', 'no-end-effector']
+    choices: ['pal-gripper', 'pal-hey5', 'custom', 'no-end-effector', 'robotiq-2f-85','robotiq-2f-140']
     default_value: 'pal-gripper'
   ft_sensor_right:
     description: 'FT sensor model right arm'
