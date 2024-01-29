@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.0.17 (2024-01-29)
+-------------------
 * tiago_pro robot_name added in the possible choices
 * Contributors: ileniaperrella
 
