@@ -2,6 +2,11 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* tiago_pro robot_name added in the possible choices
+* Contributors: ileniaperrella
+
 0.0.16 (2024-01-18)
 -------------------
 * removing epick
