@@ -83,7 +83,7 @@ def get_arm(robot):
             'arm',
             default_value='tiago-arm',
             description='Which type of arm TIAGo has. ',
-            choices=['no-arm', 'tiago-arm', 'right-arm'])
+            choices=['no-arm', 'tiago-arm'])
 
     else:
         raise ValueError('The robot ' + robot + ' has not the argument arm')
