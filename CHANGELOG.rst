@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.0.18 (2024-01-31)
+-------------------
 * Remove right-arm option for tiago
 * Contributors: Noel Jimenez
 
