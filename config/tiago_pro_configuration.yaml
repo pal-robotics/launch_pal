@@ -1,0 +1,37 @@
+tiago_pro_configuration:
+  arm_type_right:
+    description: 'Arm type right'
+    choices: ['tiago-pro', 'no-arm']
+    default_value: 'tiago-pro'
+  arm_type_left:
+    description: 'Arm type left'
+    choices: ['tiago-pro', 'no-arm']
+    default_value: 'tiago-pro'
+  laser_model:
+    description: 'Base laser model'
+    choices: ['no-laser', 'sick-571', 'sick-561', 'sick-551', 'hokuyo', 'ydlidar-tg30', 'ydlidar-tg15']
+    default_value: 'hokuyo'
+  end_effector_right:
+    description: 'End effector model right arm'
+    choices: ['pal-pro-gripper', 'custom', 'no-end-effector']
+    default_value: 'pal-pro-gripper'
+  end_effector_left:
+    description: 'End effector model left arm'
+    choices: ['pal-pro-gripper', 'custom', 'no-end-effector']
+    default_value: 'pal-pro-gripper'
+  ft_sensor_right:
+    description: 'FT sensor model right arm'
+    choices: ['rokubi', 'no-ft-sensor']
+    default_value: 'no-ft-sensor'
+  ft_sensor_left:
+    description: 'FT sensor model left arm'
+    choices: ['rokubi', 'no-ft-sensor']
+    default_value: 'no-ft-sensor'
+  base_type:
+    description: 'Base type'
+    choices: ['omni_base']
+    default_value: 'omni_base'
+  camera_model:
+    description: 'Head camera model'
+    choices: ['realsense_d435']
+    default_value: 'realsense_d435'
