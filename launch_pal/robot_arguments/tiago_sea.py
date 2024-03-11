@@ -14,6 +14,9 @@
 
 
 from dataclasses import dataclass
+from launch.actions import DeclareLaunchArgument as DLA
+from .robot import create_robot_arg
+
 # from launch.actions import DeclareLaunchArgument as DLA
 # from .robot import create_robot_arg
 
@@ -25,4 +28,11 @@ ROBOT_NAME = "tiago_sea"
 class TiagoSEAArgs:
     """This dataclass contains launch arguments for TIAGo SEA."""
 
-    pass
+    base_type: DLA = create_robot_arg("base_type", ROBOT_NAME)
+    arm_type: DLA = create_robot_arg("arm_type", ROBOT_NAME)
+    end_effector: DLA = create_robot_arg("end_effector", ROBOT_NAME)
+    ft_sensor: DLA = create_robot_arg("ft_sensor", ROBOT_NAME)
+    base_type: DLA = create_robot_arg("base_type", ROBOT_NAME)
+    camera_model: DLA = create_robot_arg("camera_model", ROBOT_NAME)
+    laser_model: DLA = create_robot_arg("laser_model", ROBOT_NAME)
+    has_screen: DLA = create_robot_arg("has_screen", ROBOT_NAME)

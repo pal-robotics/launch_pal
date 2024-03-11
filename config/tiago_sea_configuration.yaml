@@ -1,0 +1,29 @@
+tiago_sea_configuration:
+  arm_type:
+    description: 'Arm type'
+    choices: ['tiago-arm', 'no-arm']
+    default_value: 'tiago-arm'
+  end_effector:
+    description: 'End effector model'
+    choices: ['pal-gripper', 'pal-hey5', 'custom', 'no-end-effector', 'robotiq-2f-85','robotiq-2f-140', 'pal-pro-gripper']
+    default_value: 'pal-pro-gripper'
+  ft_sensor:
+    description: 'FT sensor model'
+    choices: ['schunk-ft', 'no-ft-sensor']
+    default_value: 'schunk-ft'
+  laser_model:
+    description: 'Base laser model'
+    choices: ['no-laser', 'sick-571', 'sick-561', 'sick-551', 'hokuyo']
+    default_value: 'sick-571'
+  camera_model:
+    description: 'Head camera model'
+    choices: ['orbbec-astra', 'orbbec-astra-pro', 'asus-xtion', 'no-camera']
+    default_value: 'orbbec-astra'
+  base_type:
+    description: 'Base type'
+    choices: ['pmb2', 'omni_base']
+    default_value: 'pmb2'
+  has_screen:
+    description: 'Has screen at torso'
+    choices: ['false', 'true']
+    default_value: 'false'
