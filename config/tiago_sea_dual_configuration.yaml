@@ -51,3 +51,7 @@ tiago_dual_configuration:
     description: 'Head camera model'
     choices: ['orbbec-astra', 'orbbec-astra-pro', 'asus-xtion', 'no-camera']
     default_value: 'orbbec-astra'
+  has_velodyne:
+    description: 'Has velodyne sensor'
+    choices: ['false', 'true']
+    default_value: 'false'

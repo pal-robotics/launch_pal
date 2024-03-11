@@ -35,3 +35,7 @@ tiago_sea_configuration:
     description: 'Wheel model'
     choices: ['nadia', 'moog']
     default_value: 'moog'
+  has_velodyne:
+    description: 'Has velodyne sensor'
+    choices: ['false', 'true']
+    default_value: 'false'

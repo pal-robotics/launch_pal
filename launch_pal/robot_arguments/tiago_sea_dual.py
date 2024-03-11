@@ -38,3 +38,4 @@ class TiagoSEADualArgs:
     laser_model: DLA = create_robot_arg("laser_model", ROBOT_NAME)
     camera_model: DLA = create_robot_arg("camera_model", ROBOT_NAME)
     has_screen: DLA = create_robot_arg("has_screen", ROBOT_NAME)
+    has_velodyne: DLA = create_robot_arg("has_velodyne", ROBOT_NAME)
