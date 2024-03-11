@@ -17,12 +17,12 @@ tiago_dual_configuration:
     default_value: 'sick-571'
   wrist_model_right:
     description: 'Wrist model right arm'
-    choices: ['wrist-2010', 'wrist-2017', 'spherical-wrist']
-    default_value: 'spherical-wrist'
+    choices: ['wrist-2010', 'wrist-2017']
+    default_value: 'wrist-2010'
   wrist_model_left:
     description: 'Wrist model left arm'
-    choices: ['wrist-2010', 'wrist-2017', 'spherical-wrist']
-    default_value: 'spherical-wrist'
+    choices: ['wrist-2010', 'wrist-2017']
+    default_value: 'wrist-2010'
   end_effector_right:
     description: 'End effector model right arm'
     choices: ['pal-gripper', 'pal-hey5', 'custom', 'no-end-effector', 'robotiq-2f-85','robotiq-2f-140']
@@ -51,7 +51,3 @@ tiago_dual_configuration:
     description: 'Head camera model'
     choices: ['orbbec-astra', 'orbbec-astra-pro', 'asus-xtion', 'no-camera']
     default_value: 'orbbec-astra'
-  has_velodyne:
-    description: 'Has velodyne sensor'
-    choices: ['false', 'true']
-    default_value: 'false'
