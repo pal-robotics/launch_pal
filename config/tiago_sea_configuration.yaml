@@ -27,3 +27,11 @@ tiago_sea_configuration:
     description: 'Has screen at torso'
     choices: ['false', 'true']
     default_value: 'false'
+  wrist_model:
+    description: "Wrist model"
+    choices: ['spherical-wrist']
+    default_value: 'spherical-wrist'
+  wheel_model:
+    description: 'Wheel model'
+    choices: ['nadia', 'moog']
+    default_value: 'moog'
