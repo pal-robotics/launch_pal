@@ -5,40 +5,40 @@ tiago_dual_configuration:
     default_value: 'moog'
   arm_type_right:
     description: 'Arm type right'
-    choices: ['tiago-arm', 'no-arm']
-    default_value: 'tiago-arm'
+    choices: ['sea', 'no-arm']
+    default_value: 'sea'
   arm_type_left:
     description: 'Arm type left'
-    choices: ['tiago-arm', 'no-arm']
-    default_value: 'tiago-arm'
+    choices: ['sea', 'no-arm']
+    default_value: 'sea'
   laser_model:
     description: 'Base laser model'
     choices: ['no-laser', 'sick-571', 'sick-561', 'sick-551', 'hokuyo']
     default_value: 'sick-571'
   wrist_model_right:
     description: 'Wrist model right arm'
-    choices: ['wrist-2010', 'wrist-2017']
-    default_value: 'wrist-2010'
+    choices: ['spherical-wrist']
+    default_value: 'spherical-wrist'
   wrist_model_left:
     description: 'Wrist model left arm'
-    choices: ['wrist-2010', 'wrist-2017']
-    default_value: 'wrist-2010'
+    choices: [spherical-wrist']
+    default_value: 'spherical-wrist'
   end_effector_right:
     description: 'End effector model right arm'
-    choices: ['pal-pro-gripper', 'pal-hey5', 'custom', 'no-end-effector', 'robotiq-2f-85','robotiq-2f-140']
+    choices: ['pal-pro-gripper', 'custom', 'no-end-effector']
     default_value: 'pal-pro-gripper'
   end_effector_left:
     description: 'End effector model left arm'
-    choices: ['pal-pro-gripper', 'pal-hey5', 'custom', 'no-end-effector', 'robotiq-2f-85','robotiq-2f-140']
+    choices: ['pal-pro-gripper','custom', 'no-end-effector']
     default_value: 'pal-pro-gripper'
   ft_sensor_right:
     description: 'FT sensor model right arm'
-    choices: ['schunk-ft', 'no-ft-sensor']
-    default_value: 'schunk-ft'
+    choices: ['rokubi', 'no-ft-sensor']
+    default_value: 'rokubi'
   ft_sensor_left:
     description: 'FT sensor model left arm'
-    choices: ['schunk-ft', 'no-ft-sensor']
-    default_value: 'schunk-ft'
+    choices: ['rokubi', 'no-ft-sensor']
+    default_value: 'rokubi'
   has_screen:
     description: 'Has screen at torso'
     choices: ['false', 'true']
