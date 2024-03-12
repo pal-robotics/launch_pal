@@ -32,7 +32,6 @@ class TiagoSEAArgs:
     arm_type: DLA = create_robot_arg("arm_type", ROBOT_NAME)
     end_effector: DLA = create_robot_arg("end_effector", ROBOT_NAME)
     ft_sensor: DLA = create_robot_arg("ft_sensor", ROBOT_NAME)
-    base_type: DLA = create_robot_arg("base_type", ROBOT_NAME)
     camera_model: DLA = create_robot_arg("camera_model", ROBOT_NAME)
     laser_model: DLA = create_robot_arg("laser_model", ROBOT_NAME)
     wrist_model: DLA = create_robot_arg("wrist_model", ROBOT_NAME)
