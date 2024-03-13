@@ -7,6 +7,14 @@ tiago_pro_configuration:
     description: 'Arm type left'
     choices: ['tiago-pro', 'no-arm']
     default_value: 'tiago-pro'
+  wrist_model_right:
+    description: 'Wrist model right'
+    choices: ['spherical-wrist', 'wrist-2023']
+    default_value: 'spherical-wrist'
+  wrist_model_left:
+    description: 'Wrist model left'
+    choices: ['spherical-wrist', 'wrist-2023']
+    default_value: 'spherical-wrist'
   laser_model:
     description: 'Base laser model'
     choices: ['no-laser', 'sick-571', 'sick-561', 'sick-551', 'hokuyo', 'ydlidar-tg30', 'ydlidar-tg15']
