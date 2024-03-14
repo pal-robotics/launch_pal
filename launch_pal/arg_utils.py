@@ -20,6 +20,21 @@ from dataclasses import dataclass
 
 
 @dataclass(frozen=True, kw_only=True)
+class CommonArgs:
+    """This class contains a collection of frequently used LaunchArguments."""
+
+    use_sim_time: DeclareLaunchArgument = DeclareLaunchArgument(
+        name='use_sim_time',
+        default_value='False',
+        choices=['True', 'False'],
+        description='Use simulation time')
+    namespace: DeclareLaunchArgument = DeclareLaunchArgument(
+        name='namespace',
+        default_value='',
+        description='Define namespace of the robot. ')
+
+
+@dataclass(frozen=True, kw_only=True)
 class LaunchArgumentsBase:
     """This class is a dataclass containing only DeclareLaunchArgument objects."""
 
