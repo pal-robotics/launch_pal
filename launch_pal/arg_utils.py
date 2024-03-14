@@ -27,11 +27,30 @@ class CommonArgs:
         name='use_sim_time',
         default_value='False',
         choices=['True', 'False'],
-        description='Use simulation time')
+        description='Use simulation time.')
     namespace: DeclareLaunchArgument = DeclareLaunchArgument(
         name='namespace',
         default_value='',
-        description='Define namespace of the robot. ')
+        description='Define namespace of the robot.')
+    navigation: DeclareLaunchArgument = DeclareLaunchArgument(
+        name='navigation',
+        default_value='False',
+        choices=['True', 'False'],
+        description='Specify if launching Navigation2.')
+    moveit: DeclareLaunchArgument = DeclareLaunchArgument(
+        name='moveit',
+        default_value='True',
+        choices=['True', 'False'],
+        description='Specify if launching MoveIt 2.')
+    world_name: DeclareLaunchArgument = DeclareLaunchArgument(
+        name='world_name',
+        default_value='pal_office',
+        description="Specify world name, will be converted to full path.")
+    public_sim: DeclareLaunchArgument = DeclareLaunchArgument(
+        name='public_sim',
+        default_value='False',
+        choices=['True', 'False'],
+        description="Enable public simulation.")
 
 
 @dataclass(frozen=True, kw_only=True)
