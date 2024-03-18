@@ -1,8 +1,8 @@
 tiago_sea_configuration:
-  arm_type:
-    description: 'Arm type'
-    choices: ['sea', 'no-arm']
-    default_value: 'sea'
+  arm_model:
+    description: 'Arm model'
+    choices: ['tiago-sea', 'no-arm']
+    default_value: 'tiago-sea'
   end_effector:
     description: 'End effector model'
     choices: ['custom', 'no-end-effector', 'pal-pro-gripper']
@@ -19,10 +19,10 @@ tiago_sea_configuration:
     description: 'Head camera model'
     choices: ['orbbec-astra', 'orbbec-astra-pro', 'asus-xtion', 'no-camera']
     default_value: 'orbbec-astra'
-  base_type:
-    description: 'Base type'
+  base_model:
+    description: 'Base model'
     choices: ['pmb2', 'omni_base']
-    default_value: 'pmb2'
+    default_value: 'omni_base'
   wrist_model:
     description: "Wrist model"
     choices: ['spherical-wrist']

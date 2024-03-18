@@ -28,8 +28,8 @@ ROBOT_NAME = "tiago_sea"
 class TiagoSEAArgs:
     """This dataclass contains launch arguments for TIAGo SEA."""
 
-    base_type: DLA = create_robot_arg("base_type", ROBOT_NAME)
-    arm_type: DLA = create_robot_arg("arm_type", ROBOT_NAME)
+    base_model: DLA = create_robot_arg("base_model", ROBOT_NAME)
+    arm_model: DLA = create_robot_arg("arm_model", ROBOT_NAME)
     end_effector: DLA = create_robot_arg("end_effector", ROBOT_NAME)
     ft_sensor: DLA = create_robot_arg("ft_sensor", ROBOT_NAME)
     camera_model: DLA = create_robot_arg("camera_model", ROBOT_NAME)
