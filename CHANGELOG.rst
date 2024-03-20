@@ -2,6 +2,27 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update default values
+* Remove unsupported lasers for now
+* Change common param to is_public_sim
+* Add extra common launch args
+* Add wrist model for spherical wrist
+* Add tiago pro config
+* Fixed base_type and arm_type
+* Suggested changess
+* Standarized config names
+* Configs for tiago_sea
+* Removed has_screen from tiago_sea
+* Update config to tiago sea specific arguments
+* Fixing tiago_dual_configuration
+* Velodyne param added
+* Tiago sea dual params
+* Tiago sea params
+* Create a class that contains frequently used Launch arguments to avoid mismatching Uppercase/lowercase
+* Contributors: David ter Kuile, Oscar, Oscar Martinez, davidterkuile
+
 0.0.18 (2024-01-31)
 -------------------
 * Remove right-arm option for tiago
