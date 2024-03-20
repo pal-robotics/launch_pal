@@ -10,15 +10,15 @@ tiago_pro_configuration:
   wrist_model_right:
     description: 'Wrist model right'
     choices: ['spherical-wrist', 'wrist-2023']
-    default_value: 'spherical-wrist'
+    default_value: 'wrist-2023'
   wrist_model_left:
     description: 'Wrist model left'
     choices: ['spherical-wrist', 'wrist-2023']
-    default_value: 'spherical-wrist'
+    default_value: 'wrist-2023'
   laser_model:
     description: 'Base laser model'
     choices: ['no-laser', 'sick-571']
-    default_value: 'hokuyo'
+    default_value: 'sick-571'
   end_effector_right:
     description: 'End effector model right arm'
     choices: ['pal-pro-gripper', 'custom', 'no-end-effector']
