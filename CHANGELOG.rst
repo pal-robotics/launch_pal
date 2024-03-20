@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.0 (2024-03-20)
+------------------
 * Update default values
 * Remove unsupported lasers for now
 * Change common param to is_public_sim
