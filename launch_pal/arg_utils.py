@@ -46,8 +46,8 @@ class CommonArgs:
         name='world_name',
         default_value='pal_office',
         description="Specify world name, will be converted to full path.")
-    public_sim: DeclareLaunchArgument = DeclareLaunchArgument(
-        name='public_sim',
+    is_public_sim: DeclareLaunchArgument = DeclareLaunchArgument(
+        name='is_public_sim',
         default_value='False',
         choices=['True', 'False'],
         description="Enable public simulation.")
