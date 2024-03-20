@@ -41,8 +41,8 @@ tiago_sea_dual_configuration:
     default_value: 'rokubi'
   has_screen:
     description: 'Has screen at torso'
-    choices: ['false', 'true']
-    default_value: 'false'
+    choices: ['False', 'True']
+    default_value: 'False'
   base_type:
     description: 'Base type'
     choices: ['pmb2', 'omni_base']
@@ -53,5 +53,5 @@ tiago_sea_dual_configuration:
     default_value: 'orbbec-astra'
   has_velodyne:
     description: 'Has velodyne sensor'
-    choices: ['false', 'true']
-    default_value: 'false'
+    choices: ['False', 'True']
+    default_value: 'False'

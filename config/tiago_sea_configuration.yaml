@@ -1,6 +1,6 @@
 tiago_sea_configuration:
-  arm_model:
-    description: 'Arm model'
+  arm_type:
+    description: 'Arm type'
     choices: ['tiago-sea', 'no-arm']
     default_value: 'tiago-sea'
   end_effector:
@@ -19,8 +19,8 @@ tiago_sea_configuration:
     description: 'Head camera model'
     choices: ['orbbec-astra', 'orbbec-astra-pro', 'asus-xtion', 'no-camera']
     default_value: 'orbbec-astra'
-  base_model:
-    description: 'Base model'
+  base_type:
+    description: 'Base type'
     choices: ['pmb2', 'omni_base']
     default_value: 'omni_base'
   wrist_model:
@@ -33,5 +33,5 @@ tiago_sea_configuration:
     default_value: 'moog'
   has_velodyne:
     description: 'Has velodyne sensor'
-    choices: ['false', 'true']
-    default_value: 'false'
+    choices: ['False', 'True']
+    default_value: 'False'
