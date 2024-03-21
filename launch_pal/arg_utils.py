@@ -51,6 +51,12 @@ class CommonArgs:
         default_value='False',
         choices=['True', 'False'],
         description="Enable public simulation.")
+    use_sensor_manager: DeclareLaunchArgument = DeclareLaunchArgument(
+        name='use_sensor_manager',
+        default_value='False',
+        choices=['True', 'False'],
+        description='Use moveit_sensor_manager for octomap')
+
 
 
 @dataclass(frozen=True, kw_only=True)
