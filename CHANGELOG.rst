@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.1 (2024-03-21)
+------------------
 * Fix flake test
 * Add sensor manager as common arg
 * Contributors: David ter Kuile, davidterkuile
