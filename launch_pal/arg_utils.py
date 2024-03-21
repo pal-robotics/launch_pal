@@ -58,7 +58,6 @@ class CommonArgs:
         description='Use moveit_sensor_manager for octomap')
 
 
-
 @dataclass(frozen=True, kw_only=True)
 class LaunchArgumentsBase:
     """This class is a dataclass containing only DeclareLaunchArgument objects."""
