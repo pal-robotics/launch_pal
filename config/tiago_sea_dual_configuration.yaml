@@ -5,12 +5,12 @@ tiago_sea_dual_configuration:
     default_value: 'moog'
   arm_type_right:
     description: 'Arm type right'
-    choices: ['sea', 'no-arm']
-    default_value: 'sea'
+    choices: ['tiago-sea', 'no-arm']
+    default_value: 'tiago-sea'
   arm_type_left:
     description: 'Arm type left'
-    choices: ['sea', 'no-arm']
-    default_value: 'sea'
+    choices: ['tiago-sea', 'no-arm']
+    default_value: 'tiago-sea'
   laser_model:
     description: 'Base laser model'
     choices: ['no-laser', 'sick-571', 'sick-561', 'sick-551', 'hokuyo']
