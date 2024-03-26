@@ -41,5 +41,5 @@ tiago_pro_configuration:
     default_value: 'omni_base'
   camera_model:
     description: 'Head camera model'
-    choices: ['realsense_d435']
-    default_value: 'realsense_d435'
+    choices: ['realsense-d435']
+    default_value: 'realsense-d435'
