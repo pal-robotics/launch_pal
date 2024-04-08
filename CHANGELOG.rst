@@ -2,6 +2,12 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Avoid breaking tiago pro tests
+* Update realsense name in camera rgument
+* Contributors: David ter Kuile, davidterkuile
+
 0.1.1 (2024-03-21)
 ------------------
 * Fix flake test
