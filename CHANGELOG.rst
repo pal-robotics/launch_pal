@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.3 (2024-04-09)
+------------------
 * Changed arm name from sea to tiago-sea for standarization
 * Contributors: Oscar
 
