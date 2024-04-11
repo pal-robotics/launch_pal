@@ -43,3 +43,7 @@ tiago_pro_configuration:
     description: 'Head camera model'
     choices: ['realsense-d435']
     default_value: 'realsense-d435'
+  wheel_model:
+    description: 'Wheel model'
+    choices: ['moog']
+    default_value: 'moog'
