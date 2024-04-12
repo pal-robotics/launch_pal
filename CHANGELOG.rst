@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.4 (2024-04-12)
+------------------
 * Added is_public_sim action check
 * Add wheel model
 * Remove wrong realsense camera arg name
