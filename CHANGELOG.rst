@@ -2,6 +2,13 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Added is_public_sim action check
+* Add wheel model
+* Remove wrong realsense camera arg name
+* Contributors: David ter Kuile, Oscar, davidterkuile
+
 0.1.3 (2024-04-09)
 ------------------
 * Changed arm name from sea to tiago-sea for standarization
