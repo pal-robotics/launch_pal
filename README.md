@@ -109,6 +109,37 @@ Contains utilities to reduce the boilerplate necessary for including files.
 **NOTE:**
 This mimics the behavior of including launch files in ROS 1. Helpful in large launch files structures to avoid launch arguments to be overwritten by accident.
 
+## composition_utils
+Contains utilities to reduce the boilerplate necessary for using ROS 2 components
+
+`generate_component_list`: generates a list of composable nodes from a YAML and a package name, ready to be added or loaded into a ComposableNodeContainer: 
+
+```yaml
+components:
+  <COMPONENT-NAME>:
+    type: <DIAGNOSTIC-TYPE>
+      ros__parameters: 
+        name: <FULL-DIAGNOSTIC_DESCRIPTOR>
+        [<REST-OF-PARAMS>]
+```
+
+It can be used from a launch file like:
+
+```python
+component_list = generate_component_list(components_yaml, pkg_name)
+```
+
+And then added normally to a container:
+
+```python
+container = ComposableNodeContainer(
+    name="container_name",
+    namespace="",
+    package="rclcpp_components",
+    executable="component_container",
+    composable_node_descriptions=component_list,
+)
+```
 
 ## robot_utils (DEPRECATED)
 Declare a single launch argument given by the robot name. 

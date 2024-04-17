@@ -28,12 +28,12 @@ def generate_component_list(yaml_file, components_pkg):
             for component in cfg["components"]:
 
                 component_params = cfg["components"][component]
-                type = component_params["type"]
+                component_type = component_params["type"]
                 ros_params = [component_params["ros__parameters"]]
 
                 launchable_component = ComposableNode(
                     package=components_pkg,
-                    plugin=f"{components_pkg}::{type}",
+                    plugin=f"{components_pkg}::{component_type}",
                     name=component,
                     parameters=ros_params,
                 )
