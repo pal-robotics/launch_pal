@@ -17,7 +17,7 @@ from typing import Dict
 from launch_ros.descriptions import ComposableNode
 
 
-def generate_component_list(yaml_file):
+def generate_component_list(yaml_file, components_pkg):
 
     components = []
 
@@ -32,8 +32,8 @@ def generate_component_list(yaml_file):
                 ros_params = [component_params["ros__parameters"]]
 
                 launchable_component = ComposableNode(
-                    package="pal_computer_monitor",
-                    plugin=f"pal_computer_monitor::{type}",
+                    package=components_pkg,
+                    plugin=f"{components_pkg}::{type}",
                     name=component,
                     parameters=ros_params,
                 )
