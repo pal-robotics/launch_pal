@@ -17,7 +17,7 @@ from typing import Dict
 from launch_ros.descriptions import ComposableNode
 
 
-def generate_component_list(yaml_file, components_pkg):
+def generate_component_list(yaml_file):
 
     components = []
 
@@ -28,12 +28,13 @@ def generate_component_list(yaml_file, components_pkg):
             for component in cfg["components"]:
 
                 component_params = cfg["components"][component]
+                component_pkg = component_params["package"]
                 component_type = component_params["type"]
                 ros_params = [component_params["ros__parameters"]]
 
                 launchable_component = ComposableNode(
-                    package=components_pkg,
-                    plugin=f"{components_pkg}::{component_type}",
+                    package=component_pkg,
+                    plugin=f"{component_pkg}::{component_type}",
                     name=component,
                     parameters=ros_params,
                 )
