@@ -108,7 +108,7 @@ def _parse_config(path, param_rewrites):
 
     """
     # pattern for global vars: look for ${word}
-    pattern = re.compile(r".*?\${(\w+)}.*?")
+    pattern = re.compile(r"\${(\w+)}")
     loader = yaml.SafeLoader
 
     # the tag will be used to mark where to start searching for the pattern
@@ -133,13 +133,14 @@ def _parse_config(path, param_rewrites):
 
         """
         value = loader.construct_scalar(node)
+        
         match = pattern.findall(value)  # to find all variables in line
         if match:
             full_value = value
             for g in match:
-                full_value = re.sub(
-                    r".*?\${(" + re.escape(g) + ")}.*?",
+                full_value = pattern.sub(
                     str(param_rewrites[g]),
+     
                     full_value,
                 )
 
@@ -172,6 +173,47 @@ def _parse_config(path, param_rewrites):
     else:
         raise ValueError("A path should be defined as input")
 
+def _parse_config(path, param_rewrites):
+    """
+    Load a yaml configuration file and resolve any variables.
+
+    The variables must be in this format to be parsed:
+    ${VAR_NAME}.
+    E.g.:
+    host: ${HOST}
+
+    Parameters
+    ----------
+    path : Text
+        The path to the yaml file.
+    param_rewrites : Dict
+        Substitutions parameters.
+
+    Returns
+    -------
+    __var__ : Dict
+        The dict configuration.
+
+    """
+    # pattern for global vars: look for ${word}
+    pattern = re.compile(r'\$\{(\w+)\}')
+
+    # read the YAML file
+    with open(path, 'r') as file:
+        content = file.read()
+
+    # Replace all matches of the pattern with their corresponding values from param_rewrites
+    def replace_variables(match):
+        var_name = match.group(1)
+        # Check if the variable exists in the substitution dictionary
+        if var_name in param_rewrites:
+            return param_rewrites[var_name]
+        else:
+            raise ValueError(f"Variable {var_name} not defined in param_rewrites.")
+
+    content = pattern.sub(replace_variables, content)
+
+    return yaml.safe_load(content)
 
 def parse_parametric_yaml(source_files: List[Text], param_rewrites: Dict):
     """
