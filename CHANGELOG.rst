@@ -2,6 +2,12 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* fix tests
+* fix _parse_config to be able to have a variable between text
+* Contributors: Aina Irisarri
+
 0.1.4 (2024-04-12)
 ------------------
 * Added is_public_sim action check
