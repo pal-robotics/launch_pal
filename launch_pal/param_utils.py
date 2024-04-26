@@ -108,69 +108,24 @@ def _parse_config(path, param_rewrites):
 
     """
     # pattern for global vars: look for ${word}
-    pattern = re.compile(r".*?\${(\w+)}.*?")
-    loader = yaml.SafeLoader
+    pattern = re.compile(r'\$\{(\w+)\}')
 
-    # the tag will be used to mark where to start searching for the pattern
-    # e.g. somekey: somestring${MYVAR}blah blah blah
-    loader.add_implicit_resolver(None, pattern, None)
+    # read the YAML file
+    with open(path, 'r') as file:
+        content = file.read()
 
-    def constructor_variables(loader, node):
-        """
-        Extract the variable from the node's value.
+    # Replace all matches of the pattern with their corresponding values from param_rewrites
+    def replace_variables(match):
+        var_name = match.group(1)
+        # Check if the variable exists in the substitution dictionary
+        if var_name in param_rewrites:
+            return str(param_rewrites[var_name])
+        else:
+            raise ValueError(f"Variable {var_name} not defined in param_rewrites.")
 
-        Parameters
-        ----------
-        loader : yaml.Loader
-            The yaml loader.
-        node : _type_
-            The current node in the yaml.
+    content = pattern.sub(replace_variables, content)
 
-        Returns
-        -------
-        value : Dict
-            the parsed string that contains the value of the variable
-
-        """
-        value = loader.construct_scalar(node)
-        match = pattern.findall(value)  # to find all variables in line
-        if match:
-            full_value = value
-            for g in match:
-                full_value = re.sub(
-                    r".*?\${(" + re.escape(g) + ")}.*?",
-                    str(param_rewrites[g]),
-                    full_value,
-                )
-
-            if (
-                full_value == "True"
-                or full_value == "true"
-            ):
-                return True
-            if (
-                full_value == "False"
-                or full_value == "false"
-            ):
-                return False
-
-            try:
-                return int(full_value)
-            except ValueError:
-                try:
-                    return float(full_value)
-                except ValueError:
-                    return full_value
-
-        return value
-
-    loader.add_constructor(None, constructor_variables)
-
-    if path:
-        with open(path) as conf_data:
-            return yaml.load(conf_data, Loader=loader)
-    else:
-        raise ValueError("A path should be defined as input")
+    return yaml.safe_load(content)
 
 
 def parse_parametric_yaml(source_files: List[Text], param_rewrites: Dict):
