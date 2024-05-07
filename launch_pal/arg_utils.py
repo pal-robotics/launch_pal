@@ -56,6 +56,11 @@ class CommonArgs:
         default_value='False',
         choices=['True', 'False'],
         description='Use moveit_sensor_manager for octomap')
+    tuck_arm: DeclareLaunchArgument = DeclareLaunchArgument(
+        name='tuck_arm',
+        default_value='True',
+        choices=['True', 'False'],
+        description='Launches tuck arm node')
 
 
 @dataclass(frozen=True, kw_only=True)
