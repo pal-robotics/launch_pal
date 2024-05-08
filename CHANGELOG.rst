@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.6 (2024-05-08)
+------------------
 * added tuck arm parameter
 * Contributors: sergiacosta
 
