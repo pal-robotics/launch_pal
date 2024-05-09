@@ -41,8 +41,8 @@ tiago_dual_configuration:
     default_value: 'schunk-ft'
   has_screen:
     description: 'Has screen at torso'
-    choices: ['false', 'true']
-    default_value: 'false'
+    choices: ['False', 'True']
+    default_value: 'False'
   base_type:
     description: 'Base type'
     choices: ['pmb2', 'omni_base']
