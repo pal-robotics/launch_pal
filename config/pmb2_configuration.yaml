@@ -9,5 +9,5 @@ pmb2_configuration:
     default_value: 'sick-571'
   courier_rgbd_sensors:
     description: 'Whether the base has RGBD sensors or not'
-    choices: ['true', 'false']
-    default_value: 'false'
+    choices: ['True', 'False']
+    default_value: 'False'
