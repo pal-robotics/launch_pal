@@ -2,6 +2,14 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge branch 'dtk/fix/bool-args' into 'master'
+  Set all boolean robot args to capital value
+  See merge request common/launch_pal!49
+* Set all boolean robot args to capital value
+* Contributors: Noel Jimenez, davidterkuile
+
 0.1.6 (2024-05-08)
 ------------------
 * added tuck arm parameter
