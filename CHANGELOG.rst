@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.7 (2024-05-09)
+------------------
 * Merge branch 'dtk/fix/bool-args' into 'master'
   Set all boolean robot args to capital value
   See merge request common/launch_pal!49
