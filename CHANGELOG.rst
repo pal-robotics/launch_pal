@@ -2,6 +2,14 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge branch 'omm/common_pos_args' into 'master'
+  Robot position args added to common
+  See merge request common/launch_pal!50
+* Robot position args added to common
+* Contributors: davidterkuile, oscarmartinez
+
 0.1.7 (2024-05-09)
 ------------------
 * Merge branch 'dtk/fix/bool-args' into 'master'
