@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.8 (2024-05-15)
+------------------
 * Merge branch 'omm/common_pos_args' into 'master'
   Robot position args added to common
   See merge request common/launch_pal!50
