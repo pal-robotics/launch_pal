@@ -31,6 +31,10 @@ tiago_sea_configuration:
     description: 'Wheel model'
     choices: ['nadia', 'moog']
     default_value: 'moog'
+  has_screen:
+    description: 'Has screen'
+    choices: ['False', 'True']
+    default_value: 'False'git 
   has_velodyne:
     description: 'Has velodyne sensor'
     choices: ['False', 'True']
