@@ -61,6 +61,30 @@ class CommonArgs:
         default_value='True',
         choices=['True', 'False'],
         description='Launches tuck arm node')
+    x: DeclareLaunchArgument = DeclareLaunchArgument(
+        name="x",
+        description="X pose of the robot",
+        default_value="0.0")
+    y: DeclareLaunchArgument = DeclareLaunchArgument(
+        name="y",
+        description="Y pose of the robot",
+        default_value="0.0")
+    z: DeclareLaunchArgument = DeclareLaunchArgument(
+        name="z",
+        description="Z pose of the robot",
+        default_value="0.0")
+    roll: DeclareLaunchArgument = DeclareLaunchArgument(
+        name="roll",
+        description="Roll pose of the robot",
+        default_value="0.0")
+    pitch: DeclareLaunchArgument = DeclareLaunchArgument(
+        name="pitch",
+        description="Pitch pose of the robot",
+        default_value="0.0")
+    yaw: DeclareLaunchArgument = DeclareLaunchArgument(
+        name="yaw",
+        description="Yaw pose of the robot",
+        default_value="0.0")
 
 
 @dataclass(frozen=True, kw_only=True)
