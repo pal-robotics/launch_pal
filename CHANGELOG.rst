@@ -2,6 +2,15 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge branch 'VKG/fix/screen-parameters' into 'master'
+  fixed screen parameters, edited configuration and robot argument files
+  See merge request common/launch_pal!51
+* typo fixed
+* fixed screen parameters, edited configuration and robot argument files
+* Contributors: Vamsi GUDA, davidterkuile
+
 0.1.8 (2024-05-15)
 ------------------
 * Merge branch 'omm/common_pos_args' into 'master'
