@@ -9,7 +9,7 @@ robot_configuration:
     description: 'Arm type.'
   laser_model:
     description: 'Base laser model.'
-  courier_rgbd_sensors:
+  has_courier_rgbd_sensors:
     description: 'Whether the base has RGBD sensors or not.'
   wrist_model_right:
     description: 'Wrist model right arm.'

@@ -7,7 +7,7 @@ pmb2_configuration:
     description: 'Base laser model'
     choices: ['no-laser', 'sick-571', 'sick-561', 'sick-551', 'hokuyo']
     default_value: 'sick-571'
-  courier_rgbd_sensors:
+  has_courier_rgbd_sensors:
     description: 'Whether the base has RGBD sensors or not'
     choices: ['True', 'False']
     default_value: 'False'

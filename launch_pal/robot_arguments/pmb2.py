@@ -27,4 +27,4 @@ class PMB2Args:
 
     wheel_model: DLA = create_robot_arg('wheel_model', ROBOT_NAME)
     laser_model: DLA = create_robot_arg('laser_model', ROBOT_NAME)
-    courier_rgbd_sensors: DLA = create_robot_arg('courier_rgbd_sensors', ROBOT_NAME)
+    has_courier_rgbd_sensors: DLA = create_robot_arg('has_courier_rgbd_sensors', ROBOT_NAME)
