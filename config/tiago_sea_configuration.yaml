@@ -34,7 +34,7 @@ tiago_sea_configuration:
   has_screen:
     description: 'Has screen'
     choices: ['False', 'True']
-    default_value: 'False'git 
+    default_value: 'False'
   has_velodyne:
     description: 'Has velodyne sensor'
     choices: ['False', 'True']
