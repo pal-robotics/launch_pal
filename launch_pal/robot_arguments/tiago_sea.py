@@ -36,4 +36,5 @@ class TiagoSEAArgs:
     laser_model: DLA = create_robot_arg("laser_model", ROBOT_NAME)
     wrist_model: DLA = create_robot_arg("wrist_model", ROBOT_NAME)
     wheel_model: DLA = create_robot_arg("wheel_model", ROBOT_NAME)
+    has_screen: DLA = create_robot_arg('has_screen', ROBOT_NAME)
     has_velodyne: DLA = create_robot_arg("has_velodyne", ROBOT_NAME)
