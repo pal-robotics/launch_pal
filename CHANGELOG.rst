@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.9 (2024-05-16)
+------------------
 * Merge branch 'VKG/fix/screen-parameters' into 'master'
   fixed screen parameters, edited configuration and robot argument files
   See merge request common/launch_pal!51
