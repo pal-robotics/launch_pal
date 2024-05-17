@@ -2,6 +2,14 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge branch 'omm/feat/rgdb_sensors_rename' into 'master'
+  Proper courier_rgbd_sensor name
+  See merge request common/launch_pal!52
+* Proper courier_rgbd_sensor name
+* Contributors: davidterkuile, oscarmartinez
+
 0.1.9 (2024-05-16)
 ------------------
 * Merge branch 'VKG/fix/screen-parameters' into 'master'
