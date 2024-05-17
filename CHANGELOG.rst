@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.10 (2024-05-17)
+-------------------
 * Merge branch 'omm/feat/rgdb_sensors_rename' into 'master'
   Proper courier_rgbd_sensor name
   See merge request common/launch_pal!52
