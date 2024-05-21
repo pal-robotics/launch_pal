@@ -108,12 +108,15 @@ def _parse_config(path, param_rewrites):
 
     """
     # pattern for global vars: look for ${word}
-    pattern = re.compile(r'\$\{(\w+)\}')
-
+    pattern_vars = re.compile(r'\$\{(\w+)\}')
+    
+    # Pattern to find package paths: look for ${find PKG_NAME}
+    pattern_pkg = re.compile(r'\$\{find ([a-zA-Z0-9_]+)\}')
+    
     # read the YAML file
     with open(path, 'r') as file:
         content = file.read()
-
+    
     # Replace all matches of the pattern with their corresponding values from param_rewrites
     def replace_variables(match):
         var_name = match.group(1)
@@ -122,9 +125,21 @@ def _parse_config(path, param_rewrites):
             return str(param_rewrites[var_name])
         else:
             raise ValueError(f"Variable {var_name} not defined in param_rewrites.")
-
-    content = pattern.sub(replace_variables, content)
-
+    
+    content = pattern_vars.sub(replace_variables, content)
+    
+    # Replace all occurrences of the package pattern with the full path of the package
+    def replace_pkg_path(match):
+        pkg_name = match.group(1)
+        pkg_path = get_package_share_directory(pkg_name)
+        # Assuming pkg_path is not empty if the path exists
+        if pkg_path:  
+            return pkg_path
+        else:
+            raise ValueError(f"Package path {pkg_name} not found.")
+    
+    content = pattern_pkg.sub(replace_pkg_path, content)
+    
     return yaml.safe_load(content)
 
 
