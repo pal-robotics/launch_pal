@@ -18,6 +18,7 @@ import re
 import yaml
 
 from typing import Dict, List, Text
+from ament_index_python.packages import get_package_share_directory
 
 
 def _merge_dictionaries(dict1, dict2):
@@ -88,11 +89,16 @@ def merge_param_files(yaml_files):
 def _parse_config(path, param_rewrites):
     """
     Load a yaml configuration file and resolve any variables.
+    It allows to get the share directory of a package too.
 
     The variables must be in this format to be parsed:
     ${VAR_NAME}.
     E.g.:
     host: ${HOST}
+    The pkg name must be in this format to be parsed:
+    ${find PKG_NAME}.
+    E.g.:
+    pkg_path:${find PKG_NAME}
 
     Parameters
     ----------
