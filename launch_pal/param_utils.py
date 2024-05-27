@@ -89,6 +89,7 @@ def merge_param_files(yaml_files):
 def _parse_config(path, param_rewrites):
     """
     Load a yaml configuration file and resolve any variables.
+    
     It allows to get the share directory of a package too.
 
     The variables must be in this format to be parsed:
