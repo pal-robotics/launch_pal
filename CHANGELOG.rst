@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.11 (2024-05-28)
+-------------------
 * Merge branch 'feat/aca/find-pkg-share-yaml' into 'master'
   Feat/aca/find pkg share yaml
   See merge request common/launch_pal!54
