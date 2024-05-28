@@ -18,6 +18,7 @@ import re
 import yaml
 
 from typing import Dict, List, Text
+from ament_index_python.packages import get_package_share_directory
 
 
 def _merge_dictionaries(dict1, dict2):
@@ -89,10 +90,16 @@ def _parse_config(path, param_rewrites):
     """
     Load a yaml configuration file and resolve any variables.
 
+    It allows to get the share directory of a package too.
+
     The variables must be in this format to be parsed:
     ${VAR_NAME}.
     E.g.:
     host: ${HOST}
+    The pkg name must be in this format to be parsed:
+    ${find PKG_NAME}.
+    E.g.:
+    pkg_path:${find PKG_NAME}
 
     Parameters
     ----------
@@ -108,7 +115,10 @@ def _parse_config(path, param_rewrites):
 
     """
     # pattern for global vars: look for ${word}
-    pattern = re.compile(r'\$\{(\w+)\}')
+    pattern_vars = re.compile(r'\$\{(\w+)\}')
+
+    # Pattern to find package paths: look for ${find PKG_NAME}
+    pattern_pkg = re.compile(r'\$\{find ([a-zA-Z0-9_]+)\}')
 
     # read the YAML file
     with open(path, 'r') as file:
@@ -121,9 +131,22 @@ def _parse_config(path, param_rewrites):
         if var_name in param_rewrites:
             return str(param_rewrites[var_name])
         else:
-            raise ValueError(f"Variable {var_name} not defined in param_rewrites.")
+            raise ValueError(
+                f"Variable {var_name} not defined in param_rewrites.")
 
-    content = pattern.sub(replace_variables, content)
+    content = pattern_vars.sub(replace_variables, content)
+
+    # Replace all occurrences of the package pattern with the full path of the package
+    def replace_pkg_path(match):
+        pkg_name = match.group(1)
+        pkg_path = get_package_share_directory(pkg_name)
+        # Assuming pkg_path is not empty if the path exists
+        if pkg_path:
+            return pkg_path
+        else:
+            raise ValueError(f"Package path {pkg_name} not found.")
+
+    content = pattern_pkg.sub(replace_pkg_path, content)
 
     return yaml.safe_load(content)
 
