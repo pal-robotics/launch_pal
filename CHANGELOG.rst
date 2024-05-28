@@ -2,6 +2,18 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge branch 'feat/aca/find-pkg-share-yaml' into 'master'
+  Feat/aca/find pkg share yaml
+  See merge request common/launch_pal!54
+* linters
+* linters
+* linters
+* added import, modified explication
+* extend _parse_config functionality
+* Contributors: andreacapodacqua, davidterkuile
+
 0.1.10 (2024-05-17)
 -------------------
 * Merge branch 'omm/feat/rgdb_sensors_rename' into 'master'
