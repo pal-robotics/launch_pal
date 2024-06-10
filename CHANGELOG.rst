@@ -2,6 +2,14 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge branch 'tpe/upate_std_and_launch_arg' into 'master'
+  update lauch args for the omni base
+  See merge request common/launch_pal!55
+* update lauch args for the omni base
+* Contributors: davidterkuile, thomas.peyrucain
+
 0.1.11 (2024-05-28)
 -------------------
 * Merge branch 'feat/aca/find-pkg-share-yaml' into 'master'
