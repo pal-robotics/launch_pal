@@ -25,4 +25,6 @@ ROBOT_NAME = "omni_base"
 class OmniBaseArgs:
     """This dataclass contains launch arguments for Omni Base."""
 
+    wheel_model: DLA = create_robot_arg('wheel_model', ROBOT_NAME)
     laser_model: DLA = create_robot_arg('laser_model', ROBOT_NAME)
+    rgbd_sensors: DLA = create_robot_arg('rgbd_sensors', ROBOT_NAME)
