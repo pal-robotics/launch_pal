@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.12 (2024-06-11)
+-------------------
 * Update Changelog
 * Merge branch 'tpe/upate_std_and_launch_arg' into 'master'
   update lauch args for the omni base
