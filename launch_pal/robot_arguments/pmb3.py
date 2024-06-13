@@ -1,4 +1,4 @@
-# Copyright (c) 2022 PAL Robotics S.L. All rights reserved.
+# Copyright (c) 2023 PAL Robotics S.L. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,16 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from . import arg_utils
-from . import include_utils
-from . import param_utils
-from . import substitutions
-from . import actions
 
-__all__ = [
-    'arg_utils',
-    'include_utils',
-    'param_utils',
-    'actions',
-    'substitutions',
-]
+from dataclasses import dataclass
+from launch.actions import DeclareLaunchArgument as DLA
+from .robot import create_robot_arg
+
+
+ROBOT_NAME = "pmb3"
+
+
+@dataclass(frozen=True)
+class PMB3Args:
+    """This dataclass contains launch arguments for PMB3."""
+
+    wheel_model: DLA = create_robot_arg('wheel_model', ROBOT_NAME)
+    laser_model: DLA = create_robot_arg('laser_model', ROBOT_NAME)
+    camera_model: DLA = create_robot_arg('camera_model', ROBOT_NAME)
