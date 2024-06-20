@@ -2,6 +2,45 @@
 
 Utilities for simplifying some common ROS2 launch operations.
 
+## get_pal_configuration
+
+Implementation of the PAL's PAPS-007 standard for configuration management.
+
+Retrieves all the parameters, remappings and arguments for a given node by
+looking for `ament_index`-registered YAML configurations file. It properly handle
+overloading of parameters, enabling for instance to have a default configuration
+and a specific configuration for a given robot family or robot unit.
+
+Usage:
+
+```python
+#...
+from launch_pal import get_pal_configuration
+
+def generate_launch_description():
+
+    ld = LaunchDescription()
+
+    config = get_pal_configuration(pkg='pkg_name',
+                                   node='node_name', 
+                                   ld=ld, # optional; only used for logging
+                                   )
+    my_node = Node(
+        name='node_name',
+        namespace='',
+        package='pkg_name',
+        executable='node_executable',
+        parameters=config['parameters'],
+        remappings=config['remappings'],
+        arguments=config['arguments'],
+    )
+
+    # ...
+
+    ld.add_action(my_node)
+
+    return ld
+```
 
 ## robot_arguments
 Contains classes to read launch argument settings directly from a YAML file, grouped per robot type. For each argument the name, the description, default value and possible choices are provided. The classes can be imported to remove boilerplate of robot launch arguments. 
