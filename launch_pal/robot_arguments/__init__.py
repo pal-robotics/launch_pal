@@ -15,24 +15,10 @@
 
 """robot_arguments Module."""
 
-from .ari import AriArgs
-from .tiago_dual import TiagoDualArgs
-from .tiago_sea import TiagoSEAArgs
-from .tiago_sea_dual import TiagoSEADualArgs
-from .tiago_pro import TiagoProArgs
-from .omni_base import OmniBaseArgs
-from .pmb2 import PMB2Args
 from .robot import RobotArgs
 from .common import CommonArgs
 
 __all__ = [
-    'AriArgs',
-    'TiagoDualArgs',
-    'TiagoSEAArgs',
-    'TiagoSEADualArgs',
-    'TiagoProArgs',
-    'OmniBaseArgs',
-    'PMB2Args',
     'RobotArgs',
     'CommonArgs'
 ]
