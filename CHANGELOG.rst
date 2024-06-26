@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.13 (2024-06-26)
+-------------------
 * Merge branch 'dtk/move-robot-args' into 'master'
   Dtk/move robot args
   See merge request common/launch_pal!56
