@@ -17,74 +17,62 @@ from launch.substitutions import LaunchConfiguration
 from launch.utilities import perform_substitutions
 from launch.actions import DeclareLaunchArgument
 from dataclasses import dataclass
+import yaml
 
 
-@dataclass(frozen=True, kw_only=True)
-class CommonArgs:
-    """This class contains a collection of frequently used LaunchArguments."""
+class LaunchArgCreator:
 
-    use_sim_time: DeclareLaunchArgument = DeclareLaunchArgument(
-        name='use_sim_time',
-        default_value='False',
-        choices=['True', 'False'],
-        description='Use simulation time.')
-    namespace: DeclareLaunchArgument = DeclareLaunchArgument(
-        name='namespace',
-        default_value='',
-        description='Define namespace of the robot.')
-    navigation: DeclareLaunchArgument = DeclareLaunchArgument(
-        name='navigation',
-        default_value='False',
-        choices=['True', 'False'],
-        description='Specify if launching Navigation2.')
-    moveit: DeclareLaunchArgument = DeclareLaunchArgument(
-        name='moveit',
-        default_value='True',
-        choices=['True', 'False'],
-        description='Specify if launching MoveIt 2.')
-    world_name: DeclareLaunchArgument = DeclareLaunchArgument(
-        name='world_name',
-        default_value='pal_office',
-        description="Specify world name, will be converted to full path.")
-    is_public_sim: DeclareLaunchArgument = DeclareLaunchArgument(
-        name='is_public_sim',
-        default_value='False',
-        choices=['True', 'False'],
-        description="Enable public simulation.")
-    use_sensor_manager: DeclareLaunchArgument = DeclareLaunchArgument(
-        name='use_sensor_manager',
-        default_value='False',
-        choices=['True', 'False'],
-        description='Use moveit_sensor_manager for octomap')
-    tuck_arm: DeclareLaunchArgument = DeclareLaunchArgument(
-        name='tuck_arm',
-        default_value='True',
-        choices=['True', 'False'],
-        description='Launches tuck arm node')
-    x: DeclareLaunchArgument = DeclareLaunchArgument(
-        name="x",
-        description="X pose of the robot",
-        default_value="0.0")
-    y: DeclareLaunchArgument = DeclareLaunchArgument(
-        name="y",
-        description="Y pose of the robot",
-        default_value="0.0")
-    z: DeclareLaunchArgument = DeclareLaunchArgument(
-        name="z",
-        description="Z pose of the robot",
-        default_value="0.0")
-    roll: DeclareLaunchArgument = DeclareLaunchArgument(
-        name="roll",
-        description="Roll pose of the robot",
-        default_value="0.0")
-    pitch: DeclareLaunchArgument = DeclareLaunchArgument(
-        name="pitch",
-        description="Pitch pose of the robot",
-        default_value="0.0")
-    yaw: DeclareLaunchArgument = DeclareLaunchArgument(
-        name="yaw",
-        description="Yaw pose of the robot",
-        default_value="0.0")
+    def __init__(self) -> None:
+        self.launch_arguments = {}
+
+    def from_yaml(self, yaml_file: str) -> dict:
+        with open(yaml_file, 'r') as file:
+            arg_configurations = yaml.load(file, Loader=yaml.FullLoader)
+            try:
+                self.launch_arguments = {key: self.dict_to_launch_arg(
+                    item, key) for key, item in arg_configurations.items()}
+            except Exception as e:
+                print(f"Could not parse launch argument from file {yaml_file}")
+                print(f"Error: {e}")
+
+    def is_valid_dict(self, launch_dict: dict) -> bool:
+        valid_keys = ['description', 'default_value', 'choices']
+        key_set = set(launch_dict.keys())
+
+        # Ensure description is in the dictionary and no invalid keys are present
+        return ('description' in key_set) and key_set.issubset(valid_keys)
+
+    def dict_to_launch_arg(self, launch_dict: dict, arg_name: str) -> str:
+
+        if not self.is_valid_dict(launch_dict):
+            raise ValueError(
+                f"Launch argument configuration is not valid for {arg_name}")
+
+        description = launch_dict['description']
+        default_value = None
+        choices = None
+        if 'default_value' in launch_dict.keys():
+            default_value = launch_dict['default_value']
+        if 'choices' in launch_dict.keys():
+            choices = launch_dict['choices']
+
+        return DeclareLaunchArgument(name=arg_name,
+                                     description=description,
+                                     default_value=default_value,
+                                     choices=choices)
+
+    def get_argument(self, arg_name: str) -> DeclareLaunchArgument:
+        if arg_name not in self.launch_arguments.keys():
+            raise KeyError(
+                f"Launch argument {arg_name} does not exist")
+
+        return self.launch_arguments[arg_name]
+
+
+def parse_launch_args_from_yaml(yaml_file: str) -> LaunchArgCreator:
+    launch_args = LaunchArgCreator()
+    launch_args.from_yaml(yaml_file)
+    return launch_args
 
 
 @dataclass(frozen=True, kw_only=True)
