@@ -2,6 +2,16 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge branch 'dtk/move-robot-args' into 'master'
+  Dtk/move robot args
+  See merge request common/launch_pal!56
+* Remove robot configurations
+* ArgFactory class to create launch args from yaml
+* Move common args
+* Contributors: David ter Kuile, davidterkuile
+
 0.1.12 (2024-06-11)
 -------------------
 * Update Changelog
