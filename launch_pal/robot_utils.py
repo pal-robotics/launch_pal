@@ -20,7 +20,7 @@ def get_robot_name(default_robot_name='pmb2'):
         'robot_name',
         default_value=default_robot_name,
         description='Name of the robot. ',
-        choices=['pmb2', 'tiago', 'pmb3', 'ari', 'omni_base', 'tiago_pro'])
+        choices=['pmb2', 'tiago', 'tiago_dual', 'pmb3', 'ari', 'omni_base', 'tiago_pro'])
 
     return declare_robot_name
 
