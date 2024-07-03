@@ -45,7 +45,7 @@ class CommonArgs:
         default_value='True',
         choices=['True', 'False'],
         description='Specify if launching MoveIt 2.')
-    slam = DeclareLaunchArgument(
+    slam: DeclareLaunchArgument = DeclareLaunchArgument(
         "slam",
         default_value="False",
         description="Whether or not you are using SLAM",
