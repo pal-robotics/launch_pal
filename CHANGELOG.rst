@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.14 (2024-07-03)
+-------------------
 * Merge branch 'air/feat/add_slam' into 'master'
   add slam param
   See merge request common/launch_pal!60
