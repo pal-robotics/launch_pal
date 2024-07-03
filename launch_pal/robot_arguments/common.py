@@ -30,6 +30,11 @@ class CommonArgs:
         name='namespace',
         default_value='',
         description='Define namespace of the robot.')
+    robot_name: DeclareLaunchArgument = DeclareLaunchArgument(
+        'robot_name',
+        default_value='pmb2',
+        description='Name of the robot. ',
+        choices=['pmb2', 'tiago', 'tiago_dual', 'pmb3', 'ari', 'omni_base', 'tiago_pro'])
     navigation: DeclareLaunchArgument = DeclareLaunchArgument(
         name='navigation',
         default_value='False',
