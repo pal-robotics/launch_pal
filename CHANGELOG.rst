@@ -2,6 +2,20 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge branch 'air/feat/add_slam' into 'master'
+  add slam param
+  See merge request common/launch_pal!60
+* fix declare slam
+* add slam param
+* Merge branch 'feature/tiago-dual-support' into 'master'
+  feat: add robot_name arg to CommonArgs
+  See merge request common/launch_pal!59
+* feat: add robot_name to CommonArgs
+* feat: tiago dual support
+* Contributors: Aina, davidterkuile, josegarcia
+
 0.1.13 (2024-06-26)
 -------------------
 * Merge branch 'dtk/move-robot-args' into 'master'
