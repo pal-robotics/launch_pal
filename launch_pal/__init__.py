@@ -26,4 +26,5 @@ __all__ = [
     'actions',
     'substitutions',
     'get_pal_configuration',
+    'composition_utils',
 ]
