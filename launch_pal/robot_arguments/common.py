@@ -40,6 +40,11 @@ class CommonArgs:
         default_value='False',
         choices=['True', 'False'],
         description='Specify if launching Navigation2.')
+    advanced_navigation: DeclareLaunchArgument = DeclareLaunchArgument(
+        name='advanced_navigation',
+        default_value='False',
+        choices=['True', 'False'],
+        description='Specify if launching Advanced Navigation.')
     moveit: DeclareLaunchArgument = DeclareLaunchArgument(
         name='moveit',
         default_value='True',
