@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.15 (2024-07-04)
+-------------------
 * Merge branch 'omm/feat/composition_utils' into 'master'
   Composition utils
   See merge request common/launch_pal!38
