@@ -17,6 +17,7 @@ from . import include_utils
 from . import param_utils
 from . import substitutions
 from . import actions
+from .pal_parameters import get_pal_configuration
 
 __all__ = [
     'arg_utils',
@@ -24,4 +25,5 @@ __all__ = [
     'param_utils',
     'actions',
     'substitutions',
+    'get_pal_configuration',
 ]
