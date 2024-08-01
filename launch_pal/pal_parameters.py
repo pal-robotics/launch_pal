@@ -84,21 +84,32 @@ def get_pal_configuration(pkg, node, ld=None):
         return {'parameters': [], 'remappings': [], 'arguments': []}
 
     # next, look for the user configuration files
-
+    user_cfg_srcs = []
     if PAL_USER_PARAMETERS_PATH.exists():
         # list of (*.yml, *.yaml) in any subdirectory under PAL_USER_PARAMETERS_PATH:
-        user_cfg_srcs = sorted([f for e in ["*.yml", "*.yaml"]
-                               for f in PAL_USER_PARAMETERS_PATH.glob("**/" + e)])
-        for cfg_file in user_cfg_srcs:
+        all_user_cfg_srcs = sorted([f for e in ["*.yml", "*.yaml"]
+                                    for f in PAL_USER_PARAMETERS_PATH.glob("**/" + e)])
+        for cfg_file in all_user_cfg_srcs:
             with open(cfg_file, 'r') as f:
-                config = update(config, yaml.load(f, yaml.Loader))
+                content = yaml.load(f, yaml.Loader)
+                for k in content.keys():
+                    if node in k:
+                        user_cfg_srcs.append(cfg_file)
+                        config = update(config, content)
 
     # finally, return the configuration for the specific node
     node_fqn = None
     for k in config.keys():
         if k.split('/')[-1] == node:
-            node_fqn = k
-            break
+            if not node_fqn:
+                node_fqn = k
+            else:
+                if ld:
+                    ld.add_action(LogInfo(msg=f'WARN: found two configuration '
+                                          'files with node {node} in different namespaces: '
+                                          f'{node_fqn} and {k}.'
+                                          f' Ignoring {k} for now, but you probably '
+                                          'have an error in your configuration files.'))
 
     if not node_fqn:
         if ld:
@@ -124,17 +135,23 @@ def get_pal_configuration(pkg, node, ld=None):
 
     if ld:
         ld.add_action(
-            LogInfo(msg=f'Loaded configuration for <{node}> '
-                    f'from {[str(p) for k, p in cfg_srcs.items()]}'))
+            LogInfo(msg=f'Loaded configuration for <{node}>:'
+                    '\n- System configuration (from lower to higher precedence):\n'
+                    + ("\n".join(["\t- " + str(p) for p in sorted(cfg_srcs.values())]
+                                 ) if cfg_srcs else "\t\t- (none)") +
+                    '\n- User overrides (from lower to higher precedence):\n'
+                    + ("\n".join(["\t- " + str(p) for p in user_cfg_srcs]
+                                 ) if user_cfg_srcs else "\t- (none)")
+                    ))
         if res['parameters']:
-            ld.add_action(LogInfo(msg='Parameters: ' +
-                                  '\n - '.join([f'{k}: {v}' for d in res['parameters']
-                                                for k, v in d.items()])))
+            ld.add_action(LogInfo(msg='Parameters:\n' +
+                                  '\n'.join([f'- {k}: {v}' for d in res['parameters']
+                                             for k, v in d.items()])))
         if res['remappings']:
-            ld.add_action(LogInfo(msg='Remappings: ' +
-                                  '\n - '.join([f'{a} -> {b}' for a, b in res['remappings']])))
+            ld.add_action(LogInfo(msg='Remappings:\n' +
+                                  '\n'.join([f'- {a} -> {b}' for a, b in res['remappings']])))
         if res['arguments']:
-            ld.add_action(LogInfo(msg='Arguments: ' +
-                                  '\n - '.join(res['arguments'])))
+            ld.add_action(LogInfo(msg='Arguments:\n' +
+                                  '\n'.join([f"- {a}" for a in res['arguments']])))
 
     return res
