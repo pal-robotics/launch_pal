@@ -34,7 +34,7 @@ class CommonArgs:
         'robot_name',
         default_value='pmb2',
         description='Name of the robot. ',
-        choices=['pmb2', 'tiago', 'tiago_dual', 'pmb3', 'ari', 'omni_base', 'tiago_pro'])
+        choices=['pmb2', 'tiago', 'tiago_dual', 'pmb3', 'ari', 'omni_base', 'tiago_pro', 'talos', 'kangaroo'])
     navigation: DeclareLaunchArgument = DeclareLaunchArgument(
         name='navigation',
         default_value='False',
