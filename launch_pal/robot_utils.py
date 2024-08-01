@@ -19,8 +19,19 @@ def get_robot_name(default_robot_name='pmb2'):
     declare_robot_name = DeclareLaunchArgument(
         'robot_name',
         default_value=default_robot_name,
-        description='Name of the robot. ',
-        choices=['pmb2', 'tiago', 'tiago_dual', 'pmb3', 'ari', 'omni_base', 'tiago_pro', 'talos', 'kangaroo'])
+        description="Name of the robot. ",
+        choices=[
+            "pmb2",
+            "tiago",
+            "tiago_dual",
+            "pmb3",
+            "ari",
+            "omni_base",
+            "tiago_pro",
+            "talos",
+            "kangaroo",
+        ],
+    )
 
     return declare_robot_name
 
