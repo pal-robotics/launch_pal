@@ -92,6 +92,11 @@ def get_pal_configuration(pkg, node, ld=None):
         for cfg_file in all_user_cfg_srcs:
             with open(cfg_file, 'r') as f:
                 content = yaml.load(f, yaml.Loader)
+                if not content or not isinstance(content, dict):
+                    if ld:
+                        ld.add_action(LogInfo(msg=f'WARN: configuration file {cfg_file} is empty'
+                                              ' or not a dictionary. Skipping it.'))
+                    continue
                 for k in content.keys():
                     if node in k:
                         user_cfg_srcs.append(cfg_file)
