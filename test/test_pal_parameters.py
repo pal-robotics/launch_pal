@@ -16,11 +16,24 @@ import unittest
 import os
 from launch_pal.pal_parameters import get_pal_configuration
 
-os.environ['AMENT_PREFIX_PATH'] = os.path.join(
-    os.getcwd(), 'test', 'mock_rosroot_pal_parameters')
-
 
 class TestPalGetConfiguration(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        TestPalGetConfiguration.prev_ament_prefix_path = os.environ.get(
+            'AMENT_PREFIX_PATH', None)
+
+        os.environ['AMENT_PREFIX_PATH'] = os.path.join(
+            os.getcwd(), 'test', 'mock_rosroot_pal_parameters')
+
+    @classmethod
+    def tearDownClass(cls):
+        if TestPalGetConfiguration.prev_ament_prefix_path is not None:
+            os.environ['AMENT_PREFIX_PATH'] = TestPalGetConfiguration.prev_ament_prefix_path
+        else:
+            del os.environ['AMENT_PREFIX_PATH']
+
     def test_get_configuration(self):
         config = get_pal_configuration(pkg='test_node', node='test_node')
 
