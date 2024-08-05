@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.2.0 (2024-08-05)
+------------------
 * [test] make sure changing AMENT_PREFIX_PATH does not spill out of the tests
 * PAPS-007: better logging for invalid user configuration files
 * get_pal_parameters: improved logging
