@@ -2,6 +2,17 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* [test] make sure changing AMENT_PREFIX_PATH does not spill out of the tests
+* PAPS-007: better logging for invalid user configuration files
+* get_pal_parameters: improved logging
+  In particular, list all the configuration files found for the node, by order of precedence
+* PAPS-007 - get_pal_parameters: add support for user configuration in ~/.pal/config
+  The location of user configuration can be overridden via envvar
+  $PAL_USER_PARAMETERS_PATH.
+* Contributors: Séverin Lemaignan
+
 0.1.15 (2024-07-04)
 -------------------
 * Merge branch 'omm/feat/composition_utils' into 'master'
