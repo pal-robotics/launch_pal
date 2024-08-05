@@ -11,7 +11,28 @@ looking for `ament_index`-registered YAML configurations file. It properly handl
 overloading of parameters, enabling for instance to have a default configuration
 and a specific configuration for a given robot family or robot unit.
 
-Usage:
+### User overrides
+
+Users can provide local overrides via configuration files in
+`$HOME/.pal/config`.
+
+For instance, creating a file `~/.pal/config/default_volume.yml` with the
+content:
+
+```yaml
+/volume:
+  ros__parameters:
+    default_volume: 75
+```
+
+would override the ROS parameter `default_volume` for the node `/volume`.
+
+This is useful for eg persist user configuration across robot reboots.
+
+The default location of user configuration is `$HOME/.pal/config`. It can by
+changed by setting the environment variable `$PAL_USER_PARAMETERS_PATH`.
+
+### Usage
 
 ```python
 #...

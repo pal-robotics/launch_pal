@@ -12,10 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
 import collections.abc
 import yaml
 import ament_index_python as aip
 from launch.actions import LogInfo
+from pathlib import Path
+
+DEFAULT_USER_PARAMETER_PATH = Path(os.environ["HOME"]) / ".pal" / "config"
 
 
 def get_pal_configuration(pkg, node, ld=None):
@@ -24,9 +28,20 @@ def get_pal_configuration(pkg, node, ld=None):
 
     : param pkg: The package name
     : param node: The node name
-    : param ld: The launch description to log messages to. If None, no messages are logged.
+    : param ld: The launch description to log messages to.
+                If None, no messages are logged.
     : return: A dictionary with the parameters, remappings and arguments
     """
+    PAL_USER_PARAMETERS_PATH = Path(os.environ.get(
+        'PAL_USER_PARAMETERS_PATH', DEFAULT_USER_PARAMETER_PATH))
+
+    if not PAL_USER_PARAMETERS_PATH.exists():
+        if ld:
+            ld.add_action(LogInfo(
+                msg='WARNING: user configuration path '
+                f'{PAL_USER_PARAMETERS_PATH} does not exist. '
+                'User overrides will not be available.'))
+
     # code for recursive dictionary update
     # taken from https://stackoverflow.com/a/3233356
     def update(d, u):
@@ -37,6 +52,7 @@ def get_pal_configuration(pkg, node, ld=None):
                 d[k] = v
         return d
 
+    # first, use ament_index to retrieve all configuration files pertaining to a node
     cfg_srcs_pkgs = aip.get_resources(f'pal_configuration.{pkg}')
 
     cfg_srcs = {}
@@ -67,11 +83,38 @@ def get_pal_configuration(pkg, node, ld=None):
     if not config:
         return {'parameters': [], 'remappings': [], 'arguments': []}
 
+    # next, look for the user configuration files
+    user_cfg_srcs = []
+    if PAL_USER_PARAMETERS_PATH.exists():
+        # list of (*.yml, *.yaml) in any subdirectory under PAL_USER_PARAMETERS_PATH:
+        all_user_cfg_srcs = sorted([f for e in ["*.yml", "*.yaml"]
+                                    for f in PAL_USER_PARAMETERS_PATH.glob("**/" + e)])
+        for cfg_file in all_user_cfg_srcs:
+            with open(cfg_file, 'r') as f:
+                content = yaml.load(f, yaml.Loader)
+                if not content or not isinstance(content, dict):
+                    if ld:
+                        ld.add_action(LogInfo(msg=f'WARN: configuration file {cfg_file} is empty'
+                                              ' or not a dictionary. Skipping it.'))
+                    continue
+                for k in content.keys():
+                    if node in k:
+                        user_cfg_srcs.append(cfg_file)
+                        config = update(config, content)
+
+    # finally, return the configuration for the specific node
     node_fqn = None
     for k in config.keys():
         if k.split('/')[-1] == node:
-            node_fqn = k
-            break
+            if not node_fqn:
+                node_fqn = k
+            else:
+                if ld:
+                    ld.add_action(LogInfo(msg=f'WARN: found two configuration '
+                                          'files with node {node} in different namespaces: '
+                                          f'{node_fqn} and {k}.'
+                                          f' Ignoring {k} for now, but you probably '
+                                          'have an error in your configuration files.'))
 
     if not node_fqn:
         if ld:
@@ -97,17 +140,23 @@ def get_pal_configuration(pkg, node, ld=None):
 
     if ld:
         ld.add_action(
-            LogInfo(msg=f'Loaded configuration for <{node}> '
-                    f'from {[str(p) for k, p in cfg_srcs.items()]}'))
+            LogInfo(msg=f'Loaded configuration for <{node}>:'
+                    '\n- System configuration (from lower to higher precedence):\n'
+                    + ("\n".join(["\t- " + str(p) for p in sorted(cfg_srcs.values())]
+                                 ) if cfg_srcs else "\t\t- (none)") +
+                    '\n- User overrides (from lower to higher precedence):\n'
+                    + ("\n".join(["\t- " + str(p) for p in user_cfg_srcs]
+                                 ) if user_cfg_srcs else "\t- (none)")
+                    ))
         if res['parameters']:
-            ld.add_action(LogInfo(msg='Parameters: ' +
-                                  '\n - '.join([f'{k}: {v}' for d in res['parameters']
-                                                for k, v in d.items()])))
+            ld.add_action(LogInfo(msg='Parameters:\n' +
+                                  '\n'.join([f'- {k}: {v}' for d in res['parameters']
+                                             for k, v in d.items()])))
         if res['remappings']:
-            ld.add_action(LogInfo(msg='Remappings: ' +
-                                  '\n - '.join([f'{a} -> {b}' for a, b in res['remappings']])))
+            ld.add_action(LogInfo(msg='Remappings:\n' +
+                                  '\n'.join([f'- {a} -> {b}' for a, b in res['remappings']])))
         if res['arguments']:
-            ld.add_action(LogInfo(msg='Arguments: ' +
-                                  '\n - '.join(res['arguments'])))
+            ld.add_action(LogInfo(msg='Arguments:\n' +
+                                  '\n'.join([f"- {a}" for a in res['arguments']])))
 
     return res
