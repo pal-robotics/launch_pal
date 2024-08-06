@@ -2,6 +2,11 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add talos and kangaroo as robots
+* Contributors: Adria Roig
+
 0.2.0 (2024-08-05)
 ------------------
 * [test] make sure changing AMENT_PREFIX_PATH does not spill out of the tests
