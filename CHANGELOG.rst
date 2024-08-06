@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.3.0 (2024-08-06)
+------------------
 * Add talos and kangaroo as robots
 * Contributors: Adria Roig
 
