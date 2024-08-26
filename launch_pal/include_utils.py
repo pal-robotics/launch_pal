@@ -17,6 +17,7 @@ import copy
 from launch import SomeSubstitutionsType
 from launch.actions import IncludeLaunchDescription, GroupAction, DeclareLaunchArgument
 from launch.actions import SetEnvironmentVariable
+from launch_ros.actions import PushRosNamespace
 
 from launch import Action
 from launch import Condition
@@ -53,6 +54,7 @@ def include_scoped_launch_py_description(
         launch_arguments: Dict = {},
         env_vars: List[SetEnvironmentVariable] = [],
         condition: Optional[Condition] = None,
+        namespace: Optional[str] = None,
         **kwargs) -> Action:
     """
     Return a GroupAction for the launch file inside pkg at paths.
@@ -74,6 +76,8 @@ def include_scoped_launch_py_description(
         Environment variables required for the launch file
     condition: Optional[Condition]
         Conditionally include this launch file
+    namespace: Optional[str]
+        Add a namespace to this launch file
     **kwargs:
         Any other required function arguments
 
@@ -93,6 +97,7 @@ def include_scoped_launch_py_description(
                     'arg_d': "some_value' }
     env_vars= [SetEnvironmentVariable("VAR_NAME", 'value)]
     condition=IfCondition(LaunchConfiguration('arg_a')))
+    namespace='my_namespace'
 
     """
     # Note: In case the argument name is remapped and the argument value type is
@@ -124,6 +129,9 @@ def include_scoped_launch_py_description(
 
     actions = []
 
+    # Add namespace to launched node (needs to be run first)
+    if namespace != None:
+        actions.append(PushRosNamespace(namespace))
     # Add environment variables
     actions.extend(env_vars)
     # If a declared launch argument is remapped it has to be declared in the new scope as well.
