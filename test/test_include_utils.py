@@ -21,6 +21,9 @@ from launch.launch_context import LaunchContext
 from launch.substitutions import LaunchConfiguration
 from launch.actions import DeclareLaunchArgument, SetEnvironmentVariable, IncludeLaunchDescription
 from launch_ros.substitutions import FindPackageShare
+from launch_ros.actions import PushRosNamespace
+
+import pytest
 
 
 class TestIncludeLaunch(unittest.TestCase):
@@ -157,3 +160,46 @@ class TestIncludeLaunch(unittest.TestCase):
             nested_launch_args['arg_5'].variable_name[0].text, 'arg_e')
 
         return
+
+
+class Config:
+    def __init__(
+        self,
+        *,
+        push_ns=None,
+        expected_ns=None,
+    ):
+        self.push_ns = push_ns
+        self.expected_ns = expected_ns
+
+    def __repr__(self):
+        return f'push_ns={self.push_ns}, expected_ns={self.expected_ns}, '
+
+
+def get_test_cases():
+    return (
+        Config(push_ns='elle_pleut', expected_ns='/elle_pleut'),
+        Config(push_ns='', expected_ns=''),
+        Config(),
+    )
+
+
+@pytest.mark.parametrize('config', get_test_cases())
+def test_push_ros_namespace_with_composable_node(config):
+    context = LaunchContext()
+    pkg_name = 'launch_pal'
+    file_path = ['launch', 'test.launch.py']
+
+    launch_description = include_scoped_launch_py_description(
+        pkg_name=pkg_name,
+        paths=file_path,
+        namespace=config.push_ns,
+    )
+    scoped_actions = launch_description._GroupAction__actions
+    expected_ns = config.expected_ns if config.expected_ns is not None else ''
+    if expected_ns != '':
+        assert isinstance(scoped_actions[0], PushRosNamespace)
+        namespace_action: PushRosNamespace = scoped_actions[0]
+        assert namespace_action.namespace[0].perform(context) == config.push_ns
+    else:
+        assert not isinstance(scoped_actions[0], PushRosNamespace)

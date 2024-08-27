@@ -130,7 +130,7 @@ def include_scoped_launch_py_description(
     actions = []
 
     # Add namespace to launched node (needs to be run first)
-    if namespace != None:
+    if namespace:
         actions.append(PushRosNamespace(namespace))
     # Add environment variables
     actions.extend(env_vars)
