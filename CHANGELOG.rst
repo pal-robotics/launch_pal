@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.0 (2024-08-28)
+------------------
 * add tests for namespace
 * add namespaces option when including launch file
 * Contributors: thomasung
