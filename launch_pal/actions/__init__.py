@@ -13,7 +13,9 @@
 # limitations under the License.
 
 from .check_public_sim import CheckPublicSim
+from .validate_xacro_args import ValidateXacroArgs
 
 __all__ = [
     'CheckPublicSim',
+    'ValidateXacroArgs'
 ]
