@@ -37,23 +37,7 @@ class ValidateXacroArgs(EmitEvent):
     def __init__(self, *, msg: Text = 'Arguments do not match', xacro_path, args_dict: Dict, **kwargs):
         self.xacro_path = xacro_path
         self.args_dict = args_dict
-        super().__init__(event=ShutdownEvent(reason=msg), **kwargs)
-
-    @classmethod
-    def parse(cls, entity: Entity, parser: Parser):
-        """Return `ValidateXacroArgs` action and kwargs for constructing it."""
-        _, kwargs = super().parse(entity, parser)
-        msg = entity.get_attr('reason', optional=True)
-        if msg:
-            kwargs['msg'] = parser.parse_substitution(msg)
-
-        xacro_path = entity.get_attr('xacro_path', optional=False)
-        kwargs['xacro_path'] = parser.parse_substitution(xacro_path)
-
-        args_dict = entity.get_attr('args_dict', optional=False)
-        kwargs['args_dict'] = parser.parse_substitution(args_dict)
-
-        return cls, kwargs
+        super().__init__(event=ShutdownEvent(reason='Xacro arguments not valid'), **kwargs)
 
     def execute(self, context: LaunchContext):
         """Execute the action."""
