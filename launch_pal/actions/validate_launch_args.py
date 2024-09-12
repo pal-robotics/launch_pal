@@ -15,12 +15,7 @@
 """Module for the Shutdown action."""
 
 import logging
-from typing import Text, List
 from dataclasses import fields
-
-
-from launch.frontend import Entity
-from launch.frontend import Parser
 
 from launch.actions import EmitEvent
 from launch.events import Shutdown as ShutdownEvent
@@ -38,7 +33,6 @@ class ValidateLaunchArgs(EmitEvent):
 
     def execute(self, context: LaunchContext):
         """Execute the action."""
-
         # Extract all the arguments names
         launch_args_names = [arg.name for arg in fields(self.launch_args)]
         input_args_names = [s.split(':=')[0] for s in context.argv]
