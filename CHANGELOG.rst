@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.0 (2024-09-17)
+------------------
 * add deprecation note to the robot_utils methods
 * Contributors: Sai Kishor Kothakota
 
