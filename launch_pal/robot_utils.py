@@ -13,8 +13,22 @@
 # limitations under the License.
 
 from launch.actions import DeclareLaunchArgument
+import warnings
 
 
+def deprecated(func):
+    def wrapper(*args, **kwargs):
+        warnings.filterwarnings("always")
+        warnings.warn(
+            f"{func.__name__} is deprecated and will be removed in a future release. "
+            "Please use libraries inside the 'robot_arguments' module instead.",
+            DeprecationWarning,
+        )
+        return func(*args, **kwargs)
+    return wrapper
+
+
+@deprecated
 def get_robot_name(default_robot_name='pmb2'):
     declare_robot_name = DeclareLaunchArgument(
         'robot_name',
@@ -25,6 +39,7 @@ def get_robot_name(default_robot_name='pmb2'):
     return declare_robot_name
 
 
+@deprecated
 def get_wheel_model(robot):
     if (robot == 'pmb2') or (robot == 'tiago'):
         declare_wheel_model = DeclareLaunchArgument(
@@ -40,6 +55,7 @@ def get_wheel_model(robot):
     return declare_wheel_model
 
 
+@deprecated
 def get_laser_model(robot):
     if (robot == 'pmb2') or (robot == 'tiago') or (robot == 'pmb3') or (robot == 'omni_base'):
         declare_laser_model = DeclareLaunchArgument(
@@ -62,6 +78,7 @@ def get_laser_model(robot):
     return declare_laser_model
 
 
+@deprecated
 def get_courier_rgbd_sensors(robot):
     if (robot == 'pmb2'):
         declare_courier_rgbd_sensors = DeclareLaunchArgument(
@@ -77,6 +94,7 @@ def get_courier_rgbd_sensors(robot):
     return declare_courier_rgbd_sensors
 
 
+@deprecated
 def get_arm(robot):
     if (robot == 'tiago'):
         declare_arm = DeclareLaunchArgument(
@@ -91,6 +109,7 @@ def get_arm(robot):
     return declare_arm
 
 
+@deprecated
 def get_wrist_model(robot):
     if (robot == 'tiago'):
         declare_wrist_model = DeclareLaunchArgument(
@@ -106,6 +125,7 @@ def get_wrist_model(robot):
     return declare_wrist_model
 
 
+@deprecated
 def get_end_effector(robot):
     if (robot == 'tiago'):
         declare_end_effector = DeclareLaunchArgument(
@@ -129,6 +149,7 @@ def get_end_effector(robot):
     return declare_end_effector
 
 
+@deprecated
 def get_ft_sensor(robot):
     if (robot == 'tiago'):
         declare_ft_sensor = DeclareLaunchArgument(
@@ -144,6 +165,7 @@ def get_ft_sensor(robot):
     return declare_ft_sensor
 
 
+@deprecated
 def get_camera_model(robot):
     if (robot == 'tiago'):
         declare_camera_model = DeclareLaunchArgument(
@@ -171,6 +193,7 @@ def get_camera_model(robot):
     return declare_camera_model
 
 
+@deprecated
 def get_robot_model(robot):
     if robot == 'ari':
         declare_robot_model = DeclareLaunchArgument(
