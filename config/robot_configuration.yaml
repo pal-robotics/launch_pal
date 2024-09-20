@@ -17,6 +17,12 @@ robot_configuration:
     description: 'Wrist model left arm.'
   wrist_model:
     description: 'Wrist model arm.'
+  tool_changer_right:
+    description: 'The arm has a tool changer right arm.'
+  tool_changer_left:
+    description: 'The arm has a tool changer left arm.'
+  tool_changer:
+    description: 'The arm has a tool changer.'
   end_effector_right:
     description: 'End effector model right arm.'
   end_effector_left:
