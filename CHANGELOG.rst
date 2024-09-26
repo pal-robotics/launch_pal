@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.6.0 (2024-09-26)
+------------------
 * Add tool_changer arg
 * Contributors: thomas.peyrucain
 
