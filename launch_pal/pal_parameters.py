@@ -16,21 +16,28 @@ import os
 import collections.abc
 import yaml
 import ament_index_python as aip
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import LaunchConfiguration
+from launch.launch_context import LaunchContext
 from launch.actions import LogInfo
 from pathlib import Path
 
 DEFAULT_USER_PARAMETER_PATH = Path(os.environ["HOME"]) / ".pal" / "config"
 
 
-def get_pal_configuration(pkg, node, ld=None):
+def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
     """
     Get the configuration for a node from the PAL configuration files.
 
-    : param pkg: The package name
-    : param node: The node name
-    : param ld: The launch description to log messages to.
+    :param pkg: The package name
+    :param node: The node name
+    :param ld: The launch description to log messages to.
                 If None, no messages are logged.
-    : return: A dictionary with the parameters, remappings and arguments
+    :param cmdline_args: A boolean or a list of arguments that will be added as command-line launch
+                arguments. If True (default), all arguments will be added. If False, none will be
+                added. If a list, only the arguments in the list will be added.
+
+    :return: A dictionary with the parameters, remappings and arguments
     """
     PAL_USER_PARAMETERS_PATH = Path(os.environ.get(
         'PAL_USER_PARAMETERS_PATH', DEFAULT_USER_PARAMETER_PATH))
@@ -125,6 +132,33 @@ def get_pal_configuration(pkg, node, ld=None):
                                   ' Returning empty parameters/remappings/arguments'))
         return {'parameters': [], 'remappings': [], 'arguments': []}
 
+    if cmdline_args:
+        if ld is None:
+            raise ValueError(
+                "cmdline_args can only be used if argument 'ld' is not None")
+
+        # if cmdline_args is True, add all arguments
+        if not isinstance(cmdline_args, list):
+            cmdline_args = config[node_fqn].setdefault(
+                "ros__parameters", {}).keys()
+
+        for arg in cmdline_args:
+            default = config[node_fqn].setdefault(
+                "ros__parameters", {}).get(arg)
+            if default is None:
+                ld.add_action(LogInfo(msg=f"WARNING: no default value defined for cmdline "
+                                          f"argument '{arg}'. As such, it is mandatory to "
+                                          "set this argument when launching the node. Consider "
+                                          "adding a default value in the configuration file of "
+                                          "the node."))
+
+            ld.add_action(DeclareLaunchArgument(
+                arg,
+                description=f"Start node and run 'ros2 param describe {node} {arg}' for more "
+                            "information.",
+                default_value=str(default)))
+            config[node_fqn]["ros__parameters"][arg] = LaunchConfiguration(arg, default=[default])
+
     res = {'parameters': [{k: v} for k, v in config[node_fqn].setdefault('ros__parameters', {})
                           .items()],
            'remappings': config[node_fqn].setdefault('remappings', {}).items(),
@@ -149,9 +183,17 @@ def get_pal_configuration(pkg, node, ld=None):
                                  ) if user_cfg_srcs else "\t- (none)")
                     ))
         if res['parameters']:
-            ld.add_action(LogInfo(msg='Parameters:\n' +
-                                  '\n'.join([f'- {k}: {v}' for d in res['parameters']
-                                             for k, v in d.items()])))
+            # create an empty launch context to get the default values of the parameters
+            lc = LaunchContext()
+
+            param_list = ""
+            for d in res['parameters']:
+                for k, v in d.items():
+                    if isinstance(v, LaunchConfiguration):
+                        param_list += f'- {k}: {v.perform(lc)} (can be overridden with {k}:=...)\n'
+                    else:
+                        param_list += f'- {k}: {v}\n'
+            ld.add_action(LogInfo(msg='Parameters:\n' + param_list))
         if res['remappings']:
             ld.add_action(LogInfo(msg='Remappings:\n' +
                                   '\n'.join([f'- {a} -> {b}' for a, b in res['remappings']])))
