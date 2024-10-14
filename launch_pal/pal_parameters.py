@@ -141,11 +141,11 @@ def get_pal_configuration(pkg, node, ld=None):
     if ld:
         ld.add_action(
             LogInfo(msg=f'Loaded configuration for <{node}>:'
-                    '\n- System configuration (from lower to higher precedence):\n'
-                    + ("\n".join(["\t- " + str(p) for p in sorted(cfg_srcs.values())]
+                    '\n- System configuration (from higher to lower precedence):\n'
+                    + ("\n".join(["\t- " + str(p) for p in sorted(cfg_srcs.values(), reverse=True)]
                                  ) if cfg_srcs else "\t\t- (none)") +
-                    '\n- User overrides (from lower to higher precedence):\n'
-                    + ("\n".join(["\t- " + str(p) for p in user_cfg_srcs]
+                    '\n- User overrides (from higher to lower precedence):\n'
+                    + ("\n".join(["\t- " + str(p) for p in sorted(user_cfg_srcs, reverse=True)]
                                  ) if user_cfg_srcs else "\t- (none)")
                     ))
         if res['parameters']:
