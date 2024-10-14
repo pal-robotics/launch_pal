@@ -25,6 +25,16 @@ from pathlib import Path
 DEFAULT_USER_PARAMETER_PATH = Path(os.environ["HOME"]) / ".pal" / "config"
 
 
+def get_dotted_value(dotted_arg, d):
+    """Access a nested dictionary member using a dotted string."""
+    for key in dotted_arg.split('.'):
+        if key in d:
+            d = d.get(key)
+        else:
+            return None
+    return d
+
+
 def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
     """
     Get the configuration for a node from the PAL configuration files.
@@ -143,8 +153,8 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
                 "ros__parameters", {}).keys()
 
         for arg in cmdline_args:
-            default = config[node_fqn].setdefault(
-                "ros__parameters", {}).get(arg)
+            default = get_dotted_value(arg, config[node_fqn].setdefault(
+                "ros__parameters", {}))
             if default is None:
                 ld.add_action(LogInfo(msg=f"WARNING: no default value defined for cmdline "
                                           f"argument '{arg}'. As such, it is mandatory to "
