@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.7.0 (2024-10-16)
+------------------
 * update README iwith get_pal_configuration automatic arguments
 * [pal_get_params] ensure we get the default values for nested parameters
 * [get_pal_parm] automatically creates cmdline arguments for node params
