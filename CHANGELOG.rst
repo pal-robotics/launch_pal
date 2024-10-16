@@ -2,6 +2,19 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* update README iwith get_pal_configuration automatic arguments
+* [pal_get_params] ensure we get the default values for nested parameters
+* [get_pal_parm] automatically creates cmdline arguments for node params
+  This is controlled by the 'cmdline_args' param of :
+  - cmdline_args=True (default): create cmd line arguments for all params
+  - cmdline_args=[...]: create cmdline arguments for the listed params
+  - cmdline_args=False: do not create cmdline arguments
+* [get_pal_param] show config files from high to lower precedence
+  This is a more natural order in practise
+* Contributors: Séverin Lemaignan
+
 0.6.0 (2024-09-26)
 ------------------
 * Add tool_changer arg
