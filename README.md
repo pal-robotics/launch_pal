@@ -32,6 +32,19 @@ This is useful for eg persist user configuration across robot reboots.
 The default location of user configuration is `$HOME/.pal/config`. It can by
 changed by setting the environment variable `$PAL_USER_PARAMETERS_PATH`.
 
+### Automatic command-line arguments
+
+If `get_pal_configuration` is called with `cmdline_args=True` (default), it will
+automatically add command-line launch arguments for all parameters in the
+configuration file. This allows for easy configuration of the node via the
+command line (see for instance `--show-args`).
+
+Alternatively, the user can provide a list of parameters to be exposed as
+command-line arguments. This is useful for instance to expose only a subset of
+parameters.
+
+This behavior can be disabled by setting `cmdline_args=False`.
+
 ### Usage
 
 ```python
@@ -44,7 +57,8 @@ def generate_launch_description():
 
     config = get_pal_configuration(pkg='pkg_name',
                                    node='node_name', 
-                                   ld=ld, # optional; only used for logging
+                                   ld=ld, # optional if cmdline_args = False
+                                   cmdline_args=[Bool|list]) # optional, True by default
                                    )
     my_node = Node(
         name='node_name',
