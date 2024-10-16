@@ -15,6 +15,9 @@
 import unittest
 import os
 from launch_pal.pal_parameters import get_pal_configuration
+from launch.substitutions import LaunchConfiguration
+from launch.launch_context import LaunchContext
+from launch import LaunchDescription
 
 
 class TestPalGetConfiguration(unittest.TestCase):
@@ -35,7 +38,8 @@ class TestPalGetConfiguration(unittest.TestCase):
             del os.environ['AMENT_PREFIX_PATH']
 
     def test_get_configuration(self):
-        config = get_pal_configuration(pkg='test_node', node='test_node')
+
+        config = get_pal_configuration(pkg='test_node', node='test_node', cmdline_args=False)
 
         self.assertCountEqual(
             config['parameters'],
@@ -60,7 +64,7 @@ class TestPalGetConfiguration(unittest.TestCase):
         os.environ['PAL_USER_PARAMETERS_PATH'] = os.path.join(
             os.getcwd(), 'test', 'mock_rosroot_pal_parameters', 'home', 'pal')
 
-        config = get_pal_configuration(pkg='test_node', node='test_node')
+        config = get_pal_configuration(pkg='test_node', node='test_node', cmdline_args=False)
 
         self.assertCountEqual(
             config['parameters'],
@@ -79,6 +83,47 @@ class TestPalGetConfiguration(unittest.TestCase):
                 ('remap3', '/robot-remap'),
             ]
         )
+
+    def test_get_configuration_cmdline_overrides_single_param(self):
+
+        ld = LaunchDescription()
+
+        config = get_pal_configuration(pkg='test_node',
+                                       node='test_node',
+                                       cmdline_args=['param1'],
+                                       ld=ld)
+
+        self.assertTrue(isinstance(config['parameters'][0]['param1'], LaunchConfiguration))
+
+        lc = LaunchContext()
+
+        self.assertEquals(config['parameters'][0]['param1'].perform(lc), 'base value')
+
+        self.assertFalse(isinstance(config['parameters'][1]['param2'], LaunchConfiguration))
+        self.assertFalse(isinstance(config['parameters'][2]['param3'], LaunchConfiguration))
+
+    def test_get_configuration_cmdline_overrides_all_params(self):
+
+        ld = LaunchDescription()
+
+        config = get_pal_configuration(pkg='test_node', node='test_node', ld=ld)
+
+        self.assertTrue(isinstance(config['parameters'][0]['param1'], LaunchConfiguration))
+        self.assertTrue(isinstance(config['parameters'][1]['param2'], LaunchConfiguration))
+        self.assertTrue(isinstance(config['parameters'][2]['param3'], LaunchConfiguration))
+
+    def test_get_configuration_cmdline_overrides_no_params(self):
+
+        ld = LaunchDescription()
+
+        config = get_pal_configuration(pkg='test_node',
+                                       node='test_node',
+                                       ld=ld,
+                                       cmdline_args=False)
+
+        self.assertFalse(isinstance(config['parameters'][0]['param1'], LaunchConfiguration))
+        self.assertFalse(isinstance(config['parameters'][1]['param2'], LaunchConfiguration))
+        self.assertFalse(isinstance(config['parameters'][2]['param3'], LaunchConfiguration))
 
 
 if __name__ == '__main__':
