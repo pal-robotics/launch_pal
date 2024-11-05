@@ -86,16 +86,16 @@ launch arguments for PAL Robots. These arguments consist of only a name and desc
 Example:
 ```python
 from launch_pal.arg_utils import LaunchArgumentsBase
-from launch_pal.robot_arguments import TiagoArgs, RobotArgs
+from launch_pal.robot_arguments import CommonArgs, RobotArgs
 from launch.actions import DeclareLaunchArgument
 from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class LaunchArguments(LaunchArgumentsBase):
 
-    # Tiago specific settings
-    wheel_model: DeclareLaunchArgument = TiagoArgs.wheel_model
-    # Robot agnostic argument
+    # Frequently used LaunchArguments
+    wheel_model: DeclareLaunchArgument = CommonArgs.robot_name
+    # PAL common Robot specific  LaunchArguments
     base_type: DeclareLaunchArgument = RobotArgs.base_type
 ```
 
