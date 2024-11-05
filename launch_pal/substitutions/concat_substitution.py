@@ -1,4 +1,4 @@
-# Copyright (c) 2022 PAL Robotics S.L. All rights reserved.
+# Copyright (c) 2024 PAL Robotics S.L. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,10 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .load_file import LoadFile
-from .concat_substitution import ConcatSubstitution
 
-__all__ = [
-    'LoadFile',
-    'ConcatSubstitution',
-]
+from launch.launch_context import LaunchContext
+from launch.substitution import Substitution
+
+class ConcatSubstitution(Substitution):
+    def __init__(self, *args: Substitution|str):
+        self.parts = args
+
+    def perform(self, context: LaunchContext):
+        result : str = ""
+        for part in self.parts:
+            if isinstance(part, Substitution):
+                result += part.perform(context)
+            else:
+                result += str(part)
+        return result
