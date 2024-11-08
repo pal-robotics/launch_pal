@@ -176,6 +176,33 @@ container = ComposableNodeContainer(
 )
 ```
 
+## Actions
+
+### CheckPublicSim
+
+Raises an exception if the *is_public_sim* argument is being used correctly, that is, ensure that when using a simulation outside PAL the argument is set to true. 
+
+## ValidateLaunchArgs
+
+Checks that all the passed arguments using ros2 launch are declared in the launch file. This prevents passing uncorrectly typed arguments to a launch file, which would result in unexpected behaviours as the defaults would be used without warning. 
+
+```python
+validate_launch_args = ValidateLaunchArgs(launch_args=launch_args)
+launch_description.add_action(validate_launch_args)
+```
+
+## ValidateXacroArgs
+
+It does two things: 
+
+* Checks that all the arguments that are being passed from the launch file to the xacro are declared in it, failing if not. 
+* Checks that all the declared arguments in the xacro are receiving a value from the launch file, giving a warning if not. This allows to know exactly which argument is being used in the robot description. 
+
+```python
+validate_xacro_args = ValidateXacroArgs(xacro_path=xacro_file_path, xacro_input_args=xacro_input_args)
+launch_description.add_action(validate_xacro_args)
+```
+
 ## robot_utils (DEPRECATED)
 Declare a single launch argument given by the robot name. 
 

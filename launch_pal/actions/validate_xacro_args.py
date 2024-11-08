@@ -1,4 +1,4 @@
-# Copyright 2019 Open Source Robotics Foundation, Inc.
+# Copyright 2024 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Module for the Shutdown action."""
+"""Module for the ValidateXacroArgs action."""
 
 import logging
 from typing import Dict
@@ -26,7 +26,7 @@ _logger = logging.getLogger(name='launch')
 
 
 class ValidateXacroArgs(EmitEvent):
-    """Action that check that all the launch arguments match the xacro args."""
+    """Checks that all the given xacro args match the expected ones."""
 
     def __init__(self, *, xacro_path, xacro_input_args: Dict, **kwargs):
         self.xacro_path = xacro_path
@@ -52,8 +52,11 @@ class ValidateXacroArgs(EmitEvent):
                     super().execute(context)
 
             # Give a warning if one of the expected arguments is not present (maybe intentional)
-            for expected_arg_name in expected_args_names:
+            for expected_arg in expected_args:
+                expected_arg_name = expected_arg.get('name')
                 if expected_arg_name not in self.xacro_input_args:
+                    default_value = expected_arg.get('default')
                     _logger.warn(
-                        f"{expected_arg_name} is expected in the xacro but not present in the input arguments, \
-                        the default value will be used")
+                        f"{expected_arg_name} is expected in the xacro but not present"
+                        f"in the launch input arguments, default value={default_value}"
+                    )

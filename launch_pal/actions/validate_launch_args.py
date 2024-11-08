@@ -1,4 +1,4 @@
-# Copyright 2019 Open Source Robotics Foundation, Inc.
+# Copyright 2024 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Module for the Shutdown action."""
+"""Module for the ValidateLaunchArgs action."""
 
 import logging
 from dataclasses import fields
@@ -25,7 +25,7 @@ _logger = logging.getLogger(name='launch')
 
 
 class ValidateLaunchArgs(EmitEvent):
-    """Action that check that all the launch arguments match the xacro args."""
+    """Checks that all the passed arguments are declared in the launch file."""
 
     def __init__(self, *, launch_args, **kwargs):
         self.launch_args = launch_args
