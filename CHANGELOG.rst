@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.8.0 (2024-11-11)
+------------------
 * Suggestions apply
 * Added xacro missing arg warning
 * Removing unnecesary parsing
