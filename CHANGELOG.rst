@@ -2,6 +2,15 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Suggestions apply
+* Added xacro missing arg warning
+* Removing unnecesary parsing
+* Launch arguments check
+* Xacro args checker
+* Contributors: oscarmartinez
+
 0.7.0 (2024-10-16)
 ------------------
 * update README iwith get_pal_configuration automatic arguments
