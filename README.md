@@ -105,8 +105,6 @@ class LaunchArguments(LaunchArgumentsBase):
 
 Contains utilities for declaring launch arguments and removing boiler plate.
 
-An example of the use can be found in the launch_tutorial package that compares the standard [boilerplate](https://gitlab/davidterkuile/launch_tutorial/-/blob/main/launch/robot_args_example_boilerplate.launch.py) with the an [updated version](https://gitlab/davidterkuile/launch_tutorial/-/blob/main/launch/robot_args_example.launch.py) of the launch file. This updated version also provides a structured architecture that seperates launch arguments from other launch actions.
-
 `LaunchArgumentsBase`: A dataclass that contains only `DeclareLaunchArgument` objects. The class is used to ease the process of adding launch arguments to the launch description. Has member function `add_to_launch_description` to automatically add all launch arguments to the launch description.
 
 `read_launch_argument`: Used in Opaque functions to read the value of a launch argument and substitute it to text.
