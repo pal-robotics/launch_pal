@@ -56,6 +56,11 @@ class CommonArgs:
         default_value='False',
         choices=['True', 'False'],
         description='Specify if launching Advanced Navigation.')
+    docking: DeclareLaunchArgument = DeclareLaunchArgument(
+        name='docking',
+        default_value='False',
+        choices=['True', 'False'],
+        description='Specify if launching Docking.')
     moveit: DeclareLaunchArgument = DeclareLaunchArgument(
         name='moveit',
         default_value='True',
