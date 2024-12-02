@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.9.0 (2024-12-02)
+------------------
 * Merge branch 'abr/feat/docking' into 'master'
   added docking args
   See merge request common/launch_pal!73
