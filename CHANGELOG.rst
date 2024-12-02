@@ -2,6 +2,20 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge branch 'abr/feat/docking' into 'master'
+  added docking args
+  See merge request common/launch_pal!73
+* added docking args
+* Merge branch 'upt/tun/readme' into 'master'
+  update robot_arguments readme section
+  See merge request common/launch_pal!71
+* remove internal gitlab links
+* fix linting issues
+* update robot_arguments readme section
+* Contributors: antoniobrandi, davidterkuile, thomasung
+
 0.8.0 (2024-11-11)
 ------------------
 * Suggestions apply
