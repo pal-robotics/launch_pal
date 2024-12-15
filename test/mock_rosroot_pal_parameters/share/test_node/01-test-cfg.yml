@@ -1,0 +1,13 @@
+/test_node:
+  ros__parameters:
+    param1: "base value"
+    param2: "test-cfg value"
+    param3: "test-cfg value"
+  remappings:
+    remap1: /default
+    remap2: /test-remap
+  arguments:
+    - "-arg1"
+    - "-arg2"
+
+
