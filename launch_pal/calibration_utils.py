@@ -84,19 +84,17 @@ def apply_urdf_calibration(template_folder: Path, output_folder: Path) -> dict:
 
 def get_master_calibration_params(node_name: str):
 
-    node_calibration_data = {}
     if not os.path.exists(MASTER_CALIBRATION_FILE):
-        return node_calibration_data
+        return {}
 
     # Ensure only the params of node are updated
     master_calibration_data = load_yaml(MASTER_CALIBRATION_FILE)
     master_calibration_data_nodes = list(master_calibration_data.keys())
 
     if node_name not in master_calibration_data_nodes:
-        return node_calibration_data
+        return {}
 
-    node_calibration_data[node_name] = master_calibration_data[node_name]
-    return node_calibration_data
+    return master_calibration_data[node_name]
 
 
 def get_node_names_from_yaml(yaml_file: str):
