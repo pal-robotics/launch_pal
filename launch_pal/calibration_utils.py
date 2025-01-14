@@ -30,8 +30,6 @@ def apply_master_calibration(param_file: str) -> str:
         raise ValueError("A node parameter file should contain parameters of exactly one node")
     node_name = node_name_list[0]
 
-    yaml_files = [param_file]
-
     node_calibration_data = get_master_calibration_params(node_name)
 
     # Create tmp file with only relevant params
@@ -39,9 +37,7 @@ def apply_master_calibration(param_file: str) -> str:
     with open(tmp_file.name, 'w') as f:
         yaml.safe_dump(node_calibration_data, f)
 
-    yaml_files.append(tmp_file.name)
-
-    updated_param_file = merge_param_files(yaml_files)
+    updated_param_file = merge_param_files([param_file, tmp_file.name])
 
     return updated_param_file
 
@@ -62,9 +58,10 @@ def apply_urdf_calibration(template_folder: Path, output_folder: Path) -> dict:
 
     node_calibration_data = master_calibration_data[robot_state_publisher_node][ROS_PARAM_KEY]
 
-    # List template files
-    template_files = {f.name.split('.')[0]: f for f in list(template_folder.glob("*.j2"))}
     if node_calibration_data:
+
+        # List template files
+        template_files = {f.name.split('.')[0]: f for f in list(template_folder.glob("*.j2"))}
 
         for key, value in node_calibration_data.items():
             if key not in template_files:
