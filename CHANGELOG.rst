@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.10.0 (2025-01-20)
+-------------------
 * Update wrong return value
 * Apply suggestion after review
 * Apply 1 suggestion(s) to 1 file(s)
