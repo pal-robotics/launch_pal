@@ -2,6 +2,15 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update wrong return value
+* Apply suggestion after review
+* Apply 1 suggestion(s) to 1 file(s)
+* Add jinja2 dependency
+* Add master calibration implementation
+* Contributors: David ter Kuile, antoniobrandi
+
 0.9.0 (2024-12-02)
 ------------------
 * Merge branch 'abr/feat/docking' into 'master'
