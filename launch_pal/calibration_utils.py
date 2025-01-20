@@ -91,7 +91,7 @@ def get_master_calibration_params(node_name: str):
     if node_name not in master_calibration_data_nodes:
         return {}
 
-    return master_calibration_data[node_name]
+    return master_calibration_data
 
 
 def get_node_names_from_yaml(yaml_file: str):
@@ -106,7 +106,7 @@ def get_node_names_from_yaml(yaml_file: str):
 def check_param_file_layout(data: dict):
 
     for key, value in data.items():
-        if not isinstance(value, dict) or ROS_PARAM_KEY not in value or \
+        if not isinstance(value, dict) or (ROS_PARAM_KEY not in value) or \
                 not isinstance(value[ROS_PARAM_KEY], dict):
             raise ValueError(
                 f"ROS 2 Param file for node '{key}' does not have the required layout")
