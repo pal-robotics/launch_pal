@@ -12,35 +12,47 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from collections.abc import MutableMapping
 import os
 from pathlib import Path
-import yaml
 
 import ament_index_python as aip
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, LogInfo
 from launch.launch_context import LaunchContext
 from launch.substitutions import LaunchConfiguration
+import yaml
 
 from launch_pal.param_utils import _merge_dictionaries
 
 DEFAULT_USER_PARAMETER_PATH = Path(os.environ["HOME"], ".pal", "config")
 
 
-def get_dotted_value(dotted_arg: str, d: dict):
-    """Access a nested dictionary member using a dotted string."""
-    for key in dotted_arg.split('.'):
-        if key in d:
-            d = d.get(key)
+# adapted from https://stackoverflow.com/a/6027615
+def flatten(dictionary: MutableMapping, parent_key: str = '', separator: str = '.'):
+    items = []
+    for key, value in dictionary.items():
+        new_key = parent_key + separator + str(key) if parent_key else str(key)
+        if isinstance(value, MutableMapping):
+            items.extend(flatten(value, new_key, separator=separator).items())
         else:
-            return None
-    return d
+            items.append((new_key, value))
+    return dict(items)
+
+
+def find_yaml_files_in_dir(dir: Path, recursive: bool = False):
+    """Get all YAML files in a directory."""
+    yaml_files = []
+    if dir.exists():
+        glob_f = dir.rglob if recursive else dir.glob
+        yaml_files = [p for f in ["*.yml", "*.yaml"] for p in glob_f(f) if p.is_file()]
+    return yaml_files
 
 
 def merge_template(d: dict[str, dict], templates: dict[str, Path], ld: LaunchDescription = None):
     """
     For each node in the dictionary merge, if existing, the template into the node.
-    
+
     The template is indicated by the 'template' key in the node dictionary,
     which is removed after the merge.
     First the template is applied, then the node dictionary elements override the template ones.
@@ -65,7 +77,7 @@ def merge_configs(config: dict[str, dict], srcs: dict[str, Path], templates: dic
                   ld: LaunchDescription = None):
     """
     Merge YAML files into a single config dictionary.
-    
+
     The configuration files are merged in the order they are provided in the srcs dictionary.
     The single elements of the later ones override the previous ones.
     """
@@ -157,8 +169,8 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
     user_cfg_srcs = {}
     if PAL_USER_PARAMETERS_PATH.exists():
         # list of (*.yml, *.yaml) in any subdirectory under PAL_USER_PARAMETERS_PATH:
-        all_user_cfg_paths = {(e, f) for e in ["*.yml", "*.yaml"]
-                              for f in PAL_USER_PARAMETERS_PATH.glob("**/" + e)}
+        all_user_cfg_paths = {(p.name, p) for p in
+                              find_yaml_files_in_dir(PAL_USER_PARAMETERS_PATH, True)}
         for _, path in all_user_cfg_paths:
             with open(path, 'r') as f:
                 content = yaml.load(f, yaml.Loader)
@@ -173,9 +185,6 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
     config = {}
     config, sys_used_src, sys_used_tmpl = merge_configs(config, cfg_srcs, tmpl_srcs, ld)
     config, user_used_src, user_used_tmpl = merge_configs(config, user_cfg_srcs, tmpl_srcs, ld)
-
-    if not config:
-        return {'parameters': [], 'remappings': [], 'arguments': []}
 
     # finally, return the configuration for the specific node
     node_fqn = None
@@ -200,6 +209,8 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
                                   ' Returning empty parameters/remappings/arguments'))
         return {'parameters': [], 'remappings': [], 'arguments': []}
 
+    node_flattened_params = flatten(config[node_fqn].get('ros__parameters', {}))
+
     if cmdline_args:
         if ld is None:
             raise ValueError(
@@ -207,12 +218,10 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
 
         # if cmdline_args is True, add all arguments
         if not isinstance(cmdline_args, list):
-            cmdline_args = config[node_fqn].setdefault(
-                "ros__parameters", {}).keys()
+            cmdline_args = node_flattened_params.keys()
 
         for arg in cmdline_args:
-            default = get_dotted_value(arg, config[node_fqn].setdefault(
-                "ros__parameters", {}))
+            default = node_flattened_params.get(arg, None)
             if default is None:
                 ld.add_action(LogInfo(msg=f"WARNING: no default value defined for cmdline "
                                           f"argument '{arg}'. As such, it is mandatory to "
@@ -225,11 +234,11 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
                 description=f"Start node and run 'ros2 param describe {node} {arg}' for more "
                             "information.",
                 default_value=str(default)))
-            config[node_fqn]["ros__parameters"][arg] = LaunchConfiguration(arg, default=[default])
+            node_flattened_params[arg] = LaunchConfiguration(arg, default=[default])
 
-    res = {'parameters': [dict(config[node_fqn].setdefault('ros__parameters', {}))],
-           'remappings': list(config[node_fqn].setdefault('remappings', {}).items()),
-           'arguments': config[node_fqn].setdefault('arguments', []),
+    res = {'parameters': [dict(node_flattened_params)],
+           'remappings': list(config[node_fqn].get('remappings', {}).items()),
+           'arguments': config[node_fqn].get('arguments', []),
            }
 
     if not isinstance(res['arguments'], list):

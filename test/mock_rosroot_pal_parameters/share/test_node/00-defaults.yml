@@ -1,5 +1,6 @@
 /test_node:
   ros__parameters:
+    param_default.nested: "nested"
     param_default: "default"
     param_template: "default"
     param_base: "default"

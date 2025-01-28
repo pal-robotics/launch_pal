@@ -18,6 +18,7 @@ import unittest
 from launch import LaunchDescription
 from launch.launch_context import LaunchContext
 from launch.substitutions import LaunchConfiguration
+
 from launch_pal.pal_parameters import get_pal_configuration
 
 
@@ -46,6 +47,7 @@ class TestPalGetConfiguration(unittest.TestCase):
         self.assertDictEqual(
             config['parameters'][0],
             {
+                'param_default.nested': 'nested',
                 'param_default': 'default',
                 'param_template': 'template',
                 'param_base': 'base',
@@ -81,6 +83,7 @@ class TestPalGetConfiguration(unittest.TestCase):
         self.assertDictEqual(
             config['parameters'][0],
             {
+                'param_default.nested': 'nested',
                 'param_default': 'default',
                 'param_template': 'template',
                 'param_base': 'base',
