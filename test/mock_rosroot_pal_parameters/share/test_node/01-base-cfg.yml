@@ -1,0 +1,12 @@
+/test_node:
+  template: "template.yml"
+  ros__parameters:
+    param_base: "base"
+    param_robot: "base"
+    param_user: "base"
+  remappings:
+    remap_base: "base"
+    remap_robot: "base"
+    remap_user: "base"
+  arguments:
+    - "--arg_base"

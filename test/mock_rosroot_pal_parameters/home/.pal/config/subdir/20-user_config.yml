@@ -1,0 +1,3 @@
+/test_node:
+  remappings:
+    remap_user: "user_subdir"

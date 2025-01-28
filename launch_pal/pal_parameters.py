@@ -13,19 +13,21 @@
 # limitations under the License.
 
 import os
-import collections.abc
-import yaml
-import ament_index_python as aip
-from launch.actions import DeclareLaunchArgument
-from launch.substitutions import LaunchConfiguration
-from launch.launch_context import LaunchContext
-from launch.actions import LogInfo
 from pathlib import Path
+import yaml
 
-DEFAULT_USER_PARAMETER_PATH = Path(os.environ["HOME"]) / ".pal" / "config"
+import ament_index_python as aip
+from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument, LogInfo
+from launch.launch_context import LaunchContext
+from launch.substitutions import LaunchConfiguration
+
+from launch_pal.param_utils import _merge_dictionaries
+
+DEFAULT_USER_PARAMETER_PATH = Path(os.environ["HOME"], ".pal", "config")
 
 
-def get_dotted_value(dotted_arg, d):
+def get_dotted_value(dotted_arg: str, d: dict):
     """Access a nested dictionary member using a dotted string."""
     for key in dotted_arg.split('.'):
         if key in d:
@@ -33,6 +35,54 @@ def get_dotted_value(dotted_arg, d):
         else:
             return None
     return d
+
+
+def merge_template(d: dict[str, dict], templates: dict[str, Path], ld: LaunchDescription = None):
+    """
+    For each node in the dictionary merge, if existing, the template into the node.
+    
+    The template is indicated by the 'template' key in the node dictionary,
+    which is removed after the merge.
+    First the template is applied, then the node dictionary elements override the template ones.
+    """
+    tmpl_used_per_node: dict[str, str] = {}
+    for node_name, node_data in d.items():
+        if 'template' in node_data.keys():
+            t = node_data['template']
+            if isinstance(t, str) and t in templates:
+                with open(templates[t], 'r') as f:
+                    node_data = _merge_dictionaries(yaml.load(f, yaml.Loader), node_data)
+                    node_data.pop('template')
+                d[node_name] = node_data
+                tmpl_used_per_node[node_name] = t
+            else:
+                if ld:
+                    ld.add_action(LogInfo(msg=f'WARN: template {t} not found. Skipping it.'))
+    return d, tmpl_used_per_node
+
+
+def merge_configs(config: dict[str, dict], srcs: dict[str, Path], templates: dict[str, Path],
+                  ld: LaunchDescription = None):
+    """
+    Merge YAML files into a single config dictionary.
+    
+    The configuration files are merged in the order they are provided in the srcs dictionary.
+    The single elements of the later ones override the previous ones.
+    """
+    src_used: dict[str, list[Path]] = {}
+    tmpl_used: dict[Path, dict[str, str]] = {}
+    for cfg_file in sorted(srcs.keys()):
+        cfg_path = srcs[cfg_file]
+        with open(cfg_path, 'r') as f:
+            data = yaml.load(f, yaml.Loader)
+            data, tmpl_used[cfg_path] = merge_template(data, templates, ld)
+            for node in data.keys():
+                if node not in src_used:
+                    src_used[node] = [cfg_path]
+                else:
+                    src_used[node].append(cfg_path)
+            config = _merge_dictionaries(config, data)
+    return config, src_used, tmpl_used
 
 
 def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
@@ -59,20 +109,31 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
                 f'{PAL_USER_PARAMETERS_PATH} does not exist. '
                 'User overrides will not be available.'))
 
-    # code for recursive dictionary update
-    # taken from https://stackoverflow.com/a/3233356
-    def update(d, u):
-        for k, v in u.items():
-            if isinstance(v, collections.abc.Mapping):
-                d[k] = update(d.get(k, {}), v)
-            else:
-                d[k] = v
-        return d
+    # load the package templates
+    tmpl_srcs_pkgs = aip.get_resources(f'pal_configuration_templates.{pkg}')
+    tmpl_srcs = {}
+    for tmpl_srcs_pkg, _ in tmpl_srcs_pkgs.items():
+        tmpl_files, _ = aip.get_resource(
+            f'pal_configuration_templates.{pkg}', tmpl_srcs_pkg)
+        for tmpl_file in tmpl_files.strip().split('\n'):
+            share_path = aip.get_package_share_path(tmpl_srcs_pkg)
+            path = share_path / tmpl_file
+            if not path.exists():
+                if ld:
+                    ld.add_action(LogInfo(msg=f'WARNING: template file {path} does not exist.'
+                                          ' Skipping it.'))
+                continue
+            if path.name in tmpl_srcs:
+                if ld:
+                    ld.add_action(LogInfo(msg='WARNING: two packages provide the same'
+                                          f' template {path.name} for {pkg}:'
+                                          f' {tmpl_srcs[path.name]} and {path}. Skipping {path}'))
+                continue
+            tmpl_srcs[path.name] = path
 
-    # first, use ament_index to retrieve all configuration files pertaining to a node
-    cfg_srcs_pkgs = aip.get_resources(f'pal_configuration.{pkg}')
-
+    # use ament_index to retrieve all configuration files pertaining to a pkg
     cfg_srcs = {}
+    cfg_srcs_pkgs = aip.get_resources(f'pal_configuration.{pkg}')
     for cfg_srcs_pkg, _ in cfg_srcs_pkgs.items():
         cfg_files, _ = aip.get_resource(
             f'pal_configuration.{pkg}', cfg_srcs_pkg)
@@ -92,32 +153,29 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
                 continue
             cfg_srcs[path.name] = path
 
-    config = {}
-    for cfg_file in sorted(cfg_srcs.keys()):
-        with open(cfg_srcs[cfg_file], 'r') as f:
-            config = update(config, yaml.load(f, yaml.Loader))
-
-    if not config:
-        return {'parameters': [], 'remappings': [], 'arguments': []}
-
-    # next, look for the user configuration files
-    user_cfg_srcs = []
+    # retrieve all user configuration files
+    user_cfg_srcs = {}
     if PAL_USER_PARAMETERS_PATH.exists():
         # list of (*.yml, *.yaml) in any subdirectory under PAL_USER_PARAMETERS_PATH:
-        all_user_cfg_srcs = sorted([f for e in ["*.yml", "*.yaml"]
-                                    for f in PAL_USER_PARAMETERS_PATH.glob("**/" + e)])
-        for cfg_file in all_user_cfg_srcs:
-            with open(cfg_file, 'r') as f:
+        all_user_cfg_paths = {(e, f) for e in ["*.yml", "*.yaml"]
+                              for f in PAL_USER_PARAMETERS_PATH.glob("**/" + e)}
+        for _, path in all_user_cfg_paths:
+            with open(path, 'r') as f:
                 content = yaml.load(f, yaml.Loader)
                 if not content or not isinstance(content, dict):
                     if ld:
-                        ld.add_action(LogInfo(msg=f'WARN: configuration file {cfg_file} is empty'
+                        ld.add_action(LogInfo(msg=f'WARN: configuration file {path.name} is empty'
                                               ' or not a dictionary. Skipping it.'))
                     continue
-                for k in content.keys():
-                    if node in k:
-                        user_cfg_srcs.append(cfg_file)
-                        config = update(config, content)
+                user_cfg_srcs[path.name] = path
+
+    # load and merge the configuration files
+    config = {}
+    config, sys_used_src, sys_used_tmpl = merge_configs(config, cfg_srcs, tmpl_srcs, ld)
+    config, user_used_src, user_used_tmpl = merge_configs(config, user_cfg_srcs, tmpl_srcs, ld)
+
+    if not config:
+        return {'parameters': [], 'remappings': [], 'arguments': []}
 
     # finally, return the configuration for the specific node
     node_fqn = None
@@ -169,9 +227,8 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
                 default_value=str(default)))
             config[node_fqn]["ros__parameters"][arg] = LaunchConfiguration(arg, default=[default])
 
-    res = {'parameters': [{k: v} for k, v in config[node_fqn].setdefault('ros__parameters', {})
-                          .items()],
-           'remappings': config[node_fqn].setdefault('remappings', {}).items(),
+    res = {'parameters': [dict(config[node_fqn].setdefault('ros__parameters', {}))],
+           'remappings': list(config[node_fqn].setdefault('remappings', {}).items()),
            'arguments': config[node_fqn].setdefault('arguments', []),
            }
 
@@ -182,27 +239,35 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
                                   f' for node {node} must be a _list_ of arguments'
                                   ' to be passed to the node. Ignoring it.'))
 
+    def str_config(used_srcs: dict[str, list[Path]], used_tmpl: dict[Path, dict[str, str]],
+                   node_fqn: str):
+        return ('\n'.join([f'\t- {src}'
+                          + (('\n' + '\n'.join([f"\t\t- {t}"
+                              for t in used_tmpl[src].values()])
+                              ) if node_fqn in used_tmpl[src] else '')
+                          for src in reversed(used_srcs[node_fqn])]
+                          ) if node_fqn in used_srcs else "\t- (none)")
+
     if ld:
         ld.add_action(
             LogInfo(msg=f'Loaded configuration for <{node}>:'
-                    '\n- System configuration (from higher to lower precedence):\n'
-                    + ("\n".join(["\t- " + str(p) for p in sorted(cfg_srcs.values(), reverse=True)]
-                                 ) if cfg_srcs else "\t\t- (none)") +
-                    '\n- User overrides (from higher to lower precedence):\n'
-                    + ("\n".join(["\t- " + str(p) for p in sorted(user_cfg_srcs, reverse=True)]
-                                 ) if user_cfg_srcs else "\t- (none)")
+                    '\n- User overrides '
+                    '(from higher to lower precedence, listing the used templates indented):\n'
+                    + str_config(user_used_src, user_used_tmpl, node_fqn) +
+                    '\n- System configuration '
+                    '(from higher to lower precedence, listing the used templates indented):\n'
+                    + str_config(sys_used_src, sys_used_tmpl, node_fqn)
                     ))
         if res['parameters']:
             # create an empty launch context to get the default values of the parameters
             lc = LaunchContext()
 
             param_list = ""
-            for d in res['parameters']:
-                for k, v in d.items():
-                    if isinstance(v, LaunchConfiguration):
-                        param_list += f'- {k}: {v.perform(lc)} (can be overridden with {k}:=...)\n'
-                    else:
-                        param_list += f'- {k}: {v}\n'
+            for k, v in res['parameters'][0].items():
+                if isinstance(v, LaunchConfiguration):
+                    param_list += f'- {k}: {v.perform(lc)} (can be overridden with {k}:=...)\n'
+                else:
+                    param_list += f'- {k}: {v}\n'
             ld.add_action(LogInfo(msg='Parameters:\n' + param_list))
         if res['remappings']:
             ld.add_action(LogInfo(msg='Remappings:\n' +

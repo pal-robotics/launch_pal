@@ -1,10 +1,10 @@
 /test_node:
   ros__parameters:
-    param2: "robot-cfg value"
+    param_robot: "robot"
+    param_user: "robot"
   remappings:
-    remap1: /robot-remap
-    remap3: /robot-remap
+    remap_robot: "robot"
+    remap_user: "robot"
   arguments:
-    - "-arg3"
-
-
+    - "--arg_robot_1"
+    - "--arg_robot_2"

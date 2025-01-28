@@ -1,10 +1,15 @@
 /test_node:
   ros__parameters:
-    param1: "base value"
-    param2: "base value"
+    param_default: "default"
+    param_template: "default"
+    param_base: "default"
+    param_robot: "default"
+    param_user: "default"
   remappings:
-    remap1: /default
+    remap_default: "default"
+    remap_template: "default"
+    remap_base: "default"
+    remap_robot: "default"
+    remap_user: "default"
   arguments:
-    - "-arg1"
-
-
+    - "--arg_default"
