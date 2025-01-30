@@ -183,7 +183,7 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
     for tmpl_srcs_pkg, _ in tmpl_srcs_pkgs.items():
         tmpl_files, _ = aip.get_resource(
             f'pal_configuration_templates.{pkg}', tmpl_srcs_pkg)
-        for tmpl_file in tmpl_files.strip().split('\n'):
+        for tmpl_file in re.split('\n|;', tmpl_files.strip()):
             share_path = aip.get_package_share_path(tmpl_srcs_pkg)
             path = share_path / tmpl_file
             if not path.exists():
@@ -205,7 +205,7 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
     for cfg_srcs_pkg, _ in cfg_srcs_pkgs.items():
         cfg_files, _ = aip.get_resource(
             f'pal_configuration.{pkg}', cfg_srcs_pkg)
-        for cfg_file in cfg_files.strip().split('\n'):
+        for cfg_file in re.split('\n|;', cfg_files.strip()):
             share_path = aip.get_package_share_path(cfg_srcs_pkg)
             path = share_path / cfg_file
             if not path.exists():
