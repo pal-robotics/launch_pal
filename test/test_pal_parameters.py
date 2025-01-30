@@ -13,12 +13,14 @@
 # limitations under the License.
 
 import os
+from pathlib import Path
 import unittest
 
 from launch import LaunchDescription
 from launch.launch_context import LaunchContext
 from launch.substitutions import LaunchConfiguration
 
+import launch_pal.pal_parameters
 from launch_pal.pal_parameters import get_pal_configuration
 
 
@@ -28,9 +30,13 @@ class TestPalGetConfiguration(unittest.TestCase):
     def setUpClass(cls):
         TestPalGetConfiguration.prev_ament_prefix_path = os.environ.get(
             'AMENT_PREFIX_PATH', None)
-
         os.environ['AMENT_PREFIX_PATH'] = os.path.join(
             os.getcwd(), 'test', 'mock_rosroot_pal_parameters')
+
+        launch_pal.pal_parameters.SYSTEM_ROBOT_INFO_PATH = Path(
+            os.getcwd(), 'test', 'mock_rosroot_pal_parameters', 'etc', 'robot_info', 'conf.d')
+
+        cls.maxDiff = None
 
     @classmethod
     def tearDownClass(cls):
@@ -41,14 +47,19 @@ class TestPalGetConfiguration(unittest.TestCase):
 
     def test_get_configuration(self):
 
+        test_node_share_dir = os.path.join(os.environ['AMENT_PREFIX_PATH'], 'share', 'test_node')
+
         config = get_pal_configuration(pkg='test_node', node='test_node', cmdline_args=False)
 
         self.assertEqual(len(config['parameters']), 1)
         self.assertDictEqual(
             config['parameters'][0],
             {
-                'param_default.nested': 'nested',
                 'param_default': 'default',
+                'param_default.nested': 'default',
+                'param_default.robot_info': 'system',
+                'param_default.nested_robot_info': 'system',
+                'param_default.find_pkg': test_node_share_dir,
                 'param_template': 'template',
                 'param_base': 'base',
                 'param_robot': 'robot',
@@ -74,39 +85,18 @@ class TestPalGetConfiguration(unittest.TestCase):
 
     def test_get_configuration_user_overrides(self):
 
-        os.environ['PAL_USER_PARAMETERS_PATH'] = os.path.join(
-            os.getcwd(), 'test', 'mock_rosroot_pal_parameters', 'home', '.pal', 'config')
+        os.environ['PAL_USER_PATH'] = os.path.join(
+            os.getcwd(), 'test', 'mock_rosroot_pal_parameters', 'home', '.pal')
 
         config = get_pal_configuration(pkg='test_node', node='test_node', cmdline_args=False)
 
-        self.assertEqual(len(config['parameters']), 1)
-        self.assertDictEqual(
-            config['parameters'][0],
-            {
-                'param_default.nested': 'nested',
-                'param_default': 'default',
-                'param_template': 'template',
-                'param_base': 'base',
-                'param_robot': 'robot',
-                'param_user': 'user',
-            }
-        )
+        self.assertEqual(config['parameters'][0]['param_user'], 'user')
+        self.assertEqual(config['parameters'][0]['param_default.robot_info'], 'user')
+        remappings_dict = dict(zip(*map(list, (zip(*config['remappings'])))))
+        self.assertEqual(remappings_dict['remap_user'], 'user_subdir')
+        self.assertCountEqual(config['arguments'], ['--arg_user'])
 
-        self.assertCountEqual(
-            config['remappings'],
-            [
-                ('remap_default', 'default'),
-                ('remap_template', 'template'),
-                ('remap_base', 'base'),
-                ('remap_robot', 'robot'),
-                ('remap_user', 'user_subdir'),
-            ]
-        )
-
-        self.assertCountEqual(
-            config['arguments'],
-            ['--arg_user']
-        )
+        os.environ.pop('PAL_USER_PATH')
 
     def test_get_configuration_cmdline_overrides_single_param(self):
 

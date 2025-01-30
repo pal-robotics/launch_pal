@@ -1,7 +1,10 @@
 /test_node:
   ros__parameters:
-    param_default.nested: "nested"
     param_default: "default"
+    param_default.nested: "default"
+    param_default.robot_info: "${variable}"
+    param_default.nested_robot_info: "${nested.variable}"
+    param_default.find_pkg: "${find test_node}"
     param_template: "default"
     param_base: "default"
     param_robot: "default"

@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from collections.abc import MutableMapping
 import os
 from pathlib import Path
+import re
 
 import ament_index_python as aip
 from launch import LaunchDescription
@@ -25,15 +25,16 @@ import yaml
 
 from launch_pal.param_utils import _merge_dictionaries
 
-DEFAULT_USER_PARAMETER_PATH = Path(os.environ["HOME"], ".pal", "config")
+DEFAULT_PAL_USER_PATH = Path(os.environ["HOME"], ".pal")
+SYSTEM_ROBOT_INFO_PATH = Path("/etc", "robot_info", "conf.d")
 
 
 # adapted from https://stackoverflow.com/a/6027615
-def flatten(dictionary: MutableMapping, parent_key: str = '', separator: str = '.'):
+def flatten(dictionary: dict, parent_key: str = '', separator: str = '.'):
     items = []
     for key, value in dictionary.items():
         new_key = parent_key + separator + str(key) if parent_key else str(key)
-        if isinstance(value, MutableMapping):
+        if isinstance(value, dict):
             items.extend(flatten(value, new_key, separator=separator).items())
         else:
             items.append((new_key, value))
@@ -47,6 +48,27 @@ def find_yaml_files_in_dir(dir: Path, recursive: bool = False):
         glob_f = dir.rglob if recursive else dir.glob
         yaml_files = [p for f in ["*.yml", "*.yaml"] for p in glob_f(f) if p.is_file()]
     return yaml_files
+
+
+def load_pal_robot_info(ld: LaunchDescription = None):
+    """Load the PAL robot_info from the configuration files."""
+    robot_info = {}
+    pal_user_robot_info_path = Path(os.environ.get('PAL_USER_PATH', DEFAULT_PAL_USER_PATH),
+                                    'robot_info', 'conf.d')
+
+    for path in [*sorted(find_yaml_files_in_dir(SYSTEM_ROBOT_INFO_PATH)),
+                 *sorted(find_yaml_files_in_dir(pal_user_robot_info_path))]:
+        with open(path, 'r') as f:
+            data = yaml.load(f, yaml.Loader)
+            try:
+                robot_info_update = flatten(data['robot_info_publisher']['ros__parameters'])
+                robot_info = _merge_dictionaries(robot_info, robot_info_update)
+            except (KeyError, TypeError):
+                if ld:
+                    ld.add_action(LogInfo(msg=f'WARNING: in robot info configuration {path},'
+                                          ' expected item "robot_info_publisher: ros__parameters"'
+                                          ' not found. Skipping it.'))
+    return robot_info
 
 
 def merge_template(d: dict[str, dict], templates: dict[str, Path], ld: LaunchDescription = None):
@@ -69,7 +91,7 @@ def merge_template(d: dict[str, dict], templates: dict[str, Path], ld: LaunchDes
                 tmpl_used_per_node[node_name] = t
             else:
                 if ld:
-                    ld.add_action(LogInfo(msg=f'WARN: template {t} not found. Skipping it.'))
+                    ld.add_action(LogInfo(msg=f'WARNING: template {t} not found. Skipping it.'))
     return d, tmpl_used_per_node
 
 
@@ -97,6 +119,50 @@ def merge_configs(config: dict[str, dict], srcs: dict[str, Path], templates: dic
     return config, src_used, tmpl_used
 
 
+def substitute_variable(old_str: str, robot_info: dict, ld: LaunchDescription = None):
+    """
+    Substitute variables in a string with values from the robot info.
+
+    The variables are in the form ${var} or ${find pkg}.
+    If 'var' matches a key in the robot_info dictionary, the variable substring is replaced with
+    the corresponding robot info value.
+    If 'find pkg' is used, the variable substring is replaced with the package share path of the
+    package 'pkg'.
+    """
+    var_pattern = re.compile(r'\$\{([^}]+)\}')  # matches ${...}
+    find_pkg_pattern = re.compile(r'\$\{find ([^}]+)\}')  # matches ${find ...}
+
+    new_str = old_str
+    matched_vars = set()
+    for match in var_pattern.finditer(old_str):
+        find_pkg = find_pkg_pattern.match(match.group(0))
+        if find_pkg:
+            pkg = find_pkg.group(1)
+            try:
+                new_substr = aip.get_package_share_directory(pkg)
+            except aip.PackageNotFoundError:
+                if ld:
+                    ld.add_action(LogInfo(msg='WARNING: during variable substitution,'
+                                              f' package {pkg} not found. Ignoring it.'))
+                return (old_str, set())
+        else:
+            var = match.group(1)
+            if var in robot_info:
+                new_substr = robot_info[var]
+            else:
+                if ld:
+                    ld.add_action(LogInfo(msg='WARNING: during variable substitution,'
+                                              f' variable {var} not found in robot info.'
+                                              ' Ignoring it.'))
+                return (old_str, set())
+
+        if new_substr:
+            new_str = new_str.replace(match.group(0), new_substr, 1)
+            matched_vars.add(match.group(0))
+
+    return (new_str, matched_vars)
+
+
 def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
     """
     Get the configuration for a node from the PAL configuration files.
@@ -111,16 +177,6 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
 
     :return: A dictionary with the parameters, remappings and arguments
     """
-    PAL_USER_PARAMETERS_PATH = Path(os.environ.get(
-        'PAL_USER_PARAMETERS_PATH', DEFAULT_USER_PARAMETER_PATH))
-
-    if not PAL_USER_PARAMETERS_PATH.exists():
-        if ld:
-            ld.add_action(LogInfo(
-                msg='WARNING: user configuration path '
-                f'{PAL_USER_PARAMETERS_PATH} does not exist. '
-                'User overrides will not be available.'))
-
     # load the package templates
     tmpl_srcs_pkgs = aip.get_resources(f'pal_configuration_templates.{pkg}')
     tmpl_srcs = {}
@@ -167,26 +223,34 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
 
     # retrieve all user configuration files
     user_cfg_srcs = {}
-    if PAL_USER_PARAMETERS_PATH.exists():
+    pal_user_parameters_path = Path(os.environ.get('PAL_USER_PATH', DEFAULT_PAL_USER_PATH),
+                                    'config')
+
+    if pal_user_parameters_path.exists():
         # list of (*.yml, *.yaml) in any subdirectory under PAL_USER_PARAMETERS_PATH:
         all_user_cfg_paths = {(p.name, p) for p in
-                              find_yaml_files_in_dir(PAL_USER_PARAMETERS_PATH, True)}
+                              find_yaml_files_in_dir(pal_user_parameters_path, True)}
         for _, path in all_user_cfg_paths:
             with open(path, 'r') as f:
                 content = yaml.load(f, yaml.Loader)
                 if not content or not isinstance(content, dict):
                     if ld:
-                        ld.add_action(LogInfo(msg=f'WARN: configuration file {path.name} is empty'
-                                              ' or not a dictionary. Skipping it.'))
+                        ld.add_action(LogInfo(msg=f'WARNING: configuration file {path.name}'
+                                                  ' is empty or not a dictionary. Skipping it.'))
                     continue
                 user_cfg_srcs[path.name] = path
+    else:
+        if ld:
+            ld.add_action(LogInfo(msg='WARNING: user configuration path '
+                                  f'{pal_user_parameters_path} does not exist. '
+                                  'User overrides will not be available.'))
 
     # load and merge the configuration files
     config = {}
     config, sys_used_src, sys_used_tmpl = merge_configs(config, cfg_srcs, tmpl_srcs, ld)
     config, user_used_src, user_used_tmpl = merge_configs(config, user_cfg_srcs, tmpl_srcs, ld)
 
-    # finally, return the configuration for the specific node
+    # get the configuration for the specific node
     node_fqn = None
     for k in config.keys():
         if k.split('/')[-1] == node:
@@ -194,11 +258,11 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
                 node_fqn = k
             else:
                 if ld:
-                    ld.add_action(LogInfo(msg=f'WARN: found two configuration '
-                                          'files with node {node} in different namespaces: '
-                                          f'{node_fqn} and {k}.'
-                                          f' Ignoring {k} for now, but you probably '
-                                          'have an error in your configuration files.'))
+                    ld.add_action(LogInfo(msg=f'WARNING: found two configuration '
+                                              'files with node {node} in different namespaces: '
+                                              f'{node_fqn} and {k}.'
+                                              f' Ignoring {k} for now, but you probably '
+                                              'have an error in your configuration files.'))
 
     if not node_fqn:
         if ld:
@@ -209,8 +273,45 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
                                   ' Returning empty parameters/remappings/arguments'))
         return {'parameters': [], 'remappings': [], 'arguments': []}
 
-    node_flattened_params = flatten(config[node_fqn].get('ros__parameters', {}))
+    node_config = {'parameters': {}, 'remappings': {}, 'arguments': {}}
 
+    node_config['parameters'] = flatten(config[node_fqn].get('ros__parameters', {}))
+
+    node_config['remappings'] = config[node_fqn].get('remappings', {})
+    if not isinstance(node_config['remappings'], dict):
+        node_config['remappings'] = {}
+        if ld:
+            ld.add_action(LogInfo(msg='ERROR: \'remappings\' field in configuration'
+                                  f' for node {node} must be a _dictionary_ of remappings'
+                                  ' to be passed to the node. Ignoring it.'))
+    else:
+        for k, v in node_config['remappings'].items():
+            if isinstance(v, (list, dict)):
+                if ld:
+                    ld.add_action(LogInfo(msg=f'ERROR: \'remappings[{k}]\' field in configuration'
+                                          f' for node {node} cannot be a list or dictionary.'
+                                          ' Ignoring it.'))
+                node_config['remappings'].pop(k)
+
+    if not isinstance(config[node_fqn].get('arguments', {}), list):
+        if ld:
+            ld.add_action(LogInfo(msg='ERROR: \'arguments\' field in configuration'
+                                  f' for node {node} must be a _list_ of arguments'
+                                  ' to be passed to the node. Ignoring it.'))
+    else:
+        # saved ad dict for easier manipulation, later converted back to list
+        node_config['arguments'] = {i: v for i, v in
+                                    enumerate(config[node_fqn].get('arguments', []))}
+
+    # substitute variables using the robot info
+    node_sub_vars = {'parameters': {}, 'remappings': {}, 'arguments': {}}
+    robot_info = load_pal_robot_info(ld)
+
+    for t in ['parameters', 'remappings', 'arguments']:
+        for k, v in node_config[t].items():
+            node_config[t][k], node_sub_vars[t][k] = substitute_variable(v, robot_info, ld)
+
+    # add launch command-line arguments
     if cmdline_args:
         if ld is None:
             raise ValueError(
@@ -218,10 +319,10 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
 
         # if cmdline_args is True, add all arguments
         if not isinstance(cmdline_args, list):
-            cmdline_args = node_flattened_params.keys()
+            cmdline_args = node_config['parameters'].keys()
 
         for arg in cmdline_args:
-            default = node_flattened_params.get(arg, None)
+            default = node_config['parameters'].get(arg, None)
             if default is None:
                 ld.add_action(LogInfo(msg=f"WARNING: no default value defined for cmdline "
                                           f"argument '{arg}'. As such, it is mandatory to "
@@ -234,30 +335,19 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
                 description=f"Start node and run 'ros2 param describe {node} {arg}' for more "
                             "information.",
                 default_value=str(default)))
-            node_flattened_params[arg] = LaunchConfiguration(arg, default=[default])
+            node_config['parameters'][arg] = LaunchConfiguration(arg, default=[default])
 
-    res = {'parameters': [dict(node_flattened_params)],
-           'remappings': list(config[node_fqn].get('remappings', {}).items()),
-           'arguments': config[node_fqn].get('arguments', []),
-           }
-
-    if not isinstance(res['arguments'], list):
-        res['arguments'] = []
-        if ld:
-            ld.add_action(LogInfo(msg='ERROR: \'arguments\' field in configuration'
-                                  f' for node {node} must be a _list_ of arguments'
-                                  ' to be passed to the node. Ignoring it.'))
-
-    def str_config(used_srcs: dict[str, list[Path]], used_tmpl: dict[Path, dict[str, str]],
-                   node_fqn: str):
-        return ('\n'.join([f'\t- {src}'
-                          + (('\n' + '\n'.join([f"\t\t- {t}"
-                              for t in used_tmpl[src].values()])
-                              ) if node_fqn in used_tmpl[src] else '')
-                          for src in reversed(used_srcs[node_fqn])]
-                          ) if node_fqn in used_srcs else "\t- (none)")
-
+    # log configuration
     if ld:
+        def str_config(used_srcs: dict[str, list[Path]], used_tmpl: dict[Path, dict[str, str]],
+                       node_fqn: str):
+            return ('\n'.join([f'\t- {src}'
+                    + (('\n' + '\n'.join([f"\t\t- {t}"
+                        for t in used_tmpl[src].values()])
+                        ) if node_fqn in used_tmpl[src] else '')
+                    for src in reversed(used_srcs[node_fqn])]
+                    ) if node_fqn in used_srcs else "\t- (none)")
+
         ld.add_action(
             LogInfo(msg=f'Loaded configuration for <{node}>:'
                     '\n- User overrides '
@@ -267,22 +357,40 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
                     '(from higher to lower precedence, listing the used templates indented):\n'
                     + str_config(sys_used_src, sys_used_tmpl, node_fqn)
                     ))
-        if res['parameters']:
+
+        def str_sub_vars(sub_vars: set[str]):
+            if not sub_vars:
+                return ''
+            return f' (substituted: {sub_vars})'
+
+        if node_config['parameters']:
             # create an empty launch context to get the default values of the parameters
             lc = LaunchContext()
 
-            param_list = ""
-            for k, v in res['parameters'][0].items():
+            log_param = ""
+            for k, v in node_config['parameters'].items():
+                log_param += f'- {k}'
                 if isinstance(v, LaunchConfiguration):
-                    param_list += f'- {k}: {v.perform(lc)} (can be overridden with {k}:=...)\n'
+                    log_param += f' [overridable]: {v.perform(lc)}'
                 else:
-                    param_list += f'- {k}: {v}\n'
-            ld.add_action(LogInfo(msg='Parameters:\n' + param_list))
-        if res['remappings']:
+                    log_param += f': {v}'
+                log_param += f"{str_sub_vars(node_sub_vars['parameters'][k])}\n"
+            ld.add_action(LogInfo(msg='Parameters (if "overridable", can be overridden with'
+                                  ' <full.name>:=<value>):\n' + log_param))
+        if node_config['remappings']:
             ld.add_action(LogInfo(msg='Remappings:\n' +
-                                  '\n'.join([f'- {a} -> {b}' for a, b in res['remappings']])))
-        if res['arguments']:
+                                  '\n'.join([f'- {k} -> {v}'
+                                             f"{str_sub_vars(node_sub_vars['remappings'][k])}"
+                                             for k, v in node_config['remappings'].items()])))
+        if node_config['arguments']:
             ld.add_action(LogInfo(msg='Arguments:\n' +
-                                  '\n'.join([f"- {a}" for a in res['arguments']])))
+                                  '\n'.join([f"- {v}"
+                                             f"{str_sub_vars(node_sub_vars['arguments'][k])}"
+                                             for k, v in node_config['arguments'].items()])))
+
+    res = {'parameters': [dict(node_config['parameters'])],
+           'remappings': [(k, v) for k, v in node_config['remappings'].items()],
+           'arguments': node_config['arguments'].values(),
+           }
 
     return res

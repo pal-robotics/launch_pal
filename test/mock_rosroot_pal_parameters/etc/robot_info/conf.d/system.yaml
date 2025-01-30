@@ -1,0 +1,5 @@
+robot_info_publisher:
+  ros__parameters:
+    variable: system
+    nested:
+      variable: system
