@@ -16,12 +16,13 @@
 from launch.launch_context import LaunchContext
 from launch.substitution import Substitution
 
+
 class ConcatSubstitution(Substitution):
-    def __init__(self, *args: Substitution|str):
+    def __init__(self, *args: Substitution | str):
         self.parts = args
 
     def perform(self, context: LaunchContext):
-        result : str = ""
+        result: str = ""
         for part in self.parts:
             if isinstance(part, Substitution):
                 result += part.perform(context)
