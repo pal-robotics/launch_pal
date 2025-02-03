@@ -18,10 +18,27 @@ from launch.substitution import Substitution
 
 
 class ConcatSubstitution(Substitution):
-    def __init__(self, *args: Substitution | str):
+    """
+    Concatenate list of substitutions and/or strings.
+
+    Example:
+    -------
+        # Concatenate a Substitution and a string
+        config_file_substitution = ConcatSubstitution(
+            LaunchConfiguration('robot_name'), '_configuration.yaml'
+        )
+
+    """
+
+    def __init__(self, *args: Substitution | str) -> None:
         self.parts = args
 
-    def perform(self, context: LaunchContext):
+    def perform(self, context: LaunchContext) -> str:
+        """
+        Upon substitution step, perform the concatenation between Substitutions and str.
+
+        :return: str concatenated string
+        """
         result: str = ""
         for part in self.parts:
             if isinstance(part, Substitution):
