@@ -13,7 +13,9 @@
 # limitations under the License.
 
 from .load_file import LoadFile
+from .concat_substitution import ConcatSubstitution
 
 __all__ = [
     'LoadFile',
+    'ConcatSubstitution',
 ]
