@@ -2,6 +2,13 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add comments
+* fix ament_pep8 linting
+* add generic string substitution concat
+* Contributors: thomasung
+
 0.10.0 (2025-01-20)
 -------------------
 * Update wrong return value
