@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.11.0 (2025-02-04)
+-------------------
 * Add comments
 * fix ament_pep8 linting
 * add generic string substitution concat
