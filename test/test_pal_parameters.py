@@ -56,6 +56,10 @@ class TestPalGetConfiguration(unittest.TestCase):
             config['parameters'][0],
             {
                 'param_default': 'default',
+                'param_default_double': 0.0,
+                'param_default_int': 10,
+                'param_default_bool': False,
+                'param_default_list': [0, 0, 0],
                 'param_default.nested': 'default',
                 'param_default.robot_info': 'system',
                 'param_default.nested_robot_info': 'system',
@@ -64,6 +68,10 @@ class TestPalGetConfiguration(unittest.TestCase):
                 'param_base': 'base',
                 'param_robot': 'robot',
                 'param_user': 'robot',
+                'param_double': 0.5,
+                'param_int': 1,
+                'param_bool': True,
+                'param_list': [1, 2, 3],
             }
         )
 

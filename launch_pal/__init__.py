@@ -27,4 +27,5 @@ __all__ = [
     'substitutions',
     'get_pal_configuration',
     'composition_utils',
+    'logging_utils',
 ]

@@ -32,6 +32,74 @@ This is useful for eg persist user configuration across robot reboots.
 The default location of user configuration is `$HOME/.pal/config`. It can by
 changed by setting the environment variable `$PAL_USER_PARAMETERS_PATH`.
 
+### Variables
+
+Configuration files can cointain variables in the form `${VAR}`. 
+
+```yaml
+/costmap:
+  ros__parameters:
+    robot_radius: ${robot_radius}
+```
+
+These variables are resolved by using the [robot_info_publisher](https://gitlab.pal-robotics.com/apps/robot_info_publisher).
+
+```yaml
+/robot_info_publisher:
+  ros__parameters:
+    robot_radius: 0.275
+```
+
+By default, variables values are stored in `/etc/robot_info/conf.d` and can be overriden by the user in `$HOME/.pal/robot_info/conf.d`.
+
+
+### Templates
+
+Templates define configuration presets of a Node. They define a set of parameters, remappings and arguments
+that define a way to achieve a certain functionality of a node.
+Templates are independent from the node they are used in, and can be used in multiple nodes.
+
+**rgb_camera_low_contrast.yaml**
+```yaml
+ros__parameters:
+  ...
+  color:
+    contrast": 20
+    gain": 10
+    gamma": 100
+    saturation": 10
+  ...
+```
+
+**rgb_camera_high_contrast.yaml**
+```yaml
+ros__parameters:
+  ...
+  color:
+    contrast": 50
+    gain": 60
+    gamma": 300
+    saturation": 60
+  ...
+```
+
+To use a Template, the `template` key must be set in the Node's configuration file.
+
+**head_camera.yaml**
+```yaml
+/head_camera_node:
+  template: "rgb_camera_low_contrast.yaml"
+  ...
+```
+
+**right_hand_camera.yaml**
+```yaml
+/right_hand_camera_node:
+  template: "rgb_camera_low_contrast.yaml"
+  ...
+```
+
+
 ### Automatic command-line arguments
 
 If `get_pal_configuration` is called with `cmdline_args=True` (default), it will

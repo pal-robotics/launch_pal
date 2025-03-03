@@ -1,6 +1,10 @@
 /test_node:
   ros__parameters:
     param_default: "default"
+    param_default_double: 0.0
+    param_default_int: 10
+    param_default_bool: false
+    param_default_list: [0, 0, 0]
     param_default.nested: "default"
     param_default.robot_info: "${variable}"
     param_default.nested_robot_info: "${nested.variable}"
@@ -9,6 +13,10 @@
     param_base: "default"
     param_robot: "default"
     param_user: "default"
+    param_double: ${double_variable}
+    param_int: ${int_variable}
+    param_bool: ${bool_variable}
+    param_list: ${list_variable}
   remappings:
     remap_default: "default"
     remap_template: "default"
