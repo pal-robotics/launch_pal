@@ -293,7 +293,7 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
                                           ' Ignoring it.'))
                 node_config['remappings'].pop(k)
 
-    if not isinstance(config[node_fqn].get('arguments', {}), list):
+    if not isinstance(config[node_fqn].get('arguments', []), list):
         if ld:
             ld.add_action(LogInfo(msg='ERROR: \'arguments\' field in configuration'
                                   f' for node {node} must be a _list_ of arguments'
