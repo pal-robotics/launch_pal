@@ -67,7 +67,8 @@ def load_pal_robot_info(ld: LaunchDescription = None):
                 robot_info = _merge_dictionaries(robot_info, robot_info_update)
             except (KeyError, TypeError):
                 if ld:
-                    ld.add_action(LogInfo(msg=f'WARNING: in robot info configuration {path},'
+                    ld.add_action(LogInfo(msg=log.COLOR_YELLOW +
+                                          f'WARNING: in robot info configuration {path},'
                                           ' expected item "robot_info_publisher: ros__parameters"'
                                           ' not found. Skipping it.'))
     return robot_info
@@ -93,7 +94,8 @@ def merge_preset(d: dict[str, dict], presets: dict[str, Path], ld: LaunchDescrip
                 preset_used_per_node[node_name] = p
             else:
                 if ld:
-                    ld.add_action(LogInfo(msg=f'WARNING: preset {p} not found. Skipping it.'))
+                    ld.add_action(LogInfo(msg=log.COLOR_YELLOW +
+                                          f'WARNING: preset {p} not found. Skipping it.'))
     return d, preset_used_per_node
 
 
@@ -171,14 +173,16 @@ def get_pal_resources(res_name, ld=None):
             if not path.exists():
                 if ld:
                     ld.add_action(
-                        LogInfo(msg=f'WARNING: file {path} does not exist for {res_name}.'
+                        LogInfo(msg=log.COLOR_YELLOW +
+                                f'WARNING: file {path} does not exist for {res_name}.'
                                 ' Skipping it.')
                     )
                 continue
             if path.name in srcs:
                 if ld:
                     ld.add_action(
-                        LogInfo(msg='WARNING: two packages provide the same'
+                        LogInfo(msg=log.COLOR_YELLOW +
+                                'WARNING: two packages provide the same'
                                 f' name {path.name} for {res_name}:'
                                 f' {srcs[path.name]} and {path}. Skipping {path}'))
                 continue
@@ -225,13 +229,15 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
                 content = yaml.load(f, yaml.Loader)
                 if not content or not isinstance(content, dict):
                     if ld:
-                        ld.add_action(LogInfo(msg=f'WARNING: configuration file {path.name}'
-                                                  ' is empty or not a dictionary. Skipping it.'))
+                        ld.add_action(LogInfo(msg=log.COLOR_YELLOW +
+                                              f'WARNING: configuration file {path.name}'
+                                              ' is empty or not a dictionary. Skipping it.'))
                     continue
                 user_cfg_srcs[path.name] = path
     else:
         if ld:
-            ld.add_action(LogInfo(msg='WARNING: user configuration path '
+            ld.add_action(LogInfo(msg=log.COLOR_YELLOW +
+                                  'WARNING: user configuration path '
                                   f'{pal_user_parameters_path} does not exist. '
                                   'User overrides will not be available.'))
 
@@ -274,21 +280,23 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
     if not isinstance(node_config['remappings'], dict):
         node_config['remappings'] = {}
         if ld:
-            ld.add_action(LogInfo(msg='ERROR: \'remappings\' field in configuration'
+            ld.add_action(LogInfo(msg=log.COLOR_RED +
+                                  'ERROR: \'remappings\' field in configuration'
                                   f' for node {node} must be a _dictionary_ of remappings'
                                   ' to be passed to the node. Ignoring it.'))
     else:
         for k, v in node_config['remappings'].items():
             if isinstance(v, (list, dict)):
                 if ld:
-                    ld.add_action(LogInfo(msg=f'ERROR: \'remappings[{k}]\' field in configuration'
+                    ld.add_action(LogInfo(msg=log.COLOR_RED +
+                                          f'ERROR: \'remappings[{k}]\' field in configuration'
                                           f' for node {node} cannot be a list or dictionary.'
                                           ' Ignoring it.'))
                 node_config['remappings'].pop(k)
 
     if not isinstance(config[node_fqn].get('arguments', []), list):
         if ld:
-            ld.add_action(LogInfo(msg='ERROR: \'arguments\' field in configuration'
+            ld.add_action(LogInfo(msg=log.COLOR_RED + 'ERROR: \'arguments\' field in configuration'
                                   f' for node {node} must be a _list_ of arguments'
                                   ' to be passed to the node. Ignoring it.'))
     else:
@@ -323,11 +331,12 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
         for arg in cmdline_args:
             default = node_config_sub['parameters'].get(arg, None)
             if default is None:
-                ld.add_action(LogInfo(msg=f"WARNING: no default value defined for cmdline "
-                                          f"argument '{arg}'. As such, it is mandatory to "
-                                          "set this argument when launching the node. Consider "
-                                          "adding a default value in the configuration file of "
-                                          "the node."))
+                ld.add_action(LogInfo(msg=log.COLOR_YELLOW +
+                                      f"WARNING: no default value defined for cmdline "
+                                      f"argument '{arg}'. As such, it is mandatory to "
+                                      "set this argument when launching the node. Consider "
+                                      "adding a default value in the configuration file of "
+                                      "the node."))
 
             ld.add_action(DeclareLaunchArgument(
                 arg,
@@ -384,7 +393,8 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
                     if k in node_sub_vars['parameters']
                     else '\n'
                 )
-            ld.add_action(LogInfo(msg='Parameters (if "overridable", can be overridden with'
+            ld.add_action(LogInfo(msg=log.COLOR_CYAN + 'Parameters' + log.COLOR_RESET +
+                                  ' (if "overridable", can be overridden with'
                                   ' <full.name>:=<value>):\n' + log_param))
         if node_config_sub['remappings']:
             ld.add_action(
