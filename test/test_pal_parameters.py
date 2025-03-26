@@ -64,7 +64,7 @@ class TestPalGetConfiguration(unittest.TestCase):
                 'param_default.robot_info': 'system',
                 'param_default.nested_robot_info': 'system',
                 'param_default.find_pkg': test_node_share_dir,
-                'param_template': 'template',
+                'param_preset': 'preset',
                 'param_base': 'base',
                 'param_robot': 'robot',
                 'param_user': 'robot',
@@ -79,7 +79,7 @@ class TestPalGetConfiguration(unittest.TestCase):
             config['remappings'],
             [
                 ('remap_default', 'default'),
-                ('remap_template', 'template'),
+                ('remap_preset', 'preset'),
                 ('remap_base', 'base'),
                 ('remap_robot', 'robot'),
                 ('remap_user', 'robot'),

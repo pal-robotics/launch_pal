@@ -9,7 +9,7 @@
     param_default.robot_info: "${variable}"
     param_default.nested_robot_info: "${nested.variable}"
     param_default.find_pkg: "${find test_node}"
-    param_template: "default"
+    param_preset: "default"
     param_base: "default"
     param_robot: "default"
     param_user: "default"
@@ -19,7 +19,7 @@
     param_list: ${list_variable}
   remappings:
     remap_default: "default"
-    remap_template: "default"
+    remap_preset: "default"
     remap_base: "default"
     remap_robot: "default"
     remap_user: "default"

@@ -73,31 +73,31 @@ def load_pal_robot_info(ld: LaunchDescription = None):
     return robot_info
 
 
-def merge_template(d: dict[str, dict], templates: dict[str, Path], ld: LaunchDescription = None):
+def merge_preset(d: dict[str, dict], presets: dict[str, Path], ld: LaunchDescription = None):
     """
-    For each node in the dictionary merge, if existing, the template into the node.
+    For each node in the dictionary merge, if existing, the preset into the node.
 
-    The template is indicated by the 'template' key in the node dictionary,
+    The preset is indicated by the 'use_preset' key in the node dictionary,
     which is removed after the merge.
-    First the template is applied, then the node dictionary elements override the template ones.
+    First the preset is applied, then the node dictionary elements override the preset ones.
     """
-    tmpl_used_per_node: dict[str, str] = {}
+    preset_used_per_node: dict[str, str] = {}
     for node_name, node_data in d.items():
-        if 'template' in node_data.keys():
-            t = node_data['template']
-            if isinstance(t, str) and t in templates:
-                with open(templates[t], 'r') as f:
+        if 'use_preset' in node_data.keys():
+            p = node_data['use_preset']
+            if isinstance(p, str) and p in presets:
+                with open(presets[p], 'r') as f:
                     node_data = _merge_dictionaries(yaml.load(f, yaml.Loader), node_data)
-                    node_data.pop('template')
+                    node_data.pop('use_preset')
                 d[node_name] = node_data
-                tmpl_used_per_node[node_name] = t
+                preset_used_per_node[node_name] = p
             else:
                 if ld:
-                    ld.add_action(LogInfo(msg=f'WARNING: template {t} not found. Skipping it.'))
-    return d, tmpl_used_per_node
+                    ld.add_action(LogInfo(msg=f'WARNING: preset {p} not found. Skipping it.'))
+    return d, preset_used_per_node
 
 
-def merge_configs(config: dict[str, dict], srcs: dict[str, Path], templates: dict[str, Path],
+def merge_configs(config: dict[str, dict], srcs: dict[str, Path], presets: dict[str, Path],
                   ld: LaunchDescription = None):
     """
     Merge YAML files into a single config dictionary.
@@ -106,19 +106,19 @@ def merge_configs(config: dict[str, dict], srcs: dict[str, Path], templates: dic
     The single elements of the later ones override the previous ones.
     """
     src_used: dict[str, list[Path]] = {}
-    tmpl_used: dict[Path, dict[str, str]] = {}
+    preset_used: dict[Path, dict[str, str]] = {}
     for cfg_file in sorted(srcs.keys()):
         cfg_path = srcs[cfg_file]
         with open(cfg_path, 'r') as f:
             data = yaml.load(f, yaml.Loader)
-            data, tmpl_used[cfg_path] = merge_template(data, templates, ld)
+            data, preset_used[cfg_path] = merge_preset(data, presets, ld)
             for node in data.keys():
                 if node not in src_used:
                     src_used[node] = [cfg_path]
                 else:
                     src_used[node].append(cfg_path)
             config = _merge_dictionaries(config, data)
-    return config, src_used, tmpl_used
+    return config, src_used, preset_used
 
 
 def list_pal_resources(resource: str, pkg=None, ld=None, robots=None):
@@ -219,10 +219,10 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True, robots=None, bl
 
     :return: A dictionary with the parameters, remappings and arguments
     """
-    # load the package template
-    tmpl_resources = list_pal_resources('pal_configuration_templates.', pkg, ld, robots)
-    tmpl_results = [get_pal_resources(res, ld) for res in tmpl_resources]
-    tmpl_srcs = {k: v for srcs, _ in tmpl_results for k, v in srcs.items()}
+    # load the package preset
+    preset_resources = list_pal_resources('pal_configuration_presets.', pkg, ld, robots)
+    preset_results = [get_pal_resources(res, ld) for res in preset_resources]
+    preset_srcs = {k: v for srcs, _ in preset_results for k, v in srcs.items()}
 
     # use ament_index to retrieve all configuration files pertaining to a pkg
     cfg_resources = list_pal_resources('pal_configuration.', pkg, ld, robots)
@@ -256,8 +256,8 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True, robots=None, bl
 
     # load and merge the configuration files
     config = {}
-    config, sys_used_src, sys_used_tmpl = merge_configs(config, cfg_srcs, tmpl_srcs, ld)
-    config, user_used_src, user_used_tmpl = merge_configs(config, user_cfg_srcs, tmpl_srcs, ld)
+    config, sys_used_src, sys_used_preset = merge_configs(config, cfg_srcs, preset_srcs, ld)
+    config, user_used_src, user_used_preset = merge_configs(config, user_cfg_srcs, preset_srcs, ld)
 
     # get the configuration for the specific node
     node_fqn = None
@@ -357,12 +357,12 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True, robots=None, bl
 
     # log configuration
     if ld:
-        def str_config(used_srcs: dict[str, list[Path]], used_tmpl: dict[Path, dict[str, str]],
+        def str_config(used_srcs: dict[str, list[Path]], used_presets: dict[Path, dict[str, str]],
                        node_fqn: str):
             return ('\n'.join([f'\t- {src}'
                     + (('\n' + '\n'.join([f"\t\t- {t}"
-                        for t in used_tmpl[src].values()])
-                        ) if node_fqn in used_tmpl[src] else '')
+                        for t in used_presets[src].values()])
+                        ) if node_fqn in used_presets[src] else '')
                     for src in reversed(used_srcs[node_fqn])]
                     ) if node_fqn in used_srcs else "\t- (none)")
 
@@ -370,11 +370,11 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True, robots=None, bl
             LogInfo(
                 msg=log.COLOR_CYAN_BOLD + f'Loaded configuration for <{node}>:' + log.COLOR_RESET +
                 '\n- User overrides '
-                '(from higher to lower precedence, listing the used templates indented):\n'
-                + str_config(user_used_src, user_used_tmpl, node_fqn) +
+                '(from higher to lower precedence, listing the used presets indented):\n'
+                + str_config(user_used_src, user_used_preset, node_fqn) +
                 '\n- System configuration '
-                '(from higher to lower precedence, listing the used templates indented):\n'
-                + str_config(sys_used_src, sys_used_tmpl, node_fqn) +
+                '(from higher to lower precedence, listing the used presets indented):\n'
+                + str_config(sys_used_src, sys_used_preset, node_fqn) +
                 '\n\t# Blacklisted Configuration Packages:\n'
                 + ('\n'.join([f'\t\t# {p}' for p in cfg_blk]) if cfg_blk else "\t\t# (none)")
             ))
