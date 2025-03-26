@@ -7,3 +7,4 @@ robot_info_publisher:
     list_variable: [1, 2, 3]
     nested:
       variable: system
+    robot: "robot"

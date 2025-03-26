@@ -99,11 +99,19 @@ class TestPalGetConfiguration(unittest.TestCase):
         config = get_pal_configuration(pkg='test_node', node='test_node', cmdline_args=False)
 
         self.assertEqual(config['parameters'][0]['param_user'], 'user')
+        self.assertEqual(config['parameters'][0]['param_robot'], 'robot')
         self.assertEqual(config['parameters'][0]['param_default.robot_info'], 'user')
         remappings_dict = dict(zip(*map(list, (zip(*config['remappings'])))))
         self.assertEqual(remappings_dict['remap_user'], 'user_subdir')
         self.assertCountEqual(config['arguments'], ['--arg_user'])
 
+        os.environ['PAL_CONFIGURATION_FLAGS'] = '{"robot": "user_robot"}'
+
+        config = get_pal_configuration(pkg='test_node', node='test_node', cmdline_args=False)
+
+        self.assertEqual(config['parameters'][0]['param_robot'], 'user_robot')
+
+        os.environ.pop('PAL_CONFIGURATION_FLAGS')
         os.environ.pop('PAL_USER_PATH')
 
     def test_get_configuration_cmdline_overrides_single_param(self):

@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import json
 import os
 from pathlib import Path
 import re
@@ -100,27 +101,38 @@ def merge_preset(d: dict[str, dict], presets: dict[str, Path], ld: LaunchDescrip
 
 
 def merge_configs(config: dict[str, dict], srcs: dict[str, Path], presets: dict[str, Path],
-                  ld: LaunchDescription = None):
+                  config_vars: dict, ld: LaunchDescription = None):
     """
     Merge YAML files into a single config dictionary.
 
     The configuration files are merged in the order they are provided in the srcs dictionary.
     The single elements of the later ones override the previous ones.
+    Within a configuration file, the presets are merged before the rest of the configuration.
+
+    If a configuration has a 'use_if' dictionary, the configuration is only used if all its items
+    find a matching one in the config_vars.
     """
     src_used: dict[str, list[Path]] = {}
+    src_filtered: dict[str, list[Path]] = {}
     preset_used: dict[Path, dict[str, str]] = {}
     for cfg_file in sorted(srcs.keys()):
         cfg_path = srcs[cfg_file]
         with open(cfg_path, 'r') as f:
             data = yaml.load(f, yaml.Loader)
             data, preset_used[cfg_path] = merge_preset(data, presets, ld)
+            filtered_data = {}
             for node in data.keys():
-                if node not in src_used:
-                    src_used[node] = [cfg_path]
+                req_vars = data[node].get('use_if', {})
+                is_dict = isinstance(req_vars, dict)
+                if (is_dict and not all(i in config_vars.items() for i in req_vars.items())):
+                    src_filtered.setdefault(node, []).append(cfg_path)
                 else:
-                    src_used[node].append(cfg_path)
-            config = _merge_dictionaries(config, data)
-    return config, src_used, preset_used
+                    node_data = data[node]
+                    node_data.pop('use_if', None)
+                    filtered_data[node] = node_data
+                    src_used.setdefault(node, []).append(cfg_path)
+            config = _merge_dictionaries(config, filtered_data)
+    return config, src_used, src_filtered, preset_used
 
 
 def list_pal_resources(resource: str, pkg=None, ld=None):
@@ -205,6 +217,26 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
 
     :return: A dictionary with the parameters, remappings and arguments
     """
+    # load the configuration variables from robot info and PAL_CONFIGURATION_FLAGS
+    node_sub_vars = {'parameters': {}, 'remappings': {}, 'arguments': {}}
+    robot_info = load_pal_robot_info(ld)
+
+    pal_configuration_flags = {}
+    pal_configuration_flags_str = os.getenv("PAL_CONFIGURATION_FLAGS", None)
+    if pal_configuration_flags_str:
+        try:
+            pal_configuration_flags = json.loads(pal_configuration_flags_str)
+            if not isinstance(pal_configuration_flags, dict):
+                raise json.JSONDecodeError('not a dictionary', pal_configuration_flags_str, 0)
+        except json.JSONDecodeError:
+            if ld:
+                ld.add_action(LogInfo(msg=log.COLOR_RED +
+                                      'ERROR: PAL_CONFIGURATION_FLAGS environmental variable is'
+                                      ' not a valid JSON dictionary. Ignoring it.'))
+    config_vars = {}
+    config_vars = _merge_dictionaries(config_vars, robot_info)
+    config_vars = _merge_dictionaries(config_vars, pal_configuration_flags)
+
     # load the package preset
     preset_resources = list_pal_resources('pal_configuration_presets.', pkg, ld)
     preset_results = [get_pal_resources(res, ld) for res in preset_resources]
@@ -243,8 +275,11 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
 
     # load and merge the configuration files
     config = {}
-    config, sys_used_src, sys_used_preset = merge_configs(config, cfg_srcs, preset_srcs, ld)
-    config, user_used_src, user_used_preset = merge_configs(config, user_cfg_srcs, preset_srcs, ld)
+    config, sys_used_src, sys_filtered_src, sys_used_preset = merge_configs(
+        config, cfg_srcs, preset_srcs, config_vars, ld)
+    config, user_used_src, user_filtered_src, user_used_preset = merge_configs(
+        config, user_cfg_srcs, preset_srcs, config_vars, ld)
+    filtered_src = _merge_dictionaries(sys_filtered_src, user_filtered_src)
 
     # get the configuration for the specific node
     node_fqn = None
@@ -304,13 +339,10 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
         node_config['arguments'] = {i: v for i, v in
                                     enumerate(config[node_fqn].get('arguments', []))}
 
-    # substitute variables using the robot info
-    node_sub_vars = {'parameters': {}, 'remappings': {}, 'arguments': {}}
-    robot_info = load_pal_robot_info(ld)
-
+    # substitute variables using the robot info and the PAL_CONFIGURATION_FLAGS
     tmp_file = NamedTemporaryFile(mode="w", delete=False)
     yaml.dump(node_config, tmp_file)
-    node_config_sub, sub_vars = substitute_variables(tmp_file.name, robot_info, ld)
+    node_config_sub, sub_vars = substitute_variables(tmp_file.name, config_vars, ld)
 
     for t in ['parameters', 'remappings', 'arguments']:
         for k, v in node_config[t].items():
@@ -347,12 +379,22 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
 
     # log configuration
     if ld:
+        if len(config_vars):
+            ld.add_action(
+                LogInfo(
+                    msg=log.COLOR_CYAN_BOLD + 'Loaded configuration variables:' + log.COLOR_RESET +
+                    '\n- From robot info:\n' + json.dumps(robot_info, indent=4) +
+                    (('\n- From PAL_CONFIGURATION_FLAGS (overriding the robot info):\n' +
+                     json.dumps(pal_configuration_flags, indent=4))
+                     if pal_configuration_flags else '')
+                ))
+
         def str_config(used_srcs: dict[str, list[Path]], used_presets: dict[Path, dict[str, str]],
                        node_fqn: str):
             return ('\n'.join([f'\t- {src}'
                     + (('\n' + '\n'.join([f"\t\t- {t}"
                         for t in used_presets[src].values()])
-                        ) if node_fqn in used_presets[src] else '')
+                        ) if node_fqn in used_presets.get(src, {}) else '')
                     for src in reversed(used_srcs[node_fqn])]
                     ) if node_fqn in used_srcs else "\t- (none)")
 
@@ -364,7 +406,10 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
                 + str_config(user_used_src, user_used_preset, node_fqn) +
                 '\n- System configuration '
                 '(from higher to lower precedence, listing the used presets indented):\n'
-                + str_config(sys_used_src, sys_used_preset, node_fqn)
+                + str_config(sys_used_src, sys_used_preset, node_fqn) +
+                ((log.COLOR_YELLOW + '\n- Filtered out configuration:\n' + log.COLOR_RESET +
+                  str_config(filtered_src, {}, node_fqn))
+                 if node_fqn in filtered_src else '')
             ))
 
         def str_sub_vars(sub_vars: set[str]):
