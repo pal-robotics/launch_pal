@@ -14,15 +14,15 @@
 
 import os
 from pathlib import Path
-from tempfile import NamedTemporaryFile
 import re
+from tempfile import NamedTemporaryFile
+import yaml
 
 import ament_index_python as aip
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, LogInfo
 from launch.launch_context import LaunchContext
 from launch.substitutions import LaunchConfiguration
-import yaml
 
 from launch_pal.param_utils import _merge_dictionaries, substitute_variables
 import launch_pal.logging_utils as log
@@ -121,7 +121,7 @@ def merge_configs(config: dict[str, dict], srcs: dict[str, Path], presets: dict[
     return config, src_used, preset_used
 
 
-def list_pal_resources(resource: str, pkg=None, ld=None, robots=None):
+def list_pal_resources(resource: str, pkg=None, ld=None):
     """
     List the available '{resource}.*' ament_index resources.
 
@@ -130,8 +130,6 @@ def list_pal_resources(resource: str, pkg=None, ld=None, robots=None):
                 If None, all resources are listed.
     :param ld: The launch description to log messages to.
                 If None, no messages are logged.
-    :param robots: Only list '{resource}.*.{robot}' resources.
-                If None, all robot's resources are listed.
     :return: A set with the available resources.
     """
     resources = set()
@@ -147,36 +145,25 @@ def list_pal_resources(resource: str, pkg=None, ld=None, robots=None):
             if pkg and pkg != res_info[1]:
                 continue
 
-            # Filter by robots, if provided
-            if robots and not (len(res_info) < 3 or any(robot == res_info[2] for robot in robots)):
-                continue
-
             # Add the configuration to the list
             resources.add(entry.name)
 
     return resources
 
 
-def get_pal_resources(res_name, ld=None, blacklist=None):
+def get_pal_resources(res_name, ld=None):
     """
     Get the specified resource from ament_index.
 
     :param res_name: The ament_index resource name
     :param ld: The launch description to log messages to.
                 If None, no messages are logged.
-    :param blacklist: A list of package names to ignore when loading the configurations.
-                If None, configurations registered by all packages are loaded.
 
     :return: A dictionary with the parameters, remappings and arguments
-    :return: A list of blacklisted packages
     """
     srcs_pkgs = aip.get_resources(res_name)
     srcs = {}
-    blacklisted_srcs = []
     for srcs_pkg, _ in srcs_pkgs.items():
-        if blacklist and srcs_pkg in blacklist:
-            blacklisted_srcs.append(srcs_pkg)
-            continue
         files, _ = aip.get_resource(res_name, srcs_pkg)
         for file in re.split('\n|;', files.strip()):
             share_path = aip.get_package_share_path(srcs_pkg)
@@ -197,10 +184,10 @@ def get_pal_resources(res_name, ld=None, blacklist=None):
                 continue
             srcs[path.name] = path
 
-    return srcs, blacklisted_srcs
+    return srcs
 
 
-def get_pal_configuration(pkg, node, ld=None, cmdline_args=True, robots=None, blacklist=None):
+def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
     """
     Get the configuration for a node from the PAL configuration files.
 
@@ -211,24 +198,18 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True, robots=None, bl
     :param cmdline_args: A boolean or a list of arguments that will be added as command-line launch
                 arguments. If True (default), all arguments will be added. If False, none will be
                 added. If a list, only the arguments in the list will be added.
-    :param robots: A list of robot names to get the registered configurations
-                in the form 'pal_configuration.{pkg}.{robot}'. If None, no robot configurations
-                are loaded.
-    :param blacklist: A list of package names to ignore when loading the configurations.
-                If None, configurations registered by all packages are loaded.
 
     :return: A dictionary with the parameters, remappings and arguments
     """
     # load the package preset
-    preset_resources = list_pal_resources('pal_configuration_presets.', pkg, ld, robots)
+    preset_resources = list_pal_resources('pal_configuration_presets.', pkg, ld)
     preset_results = [get_pal_resources(res, ld) for res in preset_resources]
-    preset_srcs = {k: v for srcs, _ in preset_results for k, v in srcs.items()}
+    preset_srcs = {k: v for srcs in preset_results for k, v in srcs.items()}
 
     # use ament_index to retrieve all configuration files pertaining to a pkg
-    cfg_resources = list_pal_resources('pal_configuration.', pkg, ld, robots)
-    cfg_results = [get_pal_resources(res, ld, blacklist) for res in cfg_resources]
-    cfg_srcs = {k: v for srcs, _ in cfg_results for k, v in srcs.items()}
-    cfg_blk = [item for _, blk in cfg_results for item in blk]
+    cfg_resources = list_pal_resources('pal_configuration.', pkg, ld)
+    cfg_results = [get_pal_resources(res, ld) for res in cfg_resources]
+    cfg_srcs = {k: v for srcs in cfg_results for k, v in srcs.items()}
 
     # retrieve all user configuration files
     user_cfg_srcs = {}
@@ -374,9 +355,7 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True, robots=None, bl
                 + str_config(user_used_src, user_used_preset, node_fqn) +
                 '\n- System configuration '
                 '(from higher to lower precedence, listing the used presets indented):\n'
-                + str_config(sys_used_src, sys_used_preset, node_fqn) +
-                '\n\t# Blacklisted Configuration Packages:\n'
-                + ('\n'.join([f'\t\t# {p}' for p in cfg_blk]) if cfg_blk else "\t\t# (none)")
+                + str_config(sys_used_src, sys_used_preset, node_fqn)
             ))
 
         def str_sub_vars(sub_vars: set[str]):
