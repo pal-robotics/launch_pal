@@ -89,6 +89,14 @@ def merge_param_files(yaml_files):
     return rewritten_yaml.name
 
 
+def _parse_config(path, param_rewrites):
+    """
+    DEPRECATED! Use substitute_variables instead.
+    """
+    data, _ = substitute_variables(path, param_rewrites)
+    return data
+
+
 def substitute_variables(file_path: str, variables: dict, ld: LaunchDescription = None):
     """
     Load a yaml configuration file and resolve any variables.
