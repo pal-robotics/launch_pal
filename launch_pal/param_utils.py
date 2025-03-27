@@ -90,9 +90,7 @@ def merge_param_files(yaml_files):
 
 
 def _parse_config(path, param_rewrites):
-    """
-    DEPRECATED! Use substitute_variables instead.
-    """
+    """Use substitute_variables instead."""
     data, _ = substitute_variables(path, param_rewrites)
     return data
 
