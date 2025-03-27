@@ -71,7 +71,7 @@ def load_pal_robot_info(ld: LaunchDescription = None):
                     ld.add_action(LogInfo(msg=log.COLOR_YELLOW +
                                           f'WARNING: in robot info configuration {path},'
                                           ' expected item "robot_info_publisher: ros__parameters"'
-                                          ' not found. Skipping it.'))
+                                          ' not found. Skipping it.' + log.COLOR_RESET))
     return robot_info
 
 
@@ -96,7 +96,8 @@ def merge_preset(d: dict[str, dict], presets: dict[str, Path], ld: LaunchDescrip
             else:
                 if ld:
                     ld.add_action(LogInfo(msg=log.COLOR_YELLOW +
-                                          f'WARNING: preset {p} not found. Skipping it.'))
+                                          f'WARNING: preset {p} not found. Skipping it.'
+                                          + log.COLOR_RESET))
     return d, preset_used_per_node
 
 
@@ -187,7 +188,7 @@ def get_pal_resources(res_name, ld=None):
                     ld.add_action(
                         LogInfo(msg=log.COLOR_YELLOW +
                                 f'WARNING: file {path} does not exist for {res_name}.'
-                                ' Skipping it.')
+                                ' Skipping it.' + log.COLOR_RESET)
                     )
                 continue
             if path.name in srcs:
@@ -196,7 +197,8 @@ def get_pal_resources(res_name, ld=None):
                         LogInfo(msg=log.COLOR_YELLOW +
                                 'WARNING: two packages provide the same'
                                 f' name {path.name} for {res_name}:'
-                                f' {srcs[path.name]} and {path}. Skipping {path}'))
+                                f' {srcs[path.name]} and {path}. Skipping {path}'
+                                + log.COLOR_RESET))
                 continue
             srcs[path.name] = path
 
@@ -232,7 +234,8 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
             if ld:
                 ld.add_action(LogInfo(msg=log.COLOR_RED +
                                       'ERROR: PAL_CONFIGURATION_FLAGS environmental variable is'
-                                      ' not a valid JSON dictionary. Ignoring it.'))
+                                      ' not a valid JSON dictionary. Ignoring it.'
+                                      + log.COLOR_RESET))
     config_vars = {}
     config_vars = _merge_dictionaries(config_vars, robot_info)
     config_vars = _merge_dictionaries(config_vars, pal_configuration_flags)
@@ -263,7 +266,8 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
                     if ld:
                         ld.add_action(LogInfo(msg=log.COLOR_YELLOW +
                                               f'WARNING: configuration file {path.name}'
-                                              ' is empty or not a dictionary. Skipping it.'))
+                                              ' is empty or not a dictionary. Skipping it.'
+                                               + log.COLOR_RESET))
                     continue
                 user_cfg_srcs[path.name] = path
     else:
@@ -271,7 +275,8 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
             ld.add_action(LogInfo(msg=log.COLOR_YELLOW +
                                   'WARNING: user configuration path '
                                   f'{pal_user_parameters_path} does not exist. '
-                                  'User overrides will not be available.'))
+                                  'User overrides will not be available.'
+                                   + log.COLOR_RESET))
 
     # load and merge the configuration files
     config = {}
@@ -318,7 +323,8 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
             ld.add_action(LogInfo(msg=log.COLOR_RED +
                                   'ERROR: \'remappings\' field in configuration'
                                   f' for node {node} must be a _dictionary_ of remappings'
-                                  ' to be passed to the node. Ignoring it.'))
+                                  ' to be passed to the node. Ignoring it.'
+                                   + log.COLOR_RESET))
     else:
         for k, v in node_config['remappings'].items():
             if isinstance(v, (list, dict)):
@@ -326,14 +332,14 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
                     ld.add_action(LogInfo(msg=log.COLOR_RED +
                                           f'ERROR: \'remappings[{k}]\' field in configuration'
                                           f' for node {node} cannot be a list or dictionary.'
-                                          ' Ignoring it.'))
+                                          ' Ignoring it.' + log.COLOR_RESET))
                 node_config['remappings'].pop(k)
 
     if not isinstance(config[node_fqn].get('arguments', []), list):
         if ld:
             ld.add_action(LogInfo(msg=log.COLOR_RED + 'ERROR: \'arguments\' field in configuration'
                                   f' for node {node} must be a _list_ of arguments'
-                                  ' to be passed to the node. Ignoring it.'))
+                                  ' to be passed to the node. Ignoring it.' + log.COLOR_RESET))
     else:
         # saved ad dict for easier manipulation, later converted back to list
         node_config['arguments'] = {i: v for i, v in
@@ -368,7 +374,7 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
                                       f"argument '{arg}'. As such, it is mandatory to "
                                       "set this argument when launching the node. Consider "
                                       "adding a default value in the configuration file of "
-                                      "the node."))
+                                      "the node." + log.COLOR_RESET))
 
             ld.add_action(DeclareLaunchArgument(
                 arg,
