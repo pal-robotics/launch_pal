@@ -30,6 +30,7 @@ import launch_pal.logging_utils as log
 
 DEFAULT_PAL_USER_PATH = Path(os.environ["HOME"], ".pal")
 SYSTEM_ROBOT_INFO_PATH = Path("/etc", "robot_info", "conf.d")
+ENV_VARIABLE_PATH = 'ROBOT_INFO_PATH'
 
 
 # adapted from https://stackoverflow.com/a/6027615
@@ -58,9 +59,10 @@ def load_pal_robot_info(ld: LaunchDescription = None):
     robot_info = {}
     pal_user_robot_info_path = Path(os.environ.get('PAL_USER_PATH', DEFAULT_PAL_USER_PATH),
                                     'robot_info', 'conf.d')
+    custom_path = Path(os.getenv(ENV_VARIABLE_PATH, pal_user_robot_info_path))
 
     for path in [*sorted(find_yaml_files_in_dir(SYSTEM_ROBOT_INFO_PATH)),
-                 *sorted(find_yaml_files_in_dir(pal_user_robot_info_path))]:
+                 *sorted(find_yaml_files_in_dir(custom_path))]:
         with open(path, 'r') as f:
             data = yaml.load(f, yaml.Loader)
             try:
@@ -267,7 +269,7 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
                         ld.add_action(LogInfo(msg=log.COLOR_YELLOW +
                                               f'WARNING: configuration file {path.name}'
                                               ' is empty or not a dictionary. Skipping it.'
-                                               + log.COLOR_RESET))
+                                              + log.COLOR_RESET))
                     continue
                 user_cfg_srcs[path.name] = path
     else:
@@ -276,7 +278,7 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
                                   'WARNING: user configuration path '
                                   f'{pal_user_parameters_path} does not exist. '
                                   'User overrides will not be available.'
-                                   + log.COLOR_RESET))
+                                  + log.COLOR_RESET))
 
     # load and merge the configuration files
     config = {}
@@ -324,7 +326,7 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
                                   'ERROR: \'remappings\' field in configuration'
                                   f' for node {node} must be a _dictionary_ of remappings'
                                   ' to be passed to the node. Ignoring it.'
-                                   + log.COLOR_RESET))
+                                  + log.COLOR_RESET))
     else:
         for k, v in node_config['remappings'].items():
             if isinstance(v, (list, dict)):
