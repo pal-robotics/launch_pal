@@ -2,6 +2,24 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* read ROBOT_INFO_PATH env if available
+* fix log color resets
+* linters
+* restore _parse_config and mark as deprecated
+* add filtering to get_pal_configuration
+* use consistent messages is get_pal_configuration
+* rename pal configuration templates to presets
+* rename pal configuration templates to presets
+* Improve logging and variables substitution
+* fix pal configuration logging in case of no arguments specified
+* pal_parameter configuration files support paths splitting also with ;
+* add variables support to pal_parameters
+* use flattened parameter names in pal_parameters
+* add template support; rework test_pal_parameters
+* Contributors: Luka Juricic, antoniobrandi
+
 0.11.0 (2025-02-04)
 -------------------
 * Add comments
