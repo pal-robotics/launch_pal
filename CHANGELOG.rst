@@ -2,6 +2,11 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Added argument for the side an arm is mounted
+* Contributors: oscarmartinez
+
 0.12.0 (2025-04-02)
 -------------------
 * read ROBOT_INFO_PATH env if available
