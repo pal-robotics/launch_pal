@@ -56,6 +56,10 @@ class CommonArgs:
         default_value='False',
         choices=['True', 'False'],
         description='Specify if launching Advanced Navigation.')
+    side: DeclareLaunchArgument = DeclareLaunchArgument(
+        name='side',
+        default_value='',
+        description='Side information for side-specific controllers')
     docking: DeclareLaunchArgument = DeclareLaunchArgument(
         name='docking',
         default_value='False',
