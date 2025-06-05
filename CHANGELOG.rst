@@ -2,6 +2,11 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* introduce robot_info_file
+* Contributors: antoniobrandi
+
 0.13.0 (2025-06-05)
 -------------------
 * introduce IfNodeRunning and UnlessNodeRunning
