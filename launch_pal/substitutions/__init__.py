@@ -14,8 +14,10 @@
 
 from .load_file import LoadFile
 from .concat_substitution import ConcatSubstitution
+from .robot_info_file import RobotInfoFile
 
 __all__ = [
     'LoadFile',
     'ConcatSubstitution',
+    'RobotInfoFile',
 ]
