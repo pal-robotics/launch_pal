@@ -282,3 +282,37 @@ Example:
 robot_name = 'tiago'
 laser_model_arg = get_laser_model(robot_name)
 ```
+
+## Conditions
+
+### IfNodeRunning
+
+Condition that checks if a node is running. It can be used to conditionally execute actions based on the state of a node.
+
+```python
+from launch_pal.conditions import IfNodeRunning
+from launch_ros.actions import Node
+node_a = Node(
+  package='my_package',
+  executable='my_executable',
+  name='node_a',
+  condition=IfNodeRunning(node_name='node_b'),
+)
+```
+
+In the example above, `node_a` will be launched only if `node_b` is running.
+
+### UnlessNodeRunning
+Condition that checks if a node is not running. It can be used to conditionally execute actions based on the state of a node.
+
+```python
+from launch_pal.conditions import UnlessNodeRunning
+from launch_ros.actions import Node
+node_a = Node(
+  package='my_package',
+  executable='my_executable',
+  name='node_a',
+  condition=UnlessNodeRunning(node_name='node_b'),
+)
+```
+In the example above, `node_a` will be launched only if `node_b` is **NOT** running.
