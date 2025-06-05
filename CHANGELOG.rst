@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.13.0 (2025-06-05)
+-------------------
 * introduce IfNodeRunning and UnlessNodeRunning
 * Contributors: antoniobrandi
 
