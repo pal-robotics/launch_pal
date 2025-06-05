@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.14.0 (2025-06-05)
+-------------------
 * introduce robot_info_file
 * Contributors: antoniobrandi
 
