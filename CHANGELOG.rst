@@ -2,6 +2,11 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* introduce IfNodeRunning and UnlessNodeRunning
+* Contributors: antoniobrandi
+
 0.12.1 (2025-04-09)
 -------------------
 * Added argument for the side an arm is mounted
