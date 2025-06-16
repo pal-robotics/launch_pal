@@ -140,7 +140,7 @@ def get_end_effector(robot):
             'end_effector',
             default_value='no-hand',
             description='End effector model. ',
-            choices=['ari-hand', 'no-hand'],  # ARIv2 does not have a hand DoF
+            choices=['ari-hand', 'no-hand', 'no-end-effector'],  # ARIv2 does not have a hand DoF
         )
     else:
         raise ValueError('The robot ' + robot +
