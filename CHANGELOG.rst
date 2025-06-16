@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.14.1 (2025-06-16)
+-------------------
 * Fix end-effector ari
 * Contributors: davidterkuile
 
