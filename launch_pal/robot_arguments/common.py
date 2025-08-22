@@ -41,6 +41,7 @@ class CommonArgs:
             "pmb3",
             "ari",
             "omni_base",
+            "stockbot",
             "tiago_pro",
             "talos",
             "kangaroo",
@@ -79,6 +80,10 @@ class CommonArgs:
         name='world_name',
         default_value='pal_office',
         description="Specify world name, will be converted to full path.")
+    map_name: DeclareLaunchArgument = DeclareLaunchArgument(
+        name='map_name',
+        default_value='',
+        description="Specify map name, will be converted to full path.")
     is_public_sim: DeclareLaunchArgument = DeclareLaunchArgument(
         name='is_public_sim',
         default_value='False',
