@@ -2,6 +2,11 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* added stockbot to list of robots name
+* Contributors: martinaannicelli
+
 0.14.1 (2025-06-16)
 -------------------
 * Fix end-effector ari
