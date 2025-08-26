@@ -2,6 +2,11 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* added map name
+* Contributors: martinaannicelli
+
 0.15.0 (2025-08-22)
 -------------------
 * added stockbot to list of robots name
