@@ -82,7 +82,7 @@ class CommonArgs:
         description="Specify world name, will be converted to full path.")
     map_name: DeclareLaunchArgument = DeclareLaunchArgument(
         name='map_name',
-        default_value='',
+        default_value='default_map',
         description="Specify map name, will be converted to full path.")
     is_public_sim: DeclareLaunchArgument = DeclareLaunchArgument(
         name='is_public_sim',
