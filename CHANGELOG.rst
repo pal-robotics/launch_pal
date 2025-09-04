@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.17.0 (2025-09-04)
+-------------------
 * final mujoco launch arguments
 * added mujoco arguments
 * Contributors: Ortisa Poci
