@@ -2,6 +2,12 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* final mujoco launch arguments
+* added mujoco arguments
+* Contributors: Ortisa Poci
+
 0.16.0 (2025-08-26)
 -------------------
 * added map name
