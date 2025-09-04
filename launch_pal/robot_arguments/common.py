@@ -123,3 +123,13 @@ class CommonArgs:
         name="yaw",
         description="Yaw pose of the robot",
         default_value="0.0")
+    sim_type: DeclareLaunchArgument = DeclareLaunchArgument(
+        name="sim_type",
+        default_value="gazebo",
+        choices=["mujoco-ros2-control", "mujoco", "gazebo", "no-simulation"],
+        description="Simulation type")
+    mj_control: DeclareLaunchArgument = DeclareLaunchArgument(
+        name="mj_control",
+        default_value="position",
+        choices=["false", "position", "motor"],
+        description='Mujoco control')
