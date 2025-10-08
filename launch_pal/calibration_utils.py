@@ -32,10 +32,13 @@ def apply_master_calibration(param_file: str) -> str:
 
     node_calibration_data = get_master_calibration_params(node_name)
 
+    value = node_calibration_data.get(node_name, {})
+    ros_node_calibration_data = {node_name: {ROS_PARAM_KEY: value}}
+
     # Create tmp file with only relevant params
     tmp_file = tempfile.NamedTemporaryFile(suffix='.yaml')
     with open(tmp_file.name, 'w') as f:
-        yaml.safe_dump(node_calibration_data, f)
+        yaml.safe_dump(ros_node_calibration_data, f)
 
     updated_param_file = merge_param_files([param_file, tmp_file.name])
 
@@ -56,7 +59,7 @@ def apply_urdf_calibration(template_folder: Path, output_folder: Path) -> dict:
 
     check_param_file_layout(master_calibration_data)
 
-    node_calibration_data = master_calibration_data[robot_state_publisher_node][ROS_PARAM_KEY]
+    node_calibration_data = master_calibration_data[robot_state_publisher_node]
 
     if node_calibration_data:
 
@@ -106,8 +109,7 @@ def get_node_names_from_yaml(yaml_file: str):
 def check_param_file_layout(data: dict):
 
     for key, value in data.items():
-        if not isinstance(value, dict) or (ROS_PARAM_KEY not in value) or \
-                not isinstance(value[ROS_PARAM_KEY], dict):
+        if not isinstance(value, dict):
             raise ValueError(
                 f"ROS 2 Param file for node '{key}' does not have the required layout")
 
