@@ -80,6 +80,17 @@ class CommonArgs:
         name='world_name',
         default_value='pal_office',
         description="Specify world name, will be converted to full path.")
+    gzclient: DeclareLaunchArgument = DeclareLaunchArgument(
+        name='gzclient',
+        default_value='True',
+        choices=['True', 'False'],
+        description='Whether to launch gzclient (the Gazebo GUI)')
+    rviz: DeclareLaunchArgument = DeclareLaunchArgument(
+        name='rviz',
+        default_value='True',
+        choices=['True', 'False'],
+        description='Launch RViz client'
+    )
     map_name: DeclareLaunchArgument = DeclareLaunchArgument(
         name='map_name',
         default_value='default_map',
