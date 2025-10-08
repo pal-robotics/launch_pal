@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.18.0 (2025-10-08)
+-------------------
 * added args in common for rviz and gzclient
 * Contributors: martinaannicelli
 
