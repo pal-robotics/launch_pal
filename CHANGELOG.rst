@@ -2,6 +2,11 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* added args in common for rviz and gzclient
+* Contributors: martinaannicelli
+
 0.17.0 (2025-09-04)
 -------------------
 * final mujoco launch arguments
