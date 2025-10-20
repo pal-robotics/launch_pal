@@ -14,6 +14,7 @@
 
 import unittest
 from launch_pal import calibration_utils
+from launch_pal.calibration_utils import ROS_PARAM_KEY
 import tempfile
 import yaml
 from pathlib import Path
@@ -24,11 +25,11 @@ class TestCalibration(unittest.TestCase):
     def setUp(self):
         # Setup the mock default configuration file with ros parameters
         self.node_name = "node_name"
-        self.params = {
-            "param_1": 1.0,
-            "param_2": 2.0,
-            "param_3": 3.0
-        }
+        self.params = {ROS_PARAM_KEY:
+                       {"param_1": 1.0,
+                        "param_2": 2.0,
+                        "param_3": 3.0}
+                       }
         self.default_param_file = self.create_param_yaml(self.node_name, self.params)
 
     def tearDown(self):
@@ -39,9 +40,7 @@ class TestCalibration(unittest.TestCase):
 
         temp_file = tempfile.NamedTemporaryFile(suffix='.yaml')
         yaml_content = {
-            node_name: {
-                'ros__parameters': params
-            }
+            node_name: params
         }
         with open(temp_file.name, 'w') as file:
             yaml.dump(yaml_content, file)
@@ -66,13 +65,15 @@ class TestCalibration(unittest.TestCase):
             self.default_param_file.name)
 
         updated_params = calibration_utils.load_yaml(
-            updated_param_file)[self.node_name]['ros__parameters']
-
+            updated_param_file)[self.node_name]
         # Check that the updated parameters are correct
 
-        self.assertEqual(updated_params['param_1'], self.params['param_1'])
-        self.assertEqual(updated_params['param_2'], master_calibration_params['param_2'])
-        self.assertEqual(updated_params['param_3'], self.params['param_3'])
+        self.assertEqual(updated_params[ROS_PARAM_KEY]['param_1'],
+                         self.params[ROS_PARAM_KEY]['param_1'])
+        self.assertEqual(updated_params[ROS_PARAM_KEY]['param_2'],
+                         master_calibration_params['param_2'])
+        self.assertEqual(updated_params[ROS_PARAM_KEY]['param_3'],
+                         self.params[ROS_PARAM_KEY]['param_3'])
 
     def test_no_calibration_parameters(self):
 
@@ -91,13 +92,15 @@ class TestCalibration(unittest.TestCase):
             self.default_param_file.name)
 
         updated_params = calibration_utils.load_yaml(
-            updated_param_file)[self.node_name]['ros__parameters']
-
+            updated_param_file)[self.node_name]
         # Check that the updated parameters are correct
 
-        self.assertEqual(updated_params['param_1'], self.params['param_1'])
-        self.assertEqual(updated_params['param_2'], self.params['param_2'])
-        self.assertEqual(updated_params['param_3'], self.params['param_3'])
+        self.assertEqual(updated_params[ROS_PARAM_KEY]['param_1'],
+                         self.params[ROS_PARAM_KEY]['param_1'])
+        self.assertEqual(updated_params[ROS_PARAM_KEY]['param_2'],
+                         self.params[ROS_PARAM_KEY]['param_2'])
+        self.assertEqual(updated_params[ROS_PARAM_KEY]['param_3'],
+                         self.params[ROS_PARAM_KEY]['param_3'])
 
         pass
 
@@ -107,13 +110,15 @@ class TestCalibration(unittest.TestCase):
             self.default_param_file.name)
 
         updated_params = calibration_utils.load_yaml(
-            updated_param_file)[self.node_name]['ros__parameters']
-
+            updated_param_file)[self.node_name]
         # Check that the updated parameters are correct
 
-        self.assertEqual(updated_params['param_1'], self.params['param_1'])
-        self.assertEqual(updated_params['param_2'], self.params['param_2'])
-        self.assertEqual(updated_params['param_3'], self.params['param_3'])
+        self.assertEqual(updated_params[ROS_PARAM_KEY]['param_1'],
+                         self.params[ROS_PARAM_KEY]['param_1'])
+        self.assertEqual(updated_params[ROS_PARAM_KEY]['param_2'],
+                         self.params[ROS_PARAM_KEY]['param_2'])
+        self.assertEqual(updated_params[ROS_PARAM_KEY]['param_3'],
+                         self.params[ROS_PARAM_KEY]['param_3'])
 
         pass
 
