@@ -2,6 +2,11 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Remove ros__parameters from master calibration
+* Contributors: David ter Kuile
+
 0.18.0 (2025-10-08)
 -------------------
 * added args in common for rviz and gzclient
