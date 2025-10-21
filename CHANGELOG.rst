@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.19.0 (2025-10-21)
+-------------------
 * Remove ros__parameters from master calibration
 * Contributors: David ter Kuile
 
