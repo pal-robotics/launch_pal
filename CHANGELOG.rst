@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.20.0 (2025-12-05)
+-------------------
 * Add LaunchArgument for gazebo_version
 * Contributors: Noel Jimenez
 
