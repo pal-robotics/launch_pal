@@ -80,6 +80,11 @@ class CommonArgs:
         name='world_name',
         default_value='pal_office',
         description="Specify world name, will be converted to full path.")
+    gazebo_version = DeclareLaunchArgument(
+        'gazebo_version', default_value='classic',
+        choices=['gazebo', 'classic'],
+        description="Version of Gazebo to be used, 'classic' or 'gazebo'",
+    )
     gzclient: DeclareLaunchArgument = DeclareLaunchArgument(
         name='gzclient',
         default_value='True',
