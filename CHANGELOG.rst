@@ -2,6 +2,11 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add LaunchArgument for gazebo_version
+* Contributors: Noel Jimenez
+
 0.19.0 (2025-10-21)
 -------------------
 * Remove ros__parameters from master calibration
