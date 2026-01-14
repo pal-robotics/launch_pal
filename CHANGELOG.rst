@@ -2,6 +2,11 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fix linters for jazzy
+* Contributors: Noel Jimenez
+
 0.20.0 (2025-12-05)
 -------------------
 * Add LaunchArgument for gazebo_version
