@@ -8,7 +8,7 @@ package_name = 'launch_pal'
 
 setup(
     name=package_name,
-    version='0.18.0',
+    version='0.20.1',
     packages=find_packages(exclude=['test']),
     data_files=[
         ('share/ament_index/resource_index/packages',
