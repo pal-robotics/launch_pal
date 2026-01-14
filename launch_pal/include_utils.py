@@ -12,17 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import List, Dict, Optional
 import copy
-from launch import SomeSubstitutionsType
-from launch.actions import IncludeLaunchDescription, GroupAction, DeclareLaunchArgument
-from launch.actions import SetEnvironmentVariable
-from launch_ros.actions import PushRosNamespace
+from typing import Dict, List, Optional
 
-from launch import Action
-from launch import Condition
+from launch import Action, Condition, SomeSubstitutionsType
+from launch.actions import DeclareLaunchArgument, GroupAction, IncludeLaunchDescription
+from launch.actions import SetEnvironmentVariable
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import PathJoinSubstitution, LaunchConfiguration
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
+from launch_ros.actions import PushRosNamespace
 from launch_ros.substitutions import FindPackageShare
 
 

@@ -12,17 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Text, Dict
 
 import os
-import yaml
 import tempfile
+from typing import Dict, Text
 
 from launch.actions import DeclareLaunchArgument
 from launch.launch_context import LaunchContext
 from launch.substitution import Substitution
 from launch.substitutions import LaunchConfiguration
 from launch.utilities import perform_substitutions
+import yaml
 
 
 class RobotInfoFile(Substitution):
@@ -39,7 +39,7 @@ class RobotInfoFile(Substitution):
         """Create a RobotInfoFile substitution."""
         self.content = content
         self.robot_info = {
-            "robot_info_publisher": {"ros__parameters": {}}
+            'robot_info_publisher': {'ros__parameters': {}}
         }
         super().__init__()
 

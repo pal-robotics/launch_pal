@@ -13,16 +13,16 @@
 # limitations under the License.
 
 
-import unittest
 import os
-from launch_pal.include_utils import include_launch_py_description
-from launch_pal.include_utils import include_scoped_launch_py_description
+import unittest
+
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, SetEnvironmentVariable
 from launch.launch_context import LaunchContext
 from launch.substitutions import LaunchConfiguration
-from launch.actions import DeclareLaunchArgument, SetEnvironmentVariable, IncludeLaunchDescription
-from launch_ros.substitutions import FindPackageShare
+from launch_pal.include_utils import include_launch_py_description
+from launch_pal.include_utils import include_scoped_launch_py_description
 from launch_ros.actions import PushRosNamespace
-
+from launch_ros.substitutions import FindPackageShare
 import pytest
 
 
@@ -31,7 +31,7 @@ class TestIncludeLaunch(unittest.TestCase):
     def test_include_python_file(self):
         context = LaunchContext()
 
-        pkg_name = "launch_pal"
+        pkg_name = 'launch_pal'
         file_path = ['launch', 'test.launch.py']
         launch_arguments = {'arg_1': 'value_1'}
 
@@ -55,7 +55,7 @@ class TestIncludeLaunch(unittest.TestCase):
         return
 
     def test_include_python_file_with_args(self):
-        pkg_name = "launch_pal"
+        pkg_name = 'launch_pal'
         file_path = ['launch', 'test.launch.py']
         launch_arguments = {'arg_1': 'value_1'}
 
@@ -70,7 +70,7 @@ class TestIncludeLaunch(unittest.TestCase):
 
     def test_include_scoped_python_file(self):
 
-        pkg_name = "launch_pal"
+        pkg_name = 'launch_pal'
         file_path = ['launch', 'test.launch.py']
 
         # Create scoped launch file
@@ -94,11 +94,11 @@ class TestIncludeLaunch(unittest.TestCase):
 
     def test_include_scoped_python_file_with_args(self):
 
-        pkg_name = "launch_pal"
+        pkg_name = 'launch_pal'
         file_path = ['launch', 'test.launch.py']
 
-        arg_4 = DeclareLaunchArgument(name='arg_4', default_value="value_4")
-        arg_e = DeclareLaunchArgument(name='arg_e', default_value="value_5")
+        arg_4 = DeclareLaunchArgument(name='arg_4', default_value='value_4')
+        arg_e = DeclareLaunchArgument(name='arg_e', default_value='value_5')
 
         # Create launch arguments two cases of remapping
         launch_arguments = {'arg_1': 'value_1',
@@ -108,7 +108,7 @@ class TestIncludeLaunch(unittest.TestCase):
                             'arg_5': arg_e}
 
         # Create environment variable
-        env_var = SetEnvironmentVariable("ENV_TEST", 'value')
+        env_var = SetEnvironmentVariable('ENV_TEST', 'value')
 
         # Create scoped launch file
         scoped_launch_file = include_scoped_launch_py_description(

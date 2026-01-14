@@ -12,11 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from dataclasses import dataclass
+
 from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
 from launch.utilities import perform_substitutions
-from launch.actions import DeclareLaunchArgument
-from dataclasses import dataclass
 import yaml
 
 
@@ -32,8 +33,8 @@ class LaunchArgCreator:
                 self.launch_arguments = {key: self.dict_to_launch_arg(
                     item, key) for key, item in arg_configurations.items()}
             except Exception as e:
-                print(f"Could not parse launch argument from file {yaml_file}")
-                print(f"Error: {e}")
+                print(f'Could not parse launch argument from file {yaml_file}')
+                print(f'Error: {e}')
 
     def is_valid_dict(self, launch_dict: dict) -> bool:
         valid_keys = ['description', 'default_value', 'choices']
@@ -46,7 +47,7 @@ class LaunchArgCreator:
 
         if not self.is_valid_dict(launch_dict):
             raise ValueError(
-                f"Launch argument configuration is not valid for {arg_name}")
+                f'Launch argument configuration is not valid for {arg_name}')
 
         description = launch_dict['description']
         default_value = None
@@ -64,7 +65,7 @@ class LaunchArgCreator:
     def get_argument(self, arg_name: str) -> DeclareLaunchArgument:
         if arg_name not in self.launch_arguments.keys():
             raise KeyError(
-                f"Launch argument {arg_name} does not exist")
+                f'Launch argument {arg_name} does not exist')
 
         return self.launch_arguments[arg_name]
 
@@ -84,8 +85,8 @@ class LaunchArgumentsBase:
         for attr, type_ in annotations.items():
             if not issubclass(type_, DeclareLaunchArgument):
                 raise TypeError(
-                    f"All attributes in dataclass {cls.__name__} must have type \
-                          DeclareLaunchArgument")
+                    f'All attributes in dataclass {cls.__name__} must have type \
+                          DeclareLaunchArgument')
 
     def add_to_launch_description(self, launch_description: LaunchDescription):
         """

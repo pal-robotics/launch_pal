@@ -14,27 +14,28 @@
 
 
 from dataclasses import dataclass
-from launch.actions import DeclareLaunchArgument as DLA
 from typing import Optional
+
 from ament_index_python.packages import get_package_share_directory
+from launch.actions import DeclareLaunchArgument as DLA
 import yaml
 
 
 def create_robot_arg(arg_name: str, robot_name: Optional[str] = None) -> DLA:
 
-    pkg_dir = get_package_share_directory("launch_pal")
+    pkg_dir = get_package_share_directory('launch_pal')
 
     if not robot_name:
         robot_name = 'robot'
 
-    config_file = f"{pkg_dir}/config/{robot_name}_configuration.yaml"
+    config_file = f'{pkg_dir}/config/{robot_name}_configuration.yaml'
 
     configurations_raw = yaml.load(open(config_file), Loader=yaml.FullLoader)[
-        f"{robot_name}_configuration"]
+        f'{robot_name}_configuration']
 
     if arg_name not in configurations_raw.keys():
         raise KeyError(
-            f"Robot argument {arg_name} does not seem to exist in config {config_file}")
+            f'Robot argument {arg_name} does not seem to exist in config {config_file}')
 
     description = configurations_raw[arg_name]['description']
     default_value = None

@@ -12,15 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from launch.actions import DeclareLaunchArgument
 import warnings
+
+from launch.actions import DeclareLaunchArgument
 
 
 def deprecated(func):
     def wrapper(*args, **kwargs):
-        warnings.filterwarnings("always")
+        warnings.filterwarnings('always')
         warnings.warn(
-            f"{func.__name__} is deprecated and will be removed in a future release. "
+            f'{func.__name__} is deprecated and will be removed in a future release. '
             "Please use libraries inside the 'robot_arguments' module instead.",
             DeprecationWarning,
         )
@@ -200,7 +201,7 @@ def get_robot_model(robot):
         declare_robot_model = DeclareLaunchArgument(
             'robot_model',
             default_value='v2',
-            description='ARI\'s version. ',
+            description="ARI's version. ",
             choices=['v1', 'v2'],
         )
     else:

@@ -12,25 +12,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from pathlib import Path
+import tempfile
 import unittest
+
 from launch_pal import calibration_utils
 from launch_pal.calibration_utils import ROS_PARAM_KEY
-import tempfile
 import yaml
-from pathlib import Path
 
 
 class TestCalibration(unittest.TestCase):
 
     def setUp(self):
         # Setup the mock default configuration file with ros parameters
-        self.node_name = "node_name"
+        self.node_name = 'node_name'
         self.params = {ROS_PARAM_KEY:
-                       {"param_1": 1.0,
-                        "param_2": 2.0,
-                        "param_3": 3.0}
+                       {'param_1': 1.0,
+                        'param_2': 2.0,
+                        'param_3': 3.0}
                        }
-        self.default_param_file = self.create_param_yaml(self.node_name, self.params)
+        self.default_param_file = self.create_param_yaml(
+            self.node_name, self.params)
 
     def tearDown(self):
         # Clean up the temporary file
@@ -52,10 +54,11 @@ class TestCalibration(unittest.TestCase):
 
         node_name = self.node_name
         master_calibration_params = {
-            "param_2": 20.0,
+            'param_2': 20.0,
         }
 
-        master_calibration_path = self.create_param_yaml(node_name, master_calibration_params)
+        master_calibration_path = self.create_param_yaml(
+            node_name, master_calibration_params)
 
         # Overwrite the master_calibration_file for mocking purposes
         calibration_utils.MASTER_CALIBRATION_FILE = master_calibration_path.name
@@ -77,9 +80,9 @@ class TestCalibration(unittest.TestCase):
 
     def test_no_calibration_parameters(self):
 
-        node_name = "different_node_name"
+        node_name = 'different_node_name'
         params = {
-            "param_test": 20.0,
+            'param_test': 20.0,
         }
 
         master_calibration_path = self.create_param_yaml(node_name, params)
@@ -125,27 +128,29 @@ class TestCalibration(unittest.TestCase):
     def test_urdf_calibration(self):
 
         # Create a mock master calibration file
-        calibration_method = "mock_calibration"
-        urdf_file = f"{calibration_method}.urdf.xacro"
+        calibration_method = 'mock_calibration'
+        urdf_file = f'{calibration_method}.urdf.xacro'
         master_calibration_params = {
             calibration_method: {
-                "param_1": 1.0,
-                "param_2": 5.0
+                'param_1': 1.0,
+                'param_2': 5.0
             },
         }
-        node_name = "robot_state_publisher"
-        master_calibration_path = self.create_param_yaml(node_name, master_calibration_params)
+        node_name = 'robot_state_publisher'
+        master_calibration_path = self.create_param_yaml(
+            node_name, master_calibration_params)
 
         # Overwrite the master_calibration_file for mocking purposes
         calibration_utils.MASTER_CALIBRATION_FILE = master_calibration_path.name
 
-        input_folder = Path(__file__).resolve().parent / 'mock_calibration_template'
+        input_folder = Path(__file__).resolve().parent / \
+            'mock_calibration_template'
         output_folder = tempfile.TemporaryDirectory()
         output_folder_path = Path(output_folder.name)
         calibration_xacro_args = calibration_utils.apply_urdf_calibration(
             input_folder, output_folder_path)
 
-        calibration_dir = calibration_xacro_args[f"{calibration_method}_dir"]
+        calibration_dir = calibration_xacro_args[f'{calibration_method}_dir']
 
         # Check if output dir is correct
         self.assertEqual(calibration_dir, output_folder.name)

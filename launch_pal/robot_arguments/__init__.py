@@ -15,8 +15,8 @@
 
 """robot_arguments Module."""
 
-from .robot import RobotArgs
 from .common import CommonArgs
+from .robot import RobotArgs
 
 __all__ = [
     'RobotArgs',

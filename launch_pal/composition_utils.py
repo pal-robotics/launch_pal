@@ -12,29 +12,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import yaml
 from typing import Dict
+
 from launch_ros.descriptions import ComposableNode
+import yaml
 
 
 def generate_component_list(yaml_file):
 
     components = []
 
-    with open(yaml_file, "r") as composition_yaml:
+    with open(yaml_file, 'r') as composition_yaml:
         cfg: Dict = yaml.safe_load(composition_yaml)
 
-        if "components" in cfg:
-            for component in cfg["components"]:
+        if 'components' in cfg:
+            for component in cfg['components']:
 
-                component_params = cfg["components"][component]
-                component_pkg = component_params["package"]
-                component_type = component_params["type"]
-                ros_params = [component_params["ros__parameters"]]
+                component_params = cfg['components'][component]
+                component_pkg = component_params['package']
+                component_type = component_params['type']
+                ros_params = [component_params['ros__parameters']]
 
                 launchable_component = ComposableNode(
                     package=component_pkg,
-                    plugin=f"{component_pkg}::{component_type}",
+                    plugin=f'{component_pkg}::{component_type}',
                     name=component,
                     parameters=ros_params,
                 )

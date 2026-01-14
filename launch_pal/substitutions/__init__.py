@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .load_file import LoadFile
 from .concat_substitution import ConcatSubstitution
+from .load_file import LoadFile
 from .robot_info_file import RobotInfoFile
 
 __all__ = [

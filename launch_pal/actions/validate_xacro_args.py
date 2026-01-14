@@ -42,13 +42,13 @@ class ValidateXacroArgs(EmitEvent):
             # Extract the name of all the xacro:arg tags in the entrypoint
             xacro_entrypoint_str = xacro_entrypoint.read()
             robot_xml = ET.fromstring(xacro_entrypoint_str)
-            expected_args = robot_xml.findall(".//xacro:arg", namespaces=namespaces)
+            expected_args = robot_xml.findall('.//xacro:arg', namespaces=namespaces)
             expected_args_names = [arg.get('name') for arg in expected_args]
 
             # Fail if one of the input arguments doesn't exist in the xacro
             for input_arg_name in self.xacro_input_args:
                 if input_arg_name not in expected_args_names:
-                    _logger.error(f"{input_arg_name} is not an expected xacro argument")
+                    _logger.error(f'{input_arg_name} is not an expected xacro argument')
                     super().execute(context)
 
             # Give a warning if one of the expected arguments is not present (maybe intentional)
@@ -57,6 +57,6 @@ class ValidateXacroArgs(EmitEvent):
                 if expected_arg_name not in self.xacro_input_args:
                     default_value = expected_arg.get('default')
                     _logger.warn(
-                        f"{expected_arg_name} is expected in the xacro but not present"
-                        f"in the launch input arguments, default value={default_value}"
+                        f'{expected_arg_name} is expected in the xacro but not present'
+                        f'in the launch input arguments, default value={default_value}'
                     )

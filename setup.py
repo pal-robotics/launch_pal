@@ -1,7 +1,9 @@
-from setuptools import find_packages
-from setuptools import setup
 from glob import glob
 import os
+
+from setuptools import find_packages
+from setuptools import setup
+
 package_name = 'launch_pal'
 
 setup(

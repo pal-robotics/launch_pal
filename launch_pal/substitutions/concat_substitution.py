@@ -39,7 +39,7 @@ class ConcatSubstitution(Substitution):
 
         :return: str concatenated string
         """
-        result: str = ""
+        result: str = ''
         for part in self.parts:
             if isinstance(part, Substitution):
                 result += part.perform(context)

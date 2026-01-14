@@ -13,15 +13,16 @@
 # limitations under the License.
 
 import copy
-import tempfile
 import re
-import yaml
-
+import tempfile
 from typing import Dict, List, Text
+
 import ament_index_python as aip
 
 from launch import LaunchDescription
 from launch.actions import LogInfo
+
+import yaml
 
 
 def _merge_dictionaries(dict1, dict2):
@@ -44,11 +45,11 @@ def _merge_dictionaries(dict1, dict2):
 
 
 def insert_ros_param_prefix(data, prefix):
-    if type(data) != dict:
+    if not isinstance(data, dict):
         return data
 
     for k in data.keys():
-        if k == "ros__parameters":
+        if k == 'ros__parameters':
             d = {}
             d[prefix] = copy.deepcopy(data[k])
             data[k] = d
@@ -70,20 +71,20 @@ def merge_param_files(yaml_files):
     """
     concatenated_dict = {}
     for e in yaml_files:
-        if type(e) == str:
+        if isinstance(e, str):
             yaml_file = e
             prefix = None
         else:
             yaml_file = e[0]
             prefix = e[1]
-        data = yaml.safe_load(open(yaml_file, "r"))
+        data = yaml.safe_load(open(yaml_file, 'r'))
         if prefix:
             data = insert_ros_param_prefix(data, prefix)
 
         _merge_dictionaries(concatenated_dict, data)
         # Second arg takes precedence on merge, and result is stored there
         concatenated_dict = data
-    rewritten_yaml = tempfile.NamedTemporaryFile(mode="w", delete=False)
+    rewritten_yaml = tempfile.NamedTemporaryFile(mode='w', delete=False)
     yaml.dump(concatenated_dict, rewritten_yaml)
     rewritten_yaml.close()
     return rewritten_yaml.name
@@ -199,7 +200,7 @@ def parse_parametric_yaml(
         Path to the Full YAML file containing all the parameters.
 
     """
-    rewritten_yaml = tempfile.NamedTemporaryFile(mode="w", delete=False)
+    rewritten_yaml = tempfile.NamedTemporaryFile(mode='w', delete=False)
     full_yaml = {}
 
     for source_file in source_files:

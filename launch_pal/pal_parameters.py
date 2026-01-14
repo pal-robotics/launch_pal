@@ -17,7 +17,6 @@ import os
 from pathlib import Path
 import re
 from tempfile import NamedTemporaryFile
-import yaml
 
 import ament_index_python as aip
 from launch import LaunchDescription
@@ -25,11 +24,13 @@ from launch.actions import DeclareLaunchArgument, LogInfo
 from launch.launch_context import LaunchContext
 from launch.substitutions import LaunchConfiguration
 
-from launch_pal.param_utils import _merge_dictionaries, substitute_variables
 import launch_pal.logging_utils as log
+from launch_pal.param_utils import _merge_dictionaries, substitute_variables
 
-DEFAULT_PAL_USER_PATH = Path(os.environ["HOME"], ".pal")
-SYSTEM_ROBOT_INFO_PATH = Path("/etc", "robot_info", "conf.d")
+import yaml
+
+DEFAULT_PAL_USER_PATH = Path(os.environ['HOME'], '.pal')
+SYSTEM_ROBOT_INFO_PATH = Path('/etc', 'robot_info', 'conf.d')
 ENV_VARIABLE_PATH = 'ROBOT_INFO_PATH'
 
 
@@ -45,12 +46,12 @@ def flatten(dictionary: dict, parent_key: str = '', separator: str = '.'):
     return dict(items)
 
 
-def find_yaml_files_in_dir(dir: Path, recursive: bool = False):
+def find_yaml_files_in_dir(directory: Path, recursive: bool = False):
     """Get all YAML files in a directory."""
     yaml_files = []
-    if dir.exists():
-        glob_f = dir.rglob if recursive else dir.glob
-        yaml_files = [p for f in ["*.yml", "*.yaml"] for p in glob_f(f) if p.is_file()]
+    if directory.exists():
+        glob_f = directory.rglob if recursive else directory.glob
+        yaml_files = [p for f in ['*.yml', '*.yaml'] for p in glob_f(f) if p.is_file()]
     return yaml_files
 
 
@@ -226,7 +227,7 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
     robot_info = load_pal_robot_info(ld)
 
     pal_configuration_flags = {}
-    pal_configuration_flags_str = os.getenv("PAL_CONFIGURATION_FLAGS", None)
+    pal_configuration_flags_str = os.getenv('PAL_CONFIGURATION_FLAGS', None)
     if pal_configuration_flags_str:
         try:
             pal_configuration_flags = json.loads(pal_configuration_flags_str)
@@ -323,7 +324,7 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
         node_config['remappings'] = {}
         if ld:
             ld.add_action(LogInfo(msg=log.COLOR_RED +
-                                  'ERROR: \'remappings\' field in configuration'
+                                  "ERROR: 'remappings' field in configuration"
                                   f' for node {node} must be a _dictionary_ of remappings'
                                   ' to be passed to the node. Ignoring it.'
                                   + log.COLOR_RESET))
@@ -332,23 +333,22 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
             if isinstance(v, (list, dict)):
                 if ld:
                     ld.add_action(LogInfo(msg=log.COLOR_RED +
-                                          f'ERROR: \'remappings[{k}]\' field in configuration'
+                                          f"ERROR: 'remappings[{k}]' field in configuration"
                                           f' for node {node} cannot be a list or dictionary.'
                                           ' Ignoring it.' + log.COLOR_RESET))
                 node_config['remappings'].pop(k)
 
     if not isinstance(config[node_fqn].get('arguments', []), list):
         if ld:
-            ld.add_action(LogInfo(msg=log.COLOR_RED + 'ERROR: \'arguments\' field in configuration'
+            ld.add_action(LogInfo(msg=log.COLOR_RED + "ERROR: 'arguments' field in configuration"
                                   f' for node {node} must be a _list_ of arguments'
                                   ' to be passed to the node. Ignoring it.' + log.COLOR_RESET))
     else:
-        # saved ad dict for easier manipulation, later converted back to list
-        node_config['arguments'] = {i: v for i, v in
-                                    enumerate(config[node_fqn].get('arguments', []))}
+        # saved as dict for easier manipulation, later converted back to list
+        node_config['arguments'] = dict(enumerate(config[node_fqn].get('arguments', [])))
 
     # substitute variables using the robot info and the PAL_CONFIGURATION_FLAGS
-    tmp_file = NamedTemporaryFile(mode="w", delete=False)
+    tmp_file = NamedTemporaryFile(mode='w', delete=False)
     yaml.dump(node_config, tmp_file)
     node_config_sub, sub_vars = substitute_variables(tmp_file.name, config_vars, ld)
 
@@ -372,16 +372,16 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
             default = node_config_sub['parameters'].get(arg, None)
             if default is None:
                 ld.add_action(LogInfo(msg=log.COLOR_YELLOW +
-                                      f"WARNING: no default value defined for cmdline "
+                                      f'WARNING: no default value defined for cmdline '
                                       f"argument '{arg}'. As such, it is mandatory to "
-                                      "set this argument when launching the node. Consider "
-                                      "adding a default value in the configuration file of "
-                                      "the node." + log.COLOR_RESET))
+                                      'set this argument when launching the node. Consider '
+                                      'adding a default value in the configuration file of '
+                                      'the node.' + log.COLOR_RESET))
 
             ld.add_action(DeclareLaunchArgument(
                 arg,
                 description=f"Start node and run 'ros2 param describe {node} {arg}' for more "
-                            "information.",
+                            'information.',
                 default_value=str(default)))
             node_config_sub['parameters'][arg] = LaunchConfiguration(arg, default=[default])
 
@@ -400,11 +400,11 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
         def str_config(used_srcs: dict[str, list[Path]], used_presets: dict[Path, dict[str, str]],
                        node_fqn: str):
             return ('\n'.join([f'\t- {src}'
-                    + (('\n' + '\n'.join([f"\t\t- {t}"
+                    + (('\n' + '\n'.join([f'\t\t- {t}'
                         for t in used_presets[src].values()])
                         ) if node_fqn in used_presets.get(src, {}) else '')
                     for src in reversed(used_srcs[node_fqn])]
-                    ) if node_fqn in used_srcs else "\t- (none)")
+                    ) if node_fqn in used_srcs else '\t- (none)')
 
         ld.add_action(
             LogInfo(
@@ -429,15 +429,15 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
             # create an empty launch context to get the default values of the parameters
             lc = LaunchContext()
 
-            log_param = ""
+            log_param = ''
             for k, v in node_config_sub['parameters'].items():
                 log_param += f'- {k}'
                 if isinstance(v, LaunchConfiguration):
                     log_param += (
                         log.COLOR_YELLOW
-                        + " [overridable]"
+                        + ' [overridable]'
                         + log.COLOR_RESET
-                        + f": {v.perform(lc)}"
+                        + f': {v.perform(lc)}'
                     )
                 else:
                     log_param += f': {v}'
@@ -452,10 +452,10 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
         if node_config_sub['remappings']:
             ld.add_action(
                 LogInfo(
-                    msg="Remappings:\n" + "\n".join([
+                    msg='Remappings:\n' + '\n'.join([
                         f"- {k} -> {v} {str_sub_vars(node_sub_vars['remappings'][k])}"
                         if k in node_sub_vars['remappings']
-                        else f"- {k} -> {v}"
+                        else f'- {k} -> {v}'
                         for k, v in node_config_sub['remappings'].items()
                     ])
                 )
@@ -464,10 +464,10 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
         if node_config_sub['arguments']:
             ld.add_action(
                 LogInfo(
-                    msg="Arguments:\n" + "\n".join([
+                    msg='Arguments:\n' + '\n'.join([
                         f"- {v} {str_sub_vars(node_sub_vars['arguments'][k])}"
                         if k in node_sub_vars['remappings']
-                        else f"- {v}"
+                        else f'- {v}'
                         for k, v in node_config_sub['arguments'].items()
                     ])
                 )
