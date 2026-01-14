@@ -12,13 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
+from typing import List, Optional
+
 from launch import Action
 from launch.launch_context import LaunchContext
 from launch.launch_description_entity import LaunchDescriptionEntity
-from typing import Optional
-from typing import List
 from launch_pal.arg_utils import read_launch_argument
-import os
 
 
 class CheckPublicSim(Action):

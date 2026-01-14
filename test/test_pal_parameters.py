@@ -127,7 +127,7 @@ class TestPalGetConfiguration(unittest.TestCase):
         for k, v in config['parameters'][0].items():
             if k == 'param_default':
                 self.assertTrue(isinstance(v, LaunchConfiguration))
-                self.assertEquals(v.perform(lc), 'default')
+                self.assertEqual(v.perform(lc), 'default')
             else:
                 self.assertFalse(isinstance(v, LaunchConfiguration))
 

@@ -12,14 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from launch_pal.param_utils import merge_param_files
 import os
-import yaml
-import tempfile
-from jinja2 import Environment, FileSystemLoader
 from pathlib import Path
+import tempfile
 
-MASTER_CALIBRATION_FILE = "/etc/calibration/master_calibration.yaml"
+from jinja2 import Environment, FileSystemLoader
+from launch_pal.param_utils import merge_param_files
+import yaml
+
+MASTER_CALIBRATION_FILE = '/etc/calibration/master_calibration.yaml'
 ROS_PARAM_KEY = 'ros__parameters'
 
 
@@ -27,7 +28,7 @@ def apply_master_calibration(param_file: str) -> str:
 
     node_name_list = get_node_names_from_yaml(param_file)
     if len(node_name_list) != 1:
-        raise ValueError("A node parameter file should contain parameters of exactly one node")
+        raise ValueError('A node parameter file should contain parameters of exactly one node')
     node_name = node_name_list[0]
 
     node_calibration_data = get_master_calibration_params(node_name)
@@ -50,7 +51,7 @@ def apply_urdf_calibration(template_folder: Path, output_folder: Path) -> dict:
     calibration_xacro_args = {}
 
     # Get the calibration data for the robot_state_publisher node
-    robot_state_publisher_node = "robot_state_publisher"
+    robot_state_publisher_node = 'robot_state_publisher'
     master_calibration_data = get_master_calibration_params(
         robot_state_publisher_node)
 
@@ -64,7 +65,7 @@ def apply_urdf_calibration(template_folder: Path, output_folder: Path) -> dict:
     if node_calibration_data:
 
         # List template files
-        template_files = {f.name.split('.')[0]: f for f in list(template_folder.glob("*.j2"))}
+        template_files = {f.name.split('.')[0]: f for f in list(template_folder.glob('*.j2'))}
 
         for key, value in node_calibration_data.items():
             if key not in template_files:
@@ -76,7 +77,7 @@ def apply_urdf_calibration(template_folder: Path, output_folder: Path) -> dict:
             parse_jinja_template(input_file, output_file, value)
 
             # Add xacro arg
-            xacro_arg_name = f"{key}_dir"
+            xacro_arg_name = f'{key}_dir'
             calibration_xacro_args[xacro_arg_name] = str(output_folder)
 
     return calibration_xacro_args

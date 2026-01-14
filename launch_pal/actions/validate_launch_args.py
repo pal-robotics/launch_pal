@@ -14,8 +14,8 @@
 
 """Module for the ValidateLaunchArgs action."""
 
-import logging
 from dataclasses import fields
+import logging
 
 from launch.actions import EmitEvent
 from launch.events import Shutdown as ShutdownEvent
@@ -40,5 +40,5 @@ class ValidateLaunchArgs(EmitEvent):
         # Check if all the input args are in the launch_arg list
         for input_arg in input_args_names:
             if input_arg not in launch_args_names:
-                _logger.error(f"{input_arg} is not a valid launch argument")
+                _logger.error(f'{input_arg} is not a valid launch argument')
                 super().execute(context)

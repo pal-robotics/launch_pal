@@ -13,8 +13,9 @@
 # limitations under the License.
 
 
-from launch.actions import DeclareLaunchArgument
 from dataclasses import dataclass
+
+from launch.actions import DeclareLaunchArgument
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -31,20 +32,20 @@ class CommonArgs:
         default_value='',
         description='Define namespace of the robot.')
     robot_name: DeclareLaunchArgument = DeclareLaunchArgument(
-        "robot_name",
-        default_value="pmb2",
-        description="Name of the robot. ",
+        'robot_name',
+        default_value='pmb2',
+        description='Name of the robot. ',
         choices=[
-            "pmb2",
-            "tiago",
-            "tiago_dual",
-            "pmb3",
-            "ari",
-            "omni_base",
-            "stockbot",
-            "tiago_pro",
-            "talos",
-            "kangaroo",
+            'pmb2',
+            'tiago',
+            'tiago_dual',
+            'pmb3',
+            'ari',
+            'omni_base',
+            'stockbot',
+            'tiago_pro',
+            'talos',
+            'kangaroo',
         ],
     )
     navigation: DeclareLaunchArgument = DeclareLaunchArgument(
@@ -72,14 +73,14 @@ class CommonArgs:
         choices=['True', 'False'],
         description='Specify if launching MoveIt 2.')
     slam: DeclareLaunchArgument = DeclareLaunchArgument(
-        "slam",
-        default_value="False",
-        description="Whether or not you are using SLAM",
+        'slam',
+        default_value='False',
+        description='Whether or not you are using SLAM',
     )
     world_name: DeclareLaunchArgument = DeclareLaunchArgument(
         name='world_name',
         default_value='pal_office',
-        description="Specify world name, will be converted to full path.")
+        description='Specify world name, will be converted to full path.')
     gazebo_version = DeclareLaunchArgument(
         'gazebo_version', default_value='classic',
         choices=['gazebo', 'classic'],
@@ -99,12 +100,12 @@ class CommonArgs:
     map_name: DeclareLaunchArgument = DeclareLaunchArgument(
         name='map_name',
         default_value='default_map',
-        description="Specify map name, will be converted to full path.")
+        description='Specify map name, will be converted to full path.')
     is_public_sim: DeclareLaunchArgument = DeclareLaunchArgument(
         name='is_public_sim',
         default_value='False',
         choices=['True', 'False'],
-        description="Enable public simulation.")
+        description='Enable public simulation.')
     use_sensor_manager: DeclareLaunchArgument = DeclareLaunchArgument(
         name='use_sensor_manager',
         default_value='False',
@@ -116,36 +117,36 @@ class CommonArgs:
         choices=['True', 'False'],
         description='Launches tuck arm node')
     x: DeclareLaunchArgument = DeclareLaunchArgument(
-        name="x",
-        description="X pose of the robot",
-        default_value="0.0")
+        name='x',
+        description='X pose of the robot',
+        default_value='0.0')
     y: DeclareLaunchArgument = DeclareLaunchArgument(
-        name="y",
-        description="Y pose of the robot",
-        default_value="0.0")
+        name='y',
+        description='Y pose of the robot',
+        default_value='0.0')
     z: DeclareLaunchArgument = DeclareLaunchArgument(
-        name="z",
-        description="Z pose of the robot",
-        default_value="0.0")
+        name='z',
+        description='Z pose of the robot',
+        default_value='0.0')
     roll: DeclareLaunchArgument = DeclareLaunchArgument(
-        name="roll",
-        description="Roll pose of the robot",
-        default_value="0.0")
+        name='roll',
+        description='Roll pose of the robot',
+        default_value='0.0')
     pitch: DeclareLaunchArgument = DeclareLaunchArgument(
-        name="pitch",
-        description="Pitch pose of the robot",
-        default_value="0.0")
+        name='pitch',
+        description='Pitch pose of the robot',
+        default_value='0.0')
     yaw: DeclareLaunchArgument = DeclareLaunchArgument(
-        name="yaw",
-        description="Yaw pose of the robot",
-        default_value="0.0")
+        name='yaw',
+        description='Yaw pose of the robot',
+        default_value='0.0')
     sim_type: DeclareLaunchArgument = DeclareLaunchArgument(
-        name="sim_type",
-        default_value="gazebo",
-        choices=["mujoco-ros2-control", "mujoco", "gazebo", "no-simulation"],
-        description="Simulation type")
+        name='sim_type',
+        default_value='gazebo',
+        choices=['mujoco-ros2-control', 'mujoco', 'gazebo', 'no-simulation'],
+        description='Simulation type')
     mj_control: DeclareLaunchArgument = DeclareLaunchArgument(
-        name="mj_control",
-        default_value="position",
-        choices=["false", "position", "motor"],
+        name='mj_control',
+        default_value='position',
+        choices=['false', 'position', 'motor'],
         description='Mujoco control')

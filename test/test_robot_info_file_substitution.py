@@ -13,15 +13,15 @@
 # limitations under the License.
 
 import os
-import unittest
-from typing import Dict, Any
-import yaml
 import shutil
+from typing import Any, Dict
+import unittest
 
-from launch.launch_context import LaunchContext
 from launch.actions import DeclareLaunchArgument
+from launch.launch_context import LaunchContext
 from launch.substitutions import LaunchConfiguration, TextSubstitution
 from launch_pal.substitutions import RobotInfoFile
+import yaml
 
 
 class TestRobotInfoFile(unittest.TestCase):
@@ -44,9 +44,9 @@ class TestRobotInfoFile(unittest.TestCase):
         self.temp_dirs_created.append(temp_dir_path)
 
         self.assertTrue(os.path.isdir(temp_dir_path),
-                        "Perform should return a valid directory path.")
+                        'Perform should return a valid directory path.')
 
-        expected_file_path = os.path.join(temp_dir_path, "99_robot_info.yaml")
+        expected_file_path = os.path.join(temp_dir_path, '99_robot_info.yaml')
         self.assertTrue(os.path.isfile(expected_file_path),
                         "Expected YAML file '99_robot_info.yaml' not found.")
 
@@ -54,49 +54,49 @@ class TestRobotInfoFile(unittest.TestCase):
             loaded_data = yaml.safe_load(f)
 
         expected_full_data = {
-            "robot_info_publisher": {
-                "ros__parameters": expected_params
+            'robot_info_publisher': {
+                'ros__parameters': expected_params
             }
         }
-        self.assertEqual(loaded_data, expected_full_data, "YAML does not match expected content.")
+        self.assertEqual(loaded_data, expected_full_data, 'YAML does not match expected content.')
         return temp_dir_path
 
     def test_describe_method(self):
         """Test the describe() method."""
-        content = {"param1": "value1"}
+        content = {'param1': 'value1'}
         robot_info_sub = RobotInfoFile(content=content)
         self.assertEqual(robot_info_sub.describe(), "RobotInfoFile({'param1': 'value1'})")
 
     def test_perform_simple_content(self):
         """Test perform with simple string key-value pairs."""
-        content = {"robot_name": "test_robot", "port": "1234"}
+        content = {'robot_name': 'test_robot', 'port': '1234'}
         robot_info_sub = RobotInfoFile(content=content)
-        expected_params = {"robot_name": "test_robot", "port": "1234"}
+        expected_params = {'robot_name': 'test_robot', 'port': '1234'}
         self._perform_and_check(robot_info_sub, expected_params)
 
     def test_perform_boolean_strings(self):
         """Test perform with 'True' and 'False' string values."""
-        content = {"is_enabled": "True", "has_feature": "False", "is_active": "True"}
+        content = {'is_enabled': 'True', 'has_feature': 'False', 'is_active': 'True'}
         robot_info_sub = RobotInfoFile(content=content)
-        expected_params = {"is_enabled": True, "has_feature": False, "is_active": True}
+        expected_params = {'is_enabled': True, 'has_feature': False, 'is_active': True}
         self._perform_and_check(robot_info_sub, expected_params)
 
     def test_perform_actual_booleans(self):
         """Test perform with actual boolean values (should be stringified then re-evaluated)."""
         # The original class's perform method implies it expects string inputs for boolean.
         # If actual booleans are passed, they'd be str(True) -> "True" then converted.
-        content = {"is_enabled": True, "has_feature": False}
+        content = {'is_enabled': True, 'has_feature': False}
         robot_info_sub = RobotInfoFile(content=content)
-        # str(True) is "True", str(False) is "False"
-        expected_params = {"is_enabled": True, "has_feature": False}
+        # str(True) is 'True', str(False) is 'False'
+        expected_params = {'is_enabled': True, 'has_feature': False}
         self._perform_and_check(robot_info_sub, expected_params)
 
     def test_perform_integer_values(self):
         """Test perform with integer values (should be stringified)."""
-        content = {"count": 10, "max_value": -5}
+        content = {'count': 10, 'max_value': -5}
         robot_info_sub = RobotInfoFile(content=content)
         # Integers will be converted to strings by str(arg_value) then used as is
-        # if not "True" or "False".
+        # if not 'True' or 'False'.
         self._perform_and_check(robot_info_sub, content)
 
     def test_perform_with_launch_configuration(self):
@@ -106,43 +106,43 @@ class TestRobotInfoFile(unittest.TestCase):
         self.context.launch_configurations['use_sim_time'] = 'True'
 
         content = {
-            "model": LaunchConfiguration('robot_model'),
-            "sim_time": LaunchConfiguration('use_sim_time')
+            'model': LaunchConfiguration('robot_model'),
+            'sim_time': LaunchConfiguration('use_sim_time')
         }
         robot_info_sub = RobotInfoFile(content=content)
-        expected_params = {"model": "fetch", "sim_time": True}
+        expected_params = {'model': 'fetch', 'sim_time': True}
         self._perform_and_check(robot_info_sub, expected_params)
 
     def test_perform_with_declare_launch_argument(self):
         """Test perform with DeclareLaunchArgument values."""
         declared_arg_name = DeclareLaunchArgument(
-            name="robot_name_arg",
-            default_value="default_robot"
+            name='robot_name_arg',
+            default_value='default_robot'
         )
         declared_arg_bool = DeclareLaunchArgument(
-            name="is_real_arg",
-            default_value="False"
+            name='is_real_arg',
+            default_value='False'
         )
 
         # Simulate launch system adding declared arguments to context if not already set
         self.context.extend_locals({
             declared_arg_name.name: declared_arg_name.default_value,
-            declared_arg_bool.name: "True"
+            declared_arg_bool.name: 'True'
         })
         # Or, more directly for testing LaunchConfiguration resolution:
         self.context.launch_configurations['robot_name_arg'] = 'my_lovely_robot'
         self.context.launch_configurations['is_real_arg'] = 'True'
 
         content = {
-            "name_from_arg": declared_arg_name,
-            "real_hw": declared_arg_bool
+            'name_from_arg': declared_arg_name,
+            'real_hw': declared_arg_bool
         }
         robot_info_sub = RobotInfoFile(content=content)
 
         # The RobotInfoFile will use LaunchConfiguration(arg_name).perform(context)
         expected_params = {
-            "name_from_arg": "my_lovely_robot",
-            "real_hw": True
+            'name_from_arg': 'my_lovely_robot',
+            'real_hw': True
         }
         self._perform_and_check(robot_info_sub, expected_params)
 
@@ -151,15 +151,15 @@ class TestRobotInfoFile(unittest.TestCase):
         self.context.launch_configurations['prefix'] = 'robot'
 
         content_single_sub = {
-             "description_val": TextSubstitution(text="MyBot")
+             'description_val': TextSubstitution(text='MyBot')
         }
         robot_info_sub = RobotInfoFile(content=content_single_sub)
-        expected_params = {"description_val": "MyBot"}
+        expected_params = {'description_val': 'MyBot'}
         self._perform_and_check(robot_info_sub, expected_params)
 
     def test_file_structure_and_naming(self):
         """Explicitly test the generated file structure and name."""
-        content = {"check_structure": "ok"}
+        content = {'check_structure': 'ok'}
         robot_info_sub = RobotInfoFile(content=content)
 
         temp_dir_path = robot_info_sub.perform(self.context)
@@ -172,10 +172,10 @@ class TestRobotInfoFile(unittest.TestCase):
         with open(expected_file_path, 'r') as f:
             data = yaml.safe_load(f)
 
-        self.assertIn("robot_info_publisher", data)
-        self.assertIn("ros__parameters", data["robot_info_publisher"])
-        self.assertIn("check_structure", data["robot_info_publisher"]["ros__parameters"])
-        self.assertEqual(data["robot_info_publisher"]["ros__parameters"]["check_structure"], "ok")
+        self.assertIn('robot_info_publisher', data)
+        self.assertIn('ros__parameters', data['robot_info_publisher'])
+        self.assertIn('check_structure', data['robot_info_publisher']['ros__parameters'])
+        self.assertEqual(data['robot_info_publisher']['ros__parameters']['check_structure'], 'ok')
 
     def test_empty_content(self):
         """Test perform with empty content dictionary."""
@@ -191,28 +191,28 @@ class TestRobotInfoFile(unittest.TestCase):
         The provided RobotInfoFile re-initializes robot_info_data in perform,
         so it should be fresh.
         """
-        content1 = {"param_run1": "value1"}
+        content1 = {'param_run1': 'value1'}
         robot_info_sub = RobotInfoFile(content=content1)
 
         # First perform
-        expected_params1 = {"param_run1": "value1"}
+        expected_params1 = {'param_run1': 'value1'}
         _ = self._perform_and_check(robot_info_sub, expected_params1)
 
         # If we were to change content_input and call perform again (not typical for Substitutions)
         # Or if the context changes. Let's simulate a context change.
-        self.context.launch_configurations['dynamic_param'] = "first_val"
+        self.context.launch_configurations['dynamic_param'] = 'first_val'
         robot_info_sub_dynamic = RobotInfoFile(
-            content={"dp": LaunchConfiguration("dynamic_param")})
+            content={'dp': LaunchConfiguration('dynamic_param')})
 
-        expected_params_dyn1 = {"dp": "first_val"}
+        expected_params_dyn1 = {'dp': 'first_val'}
         temp_dir_dyn1 = self._perform_and_check(robot_info_sub_dynamic, expected_params_dyn1)
 
-        self.context.launch_configurations['dynamic_param'] = "second_val"
-        expected_params_dyn2 = {"dp": "second_val"}
+        self.context.launch_configurations['dynamic_param'] = 'second_val'
+        expected_params_dyn2 = {'dp': 'second_val'}
         temp_dir_dyn2 = self._perform_and_check(robot_info_sub_dynamic, expected_params_dyn2)
 
         self.assertNotEqual(temp_dir_dyn1, temp_dir_dyn2,
-                            "Each perform call should create a new temp directory.")
+                            'Each perform call should create a new temp directory.')
 
 
 if __name__ == '__main__':
