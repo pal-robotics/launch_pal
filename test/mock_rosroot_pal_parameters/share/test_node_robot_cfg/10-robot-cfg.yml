@@ -1,0 +1,12 @@
+/test_node:
+  use_if:
+    robot: "robot"
+  ros__parameters:
+    param_robot: "robot"
+    param_user: "robot"
+  remappings:
+    remap_robot: "robot"
+    remap_user: "robot"
+  arguments:
+    - "--arg_robot_1"
+    - "--arg_robot_2"

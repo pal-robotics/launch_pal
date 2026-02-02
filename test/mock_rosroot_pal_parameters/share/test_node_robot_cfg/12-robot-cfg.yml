@@ -1,0 +1,5 @@
+/test_node:
+  use_if:
+    robot_unknown_var: "robot_unknown_var"
+  ros__parameters:
+    param_robot: "robot_unknown_var"

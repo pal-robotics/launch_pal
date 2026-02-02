@@ -2,14 +2,19 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>launch_pal</name>
-  <version>0.0.2</version>
+  <version>0.20.1</version>
   <description>Utilities for launch files</description>
-  <maintainer email="victor.lopez@pal-robotics.com">user</maintainer>
-  <license>Apache</license>
+  <maintainer email="jordan.palacios@pal-robotics.com">Jordan Palacios</maintainer>
+  <maintainer email="noel.jimenez@pal-robotics.com">Noel Jimenez</maintainer>
+  <license>Apache License 2.0</license>
+
+  <url type="website">https://github.com/pal-robotics/launch_pal</url>
 
   <depend>ament_index_python</depend>
   <depend>launch</depend>
+  <depend>launch_ros</depend>
   <depend>python3-yaml</depend>
+  <depend>python3-jinja2</depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
