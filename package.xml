@@ -22,6 +22,7 @@
   <test_depend>python3-pytest</test_depend>
 
   <export>
+    <architecture_independent />
     <build_type>ament_python</build_type>
   </export>
 </package>
