@@ -78,6 +78,11 @@ def merge_param_files(yaml_files):
             yaml_file = e[0]
             prefix = e[1]
         data = yaml.safe_load(open(yaml_file, 'r'))
+
+        if not isinstance(data, dict):
+            raise ValueError(
+                f'The content of the yaml file {yaml_file} is not a dictionary: {type(data)}')
+
         if prefix:
             data = insert_ros_param_prefix(data, prefix)
 
