@@ -2,6 +2,11 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Throw when trying to merge a yaml file that does not contain a dict
+* Contributors: Noel Jimenez
+
 0.20.1 (2026-01-14)
 -------------------
 * Fix linters for jazzy
