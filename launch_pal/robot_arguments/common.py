@@ -150,3 +150,8 @@ class CommonArgs:
         default_value='position',
         choices=['false', 'position', 'motor'],
         description='Mujoco control')
+    mj_initial_pose: DeclareLaunchArgument = DeclareLaunchArgument(
+        name='mj_initial_pose',
+        default_value='start',
+        choices=['start', 'home', 'teleop'],
+        description='MuJoCo initial pose')
