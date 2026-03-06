@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.20.3 (2026-03-06)
+-------------------
 * fix: only shutdown rclpy if initialized locally
 * Contributors: Noel Jimenez
 
