@@ -52,13 +52,14 @@ class IfNodeRunning(Condition):
         :param context: The launch context (not used in this method).
         :return: True if the specified node is running, False otherwise.
         """
-        if not rclpy.utilities.ok():
+        rclpy_initialized_here = not rclpy.utilities.ok()
+        if rclpy_initialized_here:
             rclpy.init()
         self.__node_checker = RclpyNode('node_checker_' + str(uuid.uuid4()).split('-')[0])
         rclpy.spin_once(self.__node_checker, timeout_sec=1.0)
         available_nodes = self.__node_checker.get_node_names()
         self.__node_checker.destroy_node()
-        if rclpy.utilities.ok():
+        if rclpy_initialized_here and rclpy.utilities.ok():
             rclpy.shutdown()
         return self.__node_name in available_nodes
 
