@@ -22,6 +22,7 @@ import yaml
 
 
 class TestParseParametricYaml(unittest.TestCase):
+
     def test_param_substitution(self):
         parametric_yaml = os.path.join(os.getcwd(), 'test', 'parametric.yaml')
         parametric_variables = {'name': 'John', 'age': 42, 'married': True}
