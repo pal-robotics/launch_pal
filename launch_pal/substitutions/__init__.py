@@ -12,22 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from . import actions
-from . import arg_utils
-from . import conditions
-from . import include_utils
-from . import param_utils
-from . import substitutions
-from .pal_parameters import get_pal_configuration
+from .concat_substitution import ConcatSubstitution
+from .load_file import LoadFile
+from .robot_info_file import RobotInfoFile
 
 __all__ = [
-    'arg_utils',
-    'include_utils',
-    'param_utils',
-    'actions',
-    'substitutions',
-    'get_pal_configuration',
-    'composition_utils',
-    'logging_utils',
-    'conditions',
+    'LoadFile',
+    'ConcatSubstitution',
+    'RobotInfoFile',
 ]
