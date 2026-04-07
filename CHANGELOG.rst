@@ -2,6 +2,11 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* added mujoco initial pose argument
+* Contributors: Ortisa Poci
+
 0.20.3 (2026-03-06)
 -------------------
 * fix: only shutdown rclpy if initialized locally
