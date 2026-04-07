@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.21.0 (2026-04-07)
+-------------------
 * added mujoco initial pose argument
 * Contributors: Ortisa Poci
 
