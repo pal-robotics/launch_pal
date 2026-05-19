@@ -18,7 +18,7 @@ from launch_ros.descriptions import ComposableNode
 import yaml
 
 
-def generate_component_list(yaml_file):
+def generate_component_list(yaml_file, namespace=None):
 
     components = []
 
@@ -37,6 +37,7 @@ def generate_component_list(yaml_file):
                     package=component_pkg,
                     plugin=f'{component_pkg}::{component_type}',
                     name=component,
+                    namespace=namespace,
                     parameters=ros_params,
                 )
 
