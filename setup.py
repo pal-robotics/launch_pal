@@ -23,7 +23,9 @@ setup(
                       'noel.jimenez@pal-robotics.com'],
     description='Launch utilities needed by PAL Robotics software',
     license='Apache License, Version 2.0',
-    tests_require=['pytest'],
+    extras_require={
+        'test': ['pytest'],
+    },
     entry_points={
         'console_scripts': [
         ],
