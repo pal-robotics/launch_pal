@@ -216,7 +216,7 @@ This mimics the behavior of including launch files in ROS 1. Helpful in large la
 
 Contains utilities to reduce the boilerplate necessary for using ROS 2 components
 
-`generate_component_list`: generates a list of composable nodes from a YAML and a package name, ready to be added or loaded into a ComposableNodeContainer:
+`generate_component_list`: generates a list of composable nodes from a YAML file, ready to be added or loaded into a ComposableNodeContainer. An optional `namespace` parameter can be passed to set the namespace for all the generated composable nodes:
 
 ```yaml
 components:
@@ -230,7 +230,13 @@ components:
 It can be used from a launch file like:
 
 ```python
-component_list = generate_component_list(components_yaml, pkg_name)
+component_list = generate_component_list(components_yaml)
+```
+
+Or with a namespace:
+
+```python
+component_list = generate_component_list(components_yaml, namespace="/my_namespace")
 ```
 
 And then added normally to a container:
