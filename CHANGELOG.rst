@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.21.1 (2026-05-26)
+-------------------
 * Update documentation for generate_component_list function
 * Add optional namespace parameter
 * Use extras_require instead of test_require
