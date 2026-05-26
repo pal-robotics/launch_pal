@@ -2,6 +2,13 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update documentation for generate_component_list function
+* Add optional namespace parameter
+* Use extras_require instead of test_require
+* Contributors: Isaac Acevedo, Noel Jimenez
+
 0.21.0 (2026-04-07)
 -------------------
 * added mujoco initial pose argument
