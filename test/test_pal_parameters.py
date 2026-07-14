@@ -68,6 +68,7 @@ class TestPalGetConfiguration(unittest.TestCase):
                 'param_base': 'base',
                 'param_robot': 'robot',
                 'param_user': 'robot',
+                'param_robot_list_match': 'list_match',
                 'param_double': 0.5,
                 'param_int': 1,
                 'param_bool': True,
@@ -151,6 +152,13 @@ class TestPalGetConfiguration(unittest.TestCase):
 
         for v in config['parameters'][0].values():
             self.assertFalse(isinstance(v, LaunchConfiguration))
+
+    def test_get_configuration_invalid_use_if_raises(self):
+
+        with self.assertRaises(ValueError):
+            get_pal_configuration(pkg='test_node_bad_use_if',
+                                  node='test_node_bad',
+                                  cmdline_args=False)
 
 
 if __name__ == '__main__':
