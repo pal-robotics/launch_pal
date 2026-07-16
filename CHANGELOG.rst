@@ -2,6 +2,11 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Handle multiple options in use_if entries of PAL parameters
+* Contributors: Mathias Lüdtke
+
 0.21.1 (2026-05-26)
 -------------------
 * Update documentation for generate_component_list function
