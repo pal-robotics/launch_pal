@@ -104,6 +104,20 @@ def merge_preset(d: dict[str, dict], presets: dict[str, Path], ld: LaunchDescrip
     return d, preset_used_per_node
 
 
+def _use_if_matches(use_if_vars: dict, config_vars: dict) -> bool:
+    for key, expected in use_if_vars.items():
+        try:
+            actual = config_vars[key]
+            if isinstance(expected, list):
+                if actual not in expected:
+                    return False
+            elif actual != expected:
+                return False
+        except KeyError:
+            return False
+    return True
+
+
 def merge_configs(config: dict[str, dict], srcs: dict[str, Path], presets: dict[str, Path],
                   config_vars: dict, ld: LaunchDescription = None):
     """
@@ -114,7 +128,8 @@ def merge_configs(config: dict[str, dict], srcs: dict[str, Path], presets: dict[
     Within a configuration file, the presets are merged before the rest of the configuration.
 
     If a configuration has a 'use_if' dictionary, the configuration is only used if all its items
-    find a matching one in the config_vars.
+    find a matching one in the config_vars. An item's value may be a list, in which case it
+    matches if the config_vars entry equals any of the values in the list.
     """
     src_used: dict[str, list[Path]] = {}
     src_filtered: dict[str, list[Path]] = {}
@@ -126,15 +141,21 @@ def merge_configs(config: dict[str, dict], srcs: dict[str, Path], presets: dict[
             data, preset_used[cfg_path] = merge_preset(data, presets, ld)
             filtered_data = {}
             for node in data.keys():
-                req_vars = data[node].get('use_if', {})
-                is_dict = isinstance(req_vars, dict)
-                if (is_dict and not all(i in config_vars.items() for i in req_vars.items())):
-                    src_filtered.setdefault(node, []).append(cfg_path)
-                else:
-                    node_data = data[node]
-                    node_data.pop('use_if', None)
+                node_data = data[node].copy()
+                use_if_vars = node_data.pop('use_if', None)
+
+                if use_if_vars is None:  # absent or empty block (null)
+                    use_if_vars = {}
+                elif not isinstance(use_if_vars, dict):
+                    raise ValueError(
+                        f"'use_if' for node '{node}' in {cfg_path} must be a mapping, "
+                        f'got {type(use_if_vars).__name__}: {use_if_vars!r}')
+
+                if _use_if_matches(use_if_vars, config_vars):
                     filtered_data[node] = node_data
                     src_used.setdefault(node, []).append(cfg_path)
+                else:
+                    src_filtered.setdefault(node, []).append(cfg_path)
             config = _merge_dictionaries(config, filtered_data)
     return config, src_used, src_filtered, preset_used
 
