@@ -13,11 +13,12 @@
 # limitations under the License.
 
 import os
+import tempfile
 from typing import Dict
 import unittest
 from unittest import mock
 
-from launch_pal.param_utils import merge_param_files, parse_parametric_yaml
+from launch_pal.param_utils import merge_param_files, parse_parametric_yaml, substitute_variables
 import yaml
 
 
@@ -75,6 +76,28 @@ class TestParseParametricYaml(unittest.TestCase):
             self.assertEqual(params['married'], parametric_variables['married'])
             self.assertEqual(params['birthday'], '01/01/1970')
             self.assertEqual(params['weight'], parametric_variables['weight'])
+
+    def test_default_value_substitution(self):
+        content = ('defined: ${max_battery_volts|0}\n'
+                   'undefined: ${missing_volts|0}\n'
+                   'null_value: ${null_volts|0}\n'
+                   'empty_default: ${missing_volts|}\n'
+                   'no_default: ${missing_volts}\n')
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.yaml', delete=False) as f:
+            f.write(content)
+            parametric_yaml = f.name
+
+        params, matched_vars = substitute_variables(
+            parametric_yaml, {'max_battery_volts': 48.0, 'null_volts': None}
+        )
+        self.assertEqual(params['defined'], 48.0)
+        self.assertEqual(params['undefined'], 0)
+        self.assertEqual(params['null_value'], 0)
+        self.assertIsNone(params['empty_default'])
+        self.assertIsNone(params['no_default'])
+        self.assertEqual(matched_vars['${max_battery_volts|0}'], 48.0)
+        self.assertEqual(matched_vars['${missing_volts|0}'], '0')
+        self.assertNotIn('${missing_volts}', matched_vars)
 
     @mock.patch('builtins.open')
     @mock.patch('yaml.safe_load')
