@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.22.0 (2026-08-04)
+-------------------
 * Support optional default value for robot_info parameters
 * Contributors: antoniobrandi
 
