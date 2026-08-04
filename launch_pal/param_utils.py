@@ -111,6 +111,10 @@ def substitute_variables(file_path: str, variables: dict, ld: LaunchDescription 
     ${VAR_NAME}.
     E.g.:
     host: ${HOST}
+    A fallback value can be given with ${VAR_NAME|DEFAULT}, which is used when
+    VAR_NAME is not defined or is null.
+    E.g.:
+    port: ${PORT|8080}
     The pkg name must be in this format to be parsed:
     ${find PKG_NAME}.
     E.g.:
@@ -132,7 +136,8 @@ def substitute_variables(file_path: str, variables: dict, ld: LaunchDescription 
         A dictionary with the matched variables and their values.
 
     """
-    var_pattern = re.compile(r'\$\{([^}]+)\}')  # matches ${...}
+    # matches ${...} and ${...|default}
+    var_pattern = re.compile(r'\$\{([^}|]+)(?:\|([^}]*))?\}')
     find_pkg_pattern = re.compile(r'\$\{find ([^}]+)\}')  # matches ${find ...}
 
     matched_vars = {}
@@ -158,16 +163,21 @@ def substitute_variables(file_path: str, variables: dict, ld: LaunchDescription 
 
     # Replace all matches of the pattern with their corresponding values from param_rewrites
     def replace_variables(match):
-        var = match.group(1)
+        var, default = match.group(1).strip(), match.group(2)
         # Check if the variable exists in the substitution dictionary
-        if var in variables:
+        if variables.get(var) is not None:
             matched_vars[match.group(0)] = variables[var]
             return str(variables[var])
+        # ${VAR|DEFAULT}: fall back to the default if VAR is undefined or null
+        elif default is not None:
+            matched_vars[match.group(0)] = default
+            return default
         else:
             if ld:
                 ld.add_action(LogInfo(msg='WARNING: during variable substitution,'
                                           f' variable {var} not found in robot info.'
                                           ' Ignoring it.'))
+            return ''
 
     content = var_pattern.sub(replace_variables, content)
     return yaml.safe_load(content), matched_vars
