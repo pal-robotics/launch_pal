@@ -1,0 +1,5 @@
+/test_node:
+  use_if:
+    robot: "wrong_robot"
+  ros__parameters:
+    param_robot: "wrong_robot"

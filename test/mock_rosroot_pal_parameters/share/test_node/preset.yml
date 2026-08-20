@@ -1,0 +1,12 @@
+ros__parameters:
+  param_preset: "preset"
+  param_base: "preset"
+  param_robot: "preset"
+  param_user: "preset"
+remappings:
+  remap_preset: "preset"
+  remap_base: "preset"
+  remap_robot: "preset"
+  remap_user: "preset"
+arguments:
+  - "--arg_preset"
