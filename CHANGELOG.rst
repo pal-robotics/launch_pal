@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.22.1 (2026-08-20)
+-------------------
 * Add test to verify the behaviour
 * Fix arg_utils to parse launch arguments in lyrical
 * change default mj_initial_pose to home
