@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from dataclasses import dataclass
+from dataclasses import dataclass, fields
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
@@ -99,9 +99,8 @@ class LaunchArgumentsBase:
 
 
         """
-        annotations = getattr(self, '__annotations__', {})
-        for attr, type_ in annotations.items():
-            launch_description.add_action(getattr(self, attr))
+        for f in fields(self):
+            launch_description.add_action(getattr(self, f.name))
         return
 
 
