@@ -81,10 +81,12 @@ class CommonArgs:
         name='world_name',
         default_value='pal_office',
         description='Specify world name, will be converted to full path.')
-    gazebo_version = DeclareLaunchArgument(
-        'gazebo_version', default_value='classic',
-        choices=['gazebo', 'classic'],
-        description="Version of Gazebo to be used, 'classic' or 'gazebo'",
+    gazebo_version: DeclareLaunchArgument = DeclareLaunchArgument(
+        # Gazebo Classic in humble, new Gazebo in later distros
+        name='gazebo_version',
+        default_value='classic' if environ.get('ROS_DISTRO') == 'humble' else 'gazebo',
+        choices=['classic', 'gazebo'],
+        description='Gazebo version: gazebo or classic'
     )
     gzclient: DeclareLaunchArgument = DeclareLaunchArgument(
         name='gzclient',
