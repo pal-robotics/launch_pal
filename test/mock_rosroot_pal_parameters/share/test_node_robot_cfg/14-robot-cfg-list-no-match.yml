@@ -1,0 +1,5 @@
+/test_node:
+  use_if:
+    robot: ["wrong_robot_a", "wrong_robot_b"]
+  ros__parameters:
+    param_robot_list_no_match: "should_not_appear"

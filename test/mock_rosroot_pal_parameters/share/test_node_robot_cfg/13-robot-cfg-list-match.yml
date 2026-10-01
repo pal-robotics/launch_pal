@@ -1,0 +1,5 @@
+/test_node:
+  use_if:
+    robot: ["robot", "other_robot"]
+  ros__parameters:
+    param_robot_list_match: "list_match"

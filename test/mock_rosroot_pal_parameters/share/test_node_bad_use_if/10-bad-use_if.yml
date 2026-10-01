@@ -1,0 +1,5 @@
+/test_node_bad:
+  use_if:
+    - robot: "robot"
+  ros__parameters:
+    param_bad: "should_not_load"
