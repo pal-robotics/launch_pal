@@ -2,8 +2,8 @@
 Changelog for package launch_pal
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.22.2 (2026-10-01)
+-------------------
 * Import dependencies
 * Choose default value for gazebo version depending on the ros distro
 * Contributors: Aina, Aina Irisarri
