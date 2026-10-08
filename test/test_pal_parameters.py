@@ -14,14 +14,16 @@
 
 import os
 from pathlib import Path
+from tempfile import TemporaryDirectory
 import unittest
+from unittest import mock
 
 from launch import LaunchDescription
 from launch.launch_context import LaunchContext
 from launch.substitutions import LaunchConfiguration
 
 import launch_pal.pal_parameters
-from launch_pal.pal_parameters import get_pal_configuration
+from launch_pal.pal_parameters import get_configuration, get_pal_configuration
 
 
 class TestPalGetConfiguration(unittest.TestCase):
@@ -152,6 +154,32 @@ class TestPalGetConfiguration(unittest.TestCase):
 
         for v in config['parameters'][0].values():
             self.assertFalse(isinstance(v, LaunchConfiguration))
+
+    def test_get_configuration_alias(self):
+
+        self.assertIs(get_configuration, get_pal_configuration)
+
+    def test_user_config_path(self):
+
+        with TemporaryDirectory() as home, mock.patch.dict(os.environ):
+            os.environ.pop('PAL_USER_PATH', None)
+            pal_path = Path(home, '.pal')
+            ros_path = Path(home, '.ros')
+            pal_params = launch_pal.pal_parameters
+            with mock.patch.object(pal_params, 'DEFAULT_PAL_USER_PATH', pal_path), \
+                    mock.patch.object(pal_params, 'DEFAULT_ROS_USER_PATH', ros_path):
+                # ~/.pal does not exist: fall back to ~/.ros/config
+                self.assertEqual(pal_params.get_user_config_path(),
+                                 ros_path / 'config')
+
+                pal_path.mkdir()
+                self.assertEqual(pal_params.get_user_config_path(),
+                                 pal_path / 'config')
+
+                # PAL_USER_PATH takes precedence
+                os.environ['PAL_USER_PATH'] = '/custom'
+                self.assertEqual(pal_params.get_user_config_path(),
+                                 Path('/custom', 'config'))
 
     def test_get_configuration_invalid_use_if_raises(self):
 
