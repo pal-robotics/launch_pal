@@ -4,6 +4,8 @@ Utilities for simplifying some common ROS2 launch operations.
 
 ## get_pal_configuration
 
+`get_configuration` is an alias of `get_pal_configuration`.
+
 Implementation of the PAL's PAPS-007 standard for configuration management.
 
 Retrieves all the parameters, remappings and arguments for a given node by
@@ -14,7 +16,7 @@ and a specific configuration for a given robot family or robot unit.
 ### User overrides
 
 Users can provide local overrides via configuration files in
-`$HOME/.pal/config`.
+`$HOME/.pal/config` (or `$HOME/.ros/config` if `$HOME/.pal` does not exist).
 
 For instance, creating a file `~/.pal/config/default_volume.yml` with the
 content:
@@ -29,8 +31,10 @@ would override the ROS parameter `default_volume` for the node `/volume`.
 
 This is useful for eg persist user configuration across robot reboots.
 
-The default location of user configuration is `$HOME/.pal/config`. It can by
-changed by setting the environment variable `$PAL_USER_PARAMETERS_PATH`.
+The default location of user configuration is `$HOME/.pal/config`. If
+`$HOME/.pal` does not exist, `$HOME/.ros/config` is used instead. The location
+can be changed by setting the environment variable `$PAL_USER_PATH` (the
+configuration is then looked up in `$PAL_USER_PATH/config`).
 
 ### Variables
 

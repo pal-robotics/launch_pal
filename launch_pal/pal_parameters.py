@@ -30,6 +30,7 @@ from launch_pal.param_utils import _merge_dictionaries, substitute_variables
 import yaml
 
 DEFAULT_PAL_USER_PATH = Path(os.environ['HOME'], '.pal')
+DEFAULT_ROS_USER_PATH = Path(os.environ['HOME'], '.ros')
 SYSTEM_ROBOT_INFO_PATH = Path('/etc', 'robot_info', 'conf.d')
 ENV_VARIABLE_PATH = 'ROBOT_INFO_PATH'
 
@@ -229,6 +230,20 @@ def get_pal_resources(res_name, ld=None):
     return srcs
 
 
+def get_user_config_path() -> Path:
+    """
+    Get the path of the user configuration overrides.
+
+    If set, '$PAL_USER_PATH/config' is used. Otherwise, '~/.pal/config' is used if '~/.pal'
+    exists, falling back to '~/.ros/config'.
+    """
+    if 'PAL_USER_PATH' in os.environ:
+        return Path(os.environ['PAL_USER_PATH'], 'config')
+    if DEFAULT_PAL_USER_PATH.exists():
+        return Path(DEFAULT_PAL_USER_PATH, 'config')
+    return Path(DEFAULT_ROS_USER_PATH, 'config')
+
+
 def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
     """
     Get the configuration for a node from the PAL configuration files.
@@ -276,8 +291,7 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
 
     # retrieve all user configuration files
     user_cfg_srcs = {}
-    pal_user_parameters_path = Path(os.environ.get('PAL_USER_PATH', DEFAULT_PAL_USER_PATH),
-                                    'config')
+    pal_user_parameters_path = get_user_config_path()
 
     if pal_user_parameters_path.exists():
         # list of (*.yml, *.yaml) in any subdirectory under PAL_USER_PARAMETERS_PATH:
@@ -504,3 +518,6 @@ def get_pal_configuration(pkg, node, ld=None, cmdline_args=True):
            }
 
     return res
+
+
+get_configuration = get_pal_configuration
